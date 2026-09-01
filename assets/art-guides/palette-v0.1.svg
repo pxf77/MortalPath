@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360">
+  <rect width="1200" height="360" fill="#EEE8DC"/>
+  <text x="50" y="58" font-family="serif" font-size="34" fill="#1C2320">MortalPath · 凡尘山水基础色板 v0.1</text>
+  <text x="50" y="96" font-family="sans-serif" font-size="18" fill="#405348">70% 自然环境 · 20% 角色器物 · 10% 仙法强调</text>
+  <g font-family="sans-serif" font-size="18" fill="#1C2320">
+    <g transform="translate(50,130)"><rect width="125" height="125" rx="10" fill="#1C2320"/><text y="157">墨黑 #1C2320</text></g>
+    <g transform="translate(190,130)"><rect width="125" height="125" rx="10" fill="#405348"/><text y="157">松青 #405348</text></g>
+    <g transform="translate(330,130)"><rect width="125" height="125" rx="10" fill="#74766F"/><text y="157">石灰 #74766F</text></g>
+    <g transform="translate(470,130)"><rect width="125" height="125" rx="10" fill="#756047"/><text y="157">土褐 #756047</text></g>
+    <g transform="translate(610,130)"><rect width="125" height="125" rx="10" fill="#D8D0C0" stroke="#74766F"/><text y="157">宣纸 #D8D0C0</text></g>
+    <g transform="translate(750,130)"><rect width="125" height="125" rx="10" fill="#9F4338"/><text y="157">朱砂 #9F4338</text></g>
+    <g transform="translate(890,130)"><rect width="125" height="125" rx="10" fill="#4F8778"/><text y="157">玉青 #4F8778</text></g>
+    <g transform="translate(1030,130)"><rect width="125" height="125" rx="10" fill="#B08A4B"/><text y="157">古金 #B08A4B</text></g>
+  </g>
+</svg>
