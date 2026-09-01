@@ -15,8 +15,36 @@
 - 炼气六层敌人与筑基初期敌人；
 - 境界威胁指数、属性缩放与大境界穿透规则；
 - 调试突破能力，可直观看到筑基前后的战力差距；
-- 无外部素材，全部使用 Godot 内置几何体作为占位资源；
+- 无外部生产素材，当前战斗对象仍使用 Godot 内置几何体；
 - 规则层 headless 测试。
+
+## 美术方向 v0.1
+
+首版美术基线已定义为：
+
+> **凡尘山水·写意半写实**
+
+```text
+3D 角色与场景
++ 固定正交斜俯视
++ 绘画化 PBR
++ 低饱和自然环境
++ 克制而可读的修仙特效
++ 境界驱动的动作与战场差异
+```
+
+![MortalPath 美术方向参考板](assets/art-guides/art-direction-board-v0.1.svg)
+
+参考板用于锁定构图、色彩、材质气质和境界递进。图中的生成文字、数值和界面不是正式设定，正式文字必须人工校对并在 UI 中重新排版。
+
+美术规范：
+
+- [`docs/art-direction/README.md`](docs/art-direction/README.md)
+- [`docs/art-direction/art-bible-v0.1.md`](docs/art-direction/art-bible-v0.1.md)
+- [`docs/art-direction/realm-visual-hierarchy.md`](docs/art-direction/realm-visual-hierarchy.md)
+- [`docs/art-direction/asset-production-spec.md`](docs/art-direction/asset-production-spec.md)
+- [`docs/art-direction/art-review-checklist.md`](docs/art-direction/art-review-checklist.md)
+- [`docs/art-direction/production-plan.md`](docs/art-direction/production-plan.md)
 
 ## 运行
 
@@ -55,14 +83,21 @@ godot --headless --path . --script res://tests/test_runner.gd
 
 ```text
 .
-├── docs/                       # 产品定位、境界规则、架构和路线图
+├── assets/
+│   └── art-guides/              # 美术参考板与基础色板
+├── docs/
+│   ├── art-direction/            # 美术圣经、境界视觉层级与生产规范
+│   ├── architecture.md
+│   ├── game-vision.md
+│   ├── realm-and-combat.md
+│   └── roadmap.md
 ├── src/
-│   ├── actors/                 # 玩家、敌人与战斗实体
-│   ├── combat/                 # 伤害规则
-│   ├── core/                   # 输入等基础能力
-│   ├── cultivation/            # 境界与修炼规则
-│   └── main/                   # Combat Lab 场景组合与 HUD
-├── tests/                      # 无插件的 headless 规则测试
+│   ├── actors/                   # 玩家、敌人与战斗实体
+│   ├── combat/                   # 伤害规则
+│   ├── core/                     # 输入等基础能力
+│   ├── cultivation/              # 境界与修炼规则
+│   └── main/                     # Combat Lab 场景组合与 HUD
+├── tests/                        # 无插件的 headless 规则测试
 ├── project.godot
 └── README.md
 ```
@@ -78,7 +113,7 @@ godot --headless --path . --script res://tests/test_runner.gd
 - 不做开放世界、联机、多角色即时切换、全局等级缩放；
 - 元婴及以上作为世界背景和高压事件存在，不作为首作常规可战胜目标。
 
-详见：
+其他设计文档：
 
 - [`docs/game-vision.md`](docs/game-vision.md)
 - [`docs/realm-and-combat.md`](docs/realm-and-combat.md)
