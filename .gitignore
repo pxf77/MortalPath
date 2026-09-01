@@ -1,0 +1,16 @@
+# Godot generated data
+.godot/
+.import/
+
+# Builds
+build/
+dist/
+exports/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp

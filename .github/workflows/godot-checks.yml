@@ -1,0 +1,27 @@
+name: Godot checks
+
+on:
+  push:
+    branches:
+      - main
+      - "feat/**"
+  pull_request:
+
+jobs:
+  headless-rules:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Import project
+        run: godot --headless --editor --path . --quit
+
+      - name: Smoke test main scene
+        run: godot --headless --path . --quit-after 30
+
+      - name: Run rule tests
+        run: godot --headless --path . --script res://tests/test_runner.gd

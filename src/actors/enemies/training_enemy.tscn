@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/actors/enemies/training_enemy.gd" id="1_enemy"]
+
+[sub_resource type="StandardMaterial3D" id="Material_body"]
+albedo_color = Color(0.76, 0.24, 0.22, 1)
+roughness = 0.78
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+material = SubResource("Material_body")
+radius = 0.44
+height = 1.5
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.44
+height = 1.5
+
+[node name="TrainingEnemy" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_enemy")
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.78, 0)
+shape = SubResource("Shape_body")
+
+[node name="RealmLabel" type="Label3D" parent="."]
+position = Vector3(0, 1.9, 0)
+billboard = 1
+no_depth_test = true
+text = "训练敌人\n炼气一层"
+font_size = 28
+outline_size = 7
