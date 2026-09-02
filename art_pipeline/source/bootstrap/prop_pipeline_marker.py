@@ -48,7 +48,7 @@ def main() -> None:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
     scene.unit_settings.system = "METRIC"
-    scene.unit_settings.unit_scale = 1.0
+    scene.unit_settings.scale_length = 1.0
     scene["mortalpath_asset_id"] = "prop_pipeline_marker"
 
     stone = material("mat_stone_gray", (0.28, 0.30, 0.28, 1.0), 0.88)
