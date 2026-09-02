@@ -11,6 +11,13 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var required_driver := OS.get_environment("GODOT_REQUIRE_AUDIO_DRIVER")
+	if not required_driver.is_empty():
+		print("Audio driver: %s; required: %s" % [AudioServer.get_driver_name(), required_driver])
+		if AudioServer.get_driver_name() != required_driver:
+			push_error("Graphical playback requires the requested audio driver, not a fallback.")
+			quit(1)
+			return
 	await _test_windup_and_buffer()
 	await _test_whiff_and_dodge()
 	await _test_sword_and_guard()

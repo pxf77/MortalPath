@@ -36,16 +36,31 @@ jobs:
       - name: Install exact official editor
         run: python3 tools/godot_toolchain.py install --github
 
-      - name: Install virtual display, encoder and CJK fonts
+      - name: Install virtual display, audio server, encoder and CJK fonts
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             xvfb xauth ffmpeg libgl1-mesa-dri libglx-mesa0 mesa-utils \
-            fontconfig fonts-noto-cjk
+            pulseaudio pulseaudio-utils fontconfig fonts-noto-cjk
           fc-cache -f
           fc-list :lang=zh | sed -n '1,3p'
+
+      - name: Start virtual audio output for graphical playback
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Hosted runners have no ALSA card. Keep real audio mixing through
+          # PulseAudio rather than letting Godot silently fall back to Dummy.
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=mortalpath_ci rate=48000 channels=2
+          pactl set-default-sink mortalpath_ci
+          pactl set-sink-mute mortalpath_ci 0
+          pactl set-sink-volume mortalpath_ci 100%
+          test "$(pactl get-default-sink)" = mortalpath_ci
+          pactl list short sinks
+          echo "PULSE_SINK=mortalpath_ci" >> "$GITHUB_ENV"
 
       - name: Import project and build script class cache
         shell: bash
@@ -73,6 +88,7 @@ jobs:
           godot \
             --path . \
             --display-driver x11 \
+            --audio-driver PulseAudio \
             --rendering-method gl_compatibility \
             --resolution 1280x720 \
             --position 0,0 \
@@ -150,7 +166,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p demo-evidence/normal-input
-          timeout 180s xvfb-run -a godot --path . --display-driver x11 \
+          GODOT_REQUIRE_AUDIO_DRIVER=PulseAudio \
+            timeout 180s xvfb-run -a godot --path . --display-driver x11 --audio-driver PulseAudio \
             --rendering-method gl_compatibility --fixed-fps 60 \
             --script res://tests/combat_feedback_runner.gd 2>&1 | tee demo-evidence/feedback.log
           bash scripts/check-godot-log.sh demo-evidence/feedback.log
@@ -161,6 +178,17 @@ jobs:
             --capture --output=res://demo-evidence/normal-input \
             2>&1 | tee demo-evidence/normal-input/godot.log
           bash scripts/check-godot-log.sh demo-evidence/normal-input/godot.log
+          # MovieWriter deliberately mixes offline with its own Dummy driver;
+          # validate the captured signal separately from realtime PulseAudio.
+          ffmpeg -i demo-evidence/normal-input/runs.avi -vn -af volumedetect -f null - \
+            2>&1 | tee demo-evidence/normal-input/audio-level.log
+          python3 - <<'PY'
+          import pathlib, re
+          log = pathlib.Path("demo-evidence/normal-input/audio-level.log").read_text()
+          match = re.search(r"max_volume: ([-\d.]+) dB", log)
+          if not match or not -60.0 < float(match.group(1)) < -0.1:
+              raise SystemExit("Recorded audio is missing, silent or clipping")
+          PY
           ffmpeg -y -i demo-evidence/normal-input/runs.avi \
             -c:v libx264 -preset fast -crf 23 -pix_fmt yuv420p \
             -c:a aac -b:a 160k -movflags +faststart demo-evidence/normal-input/runs.mp4
