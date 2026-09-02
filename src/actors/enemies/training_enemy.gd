@@ -50,7 +50,8 @@ func _ready() -> void:
 	add_to_group("combat_enemies")
 	add_to_group("combat_targets")
 	_telegraph.visible = false
-	_apply_unique_tint()
+	if DisplayServer.get_name() != "headless":
+		_apply_unique_tint()
 	damage_received.connect(_on_damage_received)
 	realm_changed.connect(_on_realm_changed)
 	_update_realm_label()
