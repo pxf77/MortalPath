@@ -11,10 +11,19 @@ const KEY_ACTIONS := {
 	"dodge": [KEY_SPACE, KEY_K],
 	"start_demo": [KEY_ENTER],
 	"restart": [KEY_R],
+	"toggle_feedback_motion": [KEY_F6],
+	"toggle_sound": [KEY_M],
 }
 
 
 func _enter_tree() -> void:
+	var policy = JSON.parse_string(FileAccess.get_file_as_string("res://toolchain.lock.json"))
+	var actual := Engine.get_version_info()
+	var actual_version := "%d.%d.%d" % [actual.major, actual.minor, actual.patch]
+	if not policy is Dictionary or not policy.has("godot") or actual_version != policy.godot.version or actual.status != "stable":
+		push_error("MortalPath requires the exact stable Godot version in toolchain.lock.json; got %s." % actual.string)
+		get_tree().quit(1)
+		return
 	for action_name in KEY_ACTIONS.keys():
 		_ensure_action(action_name)
 		for key_code in KEY_ACTIONS[action_name]:

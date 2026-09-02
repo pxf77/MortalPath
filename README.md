@@ -20,7 +20,7 @@
 
 已实现：
 
-- Godot 4.3+、GDScript；
+- Godot 4.7.2 stable（精确固定）、GDScript；
 - 3D 战斗平面与固定正交斜俯视镜头；
 - 三段御剑普攻及输入缓冲；
 - 主动剑诀、护体灵光、身法闪避；
@@ -31,19 +31,22 @@
 - 锁灵阵眼、遁光阵、撤离胜利条件；
 - 开场、胜利、失败和重新挑战流程；
 - 规则测试、主场景冒烟和 Demo 阶段流转测试。
+- 短前摇、输入缓冲、命中停顿、局部受击与破阵反馈、[CC0 初版采样音效](assets/audio/README.md)；
+- 默认 / 减弱动态 / 静音三轮正常输入回归与技能使用记录。
 
 当前仍使用工程占位几何体，目标是先验证玩法闭环、战斗可读性和境界秩序。正式美术资产将由独立美术仓库发布 Runtime Art Pack 后再接入。
 
 ## 运行
 
-1. 使用 Godot 4.3 或更高版本打开仓库根目录。
+1. 使用 Godot 4.7.2 stable 打开仓库根目录，不使用其他补丁版或预览版。
 2. 运行项目或主场景 `res://src/main/main.tscn`。
 3. 按 `Enter` 开始 Demo。
 
 命令行：
 
 ```bash
-godot --path .
+python3 tools/godot_toolchain.py install --templates
+bash scripts/godot.sh
 ```
 
 ## 操作
@@ -57,10 +60,14 @@ godot --path .
 | 身法闪避 | `Space` / `K` |
 | 开始 / 结算后重开 | `Enter` |
 | 随时重置 | `R` |
+| 减弱动态（震屏及停顿） | `F6` |
+| 音效开关 | `M` |
+
+移动相对于屏幕方向，攻击朝向由最后一次移动决定；左键触发攻击但不按鼠标指针瞄准。
 
 战斗建议：
 
-1. 连续输入普攻完成三段连击，第三段可以同时命中多个近身目标并回复少量灵力；
+1. 连续输入普攻完成三段连击，第三段可以命中多个近身目标，实际命中才回复少量灵力；
 2. `Q` 消耗灵力释放远距离贯穿剑诀；
 3. `E` 在敌人重击或筑基修士施法前展开护体灵光；
 4. 筑基修士出现后不要把击杀作为首要目标，优先破坏三处阵眼并进入南侧遁光阵。
@@ -69,13 +76,15 @@ godot --path .
 
 ```bash
 # 境界、伤害、连击与灵力规则
- godot --headless --path . --script res://tests/test_runner.gd
+ bash scripts/godot.sh --headless --script res://tests/test_runner.gd
 
 # Demo 阶段、敌人生成、破阵和撤离入口流转
- godot --headless --path . --script res://tests/demo_scene_runner.gd
+ bash scripts/godot.sh --headless --script res://tests/demo_scene_runner.gd
 ```
 
 GitHub Actions 还会执行 Godot 工程导入和主场景 headless 冒烟。
+
+本地完整回归：`bash scripts/validate-demo.sh`，导出验收：`bash scripts/validate-export.sh`。本地编辑器、匹配的导出模板、游戏 CI 和美术夹具统一从 `toolchain.lock.json` 读取 4.7.2；不再日常验证 4.3，不自动追随最新版。版本升级须单独完整回归，见 [`版本策略`](docs/godot-version-policy.md)。首批实施和待人工签收项目见 [`M1 验收记录`](docs/m1-validation.md)。自动通关不等于人工手感验收。
 
 ## 美术仓库
 

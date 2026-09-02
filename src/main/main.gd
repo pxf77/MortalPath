@@ -35,9 +35,14 @@ var _phase: int = DemoPhase.INTRO
 var _objective_text := "等待进入青岚谷"
 var _last_message := "先击退炼气邪修，再设法从筑基修士的锁灵阵中脱身。"
 var _guardian: TrainingEnemy = null
+var _feedback: CombatFeedback
 
 
 func _ready() -> void:
+	_feedback = CombatFeedback.new()
+	_feedback.name = "CombatFeedback"
+	add_child(_feedback)
+	_feedback.observe(_player)
 	_player.combat_message.connect(_on_combat_message)
 	_player.damage_received.connect(_on_player_damage_received)
 	_player.died.connect(_on_player_died)
@@ -58,10 +63,21 @@ func _process(delta: float) -> void:
 		var weight := minf(1.0, delta * camera_follow_speed)
 		_camera.global_position = _camera.global_position.lerp(target_position, weight)
 		_camera.look_at(_player.global_position + Vector3(0.0, 0.55, 0.0), Vector3.UP)
+		var shake := _feedback.camera_offset()
+		_camera.h_offset = shake.x
+		_camera.v_offset = shake.y
 	_refresh_hud()
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_echo():
+		return
+	if event.is_action_pressed("toggle_feedback_motion"):
+		_feedback.set_reduced_motion(not _feedback.reduced_motion)
+		return
+	if event.is_action_pressed("toggle_sound"):
+		_feedback.audio.set_muted(not _feedback.audio.muted)
+		return
 	if event.is_action_pressed("restart"):
 		get_tree().reload_current_scene()
 		return
@@ -154,7 +170,7 @@ func _spawn_first_wave() -> void:
 		3.1,
 		1.05
 	)
-	_spawn_enemy(
+	var talisman_enemy := _spawn_enemy(
 		"符箓邪修",
 		RealmRules.MajorRealm.QI_REFINING,
 		7,
@@ -167,6 +183,7 @@ func _spawn_first_wave() -> void:
 		2.55,
 		0.82
 	)
+	talisman_enemy.ranged_audio_cue = &"talisman_cast"
 
 
 func _begin_escape_phase() -> void:
@@ -230,6 +247,7 @@ func _spawn_enemy(
 	enemy.move_speed = speed
 	enemy.attack_multiplier = multiplier
 	_actors.add_child(enemy)
+	_feedback.observe(enemy)
 	enemy.died.connect(_on_enemy_died)
 	return enemy
 
@@ -238,6 +256,7 @@ func _spawn_anchor(spawn_position: Vector3) -> FormationAnchor:
 	var anchor := ANCHOR_SCENE.instantiate() as FormationAnchor
 	anchor.position = spawn_position
 	_actors.add_child(anchor)
+	_feedback.observe(anchor)
 	anchor.anchor_broken.connect(_on_anchor_broken)
 	return anchor
 
@@ -258,8 +277,7 @@ func _on_player_died(_actor) -> void:
 	if _phase == DemoPhase.VICTORY:
 		return
 	_phase = DemoPhase.DEFEAT
-	_player.set_input_enabled(false)
-	_set_enemy_ai_enabled(false)
+	_stop_combat()
 	_show_overlay(
 		"道途暂断",
 		"你在青岚谷中陨落。观察敌人前摇，保留灵力用于护体，并在筑基修士出现后优先破坏阵眼。",
@@ -301,14 +319,21 @@ func _on_portal_escaped(_actor) -> void:
 	if _phase != DemoPhase.ESCAPE or not _portal.is_active():
 		return
 	_phase = DemoPhase.VICTORY
-	_player.set_input_enabled(false)
-	_set_enemy_ai_enabled(false)
+	_stop_combat()
 	_show_overlay(
 		"脱身成功",
 		"你没有与筑基修士死战，而是破坏阵眼并借遁光阵离开青岚谷。\n\nDemo 完成：同境界战斗、灵力管理、远程预警、境界压制与撤离目标均已走通。",
 		"按 Enter 或 R 再次挑战"
 	)
 	_last_message = "青岚谷初版 Demo 已完成。"
+
+
+func _stop_combat() -> void:
+	_player.set_input_enabled(false)
+	_player.invulnerable = true
+	_set_enemy_ai_enabled(false)
+	for projectile in get_tree().get_nodes_in_group("combat_projectiles"):
+		projectile.queue_free()
 
 
 func _set_enemy_ai_enabled(enabled: bool) -> void:
@@ -352,6 +377,10 @@ func _refresh_hud() -> void:
 		_cooldown_text(_player.sword_art_cooldown_left()),
 		_cooldown_text(_player.guard_cooldown_left()),
 		_cooldown_text(_player.dodge_cooldown_left()),
+	]
+	_skill_status.text += "\nF6 减弱动态：%s  |  M 音效：%s" % [
+		"开" if _feedback.reduced_motion else "关",
+		"关" if _feedback.audio.muted else "开",
 	]
 	_objective_label.text = "当前目标：%s" % _objective_text
 	_threat_label.text = _build_threat_text()

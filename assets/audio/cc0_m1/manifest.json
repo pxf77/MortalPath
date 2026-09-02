@@ -1,0 +1,851 @@
+{
+  "pack_id": "mortalpath_cc0_m1_v0_1",
+  "review": "technical_pass_subjective_review_pending",
+  "sample_rate": 48000,
+  "channels": 1,
+  "bit_depth": 16,
+  "ffmpeg": "ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "recipes_sha256": "6556608eecea4ced68014ea338596c2d96031dde8ebf75991b458d6df6d9fca8",
+  "sources": [
+    {
+      "id": "swishes",
+      "title": "Swishes Sound Pack",
+      "author": "artisticdude",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/swishes-sound-pack",
+      "download": "https://opengameart.org/sites/default/files/swishes.zip",
+      "archive": "archives/swishes.zip",
+      "sha256": "7980215241b739a787dcf26f660ce510bb237900968789395a86911619795693",
+      "evidence": "evidence/swishes.html",
+      "provenance": "Author describes recording wood sticks and a clothes hanger; CC0 marked on source page."
+    },
+    {
+      "id": "sword",
+      "title": "20 Sword Sound Effects - attacks",
+      "author": "StarNinjas",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+      "download": "https://opengameart.org/sites/default/files/sword_-_starninjas_1.zip",
+      "archive": "archives/sword.zip",
+      "sha256": "87a1fe1cfeee5f282fe06a7a9c25ab9ebf24b7674fe19171b7f2762dffb628c1",
+      "evidence": "evidence/sword.html",
+      "provenance": "Author describes recording knives and processing in Audacity; CC0 source page."
+    },
+    {
+      "id": "clash",
+      "title": "20 Sword Sound Effects - clashes",
+      "author": "StarNinjas",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+      "download": "https://opengameart.org/sites/default/files/sword_clash_-_starninjas_0.zip",
+      "archive": "archives/sword-clash.zip",
+      "sha256": "f363c80ea1627548d336370750651b0d2d092978148ecfb3642717c2efb54b6b",
+      "evidence": "evidence/sword.html",
+      "provenance": "Companion clash archive on same CC0 author page."
+    },
+    {
+      "id": "paper",
+      "title": "Various Paper Sound Effects",
+      "author": "Luckius",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/various-paper-sound-effects",
+      "download": "https://opengameart.org/sites/default/files/sounds_6.zip",
+      "archive": "archives/paper.zip",
+      "sha256": "aa1889414310c7cfdd8dc291c19d4e4fc21ec987e9238b0d961fb72449c263a4",
+      "evidence": "evidence/paper.html",
+      "provenance": "Author recorded paper sounds for an in-game map; use original WAV variants, not MP3 previews."
+    },
+    {
+      "id": "rpg",
+      "title": "80 CC0 RPG SFX",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "download": "https://opengameart.org/sites/default/files/80-CC0-RPG-SFX_0.zip",
+      "archive": "archives/rpg.zip",
+      "sha256": "1c2f06ff4e8563b5b8b745b23cf213c1474142a69bb82bd8f5e10d9b3f7a7bbd",
+      "evidence": "evidence/rpg.html",
+      "provenance": "Creator's own fantasy sound pack. Select material/stone/gem layers; exclude monster voices and coin/UI effects."
+    },
+    {
+      "id": "basic_spells",
+      "title": "Basic Spell Impacts",
+      "author": "lentikula",
+      "license": "CC0-1.0",
+      "page": "https://lentikula.itch.io/freecc0-basic-spell-impacts-sfx",
+      "download": "https://lentikula.itch.io/freecc0-basic-spell-impacts-sfx/purchase",
+      "archive": "archives/basic_spells.zip",
+      "sha256": "6e265452877dd4121635200b2c59be3b36a2d2aed20ee15915c7c59396028f4d",
+      "evidence": "evidence/lentikula.html",
+      "provenance": "Creator explicitly uses own recordings and CC0 recordings; acquired original ZIP via official no-payment download flow, upload 12568040. No previews or paid demos."
+    }
+  ],
+  "cues": [
+    {
+      "id": "attack_01",
+      "file": "attack_01.wav",
+      "role": "御剑一式：短金属掠过＋窄风切，不带命中爆炸",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "sword",
+          "member": "sword - StarNinjas/sword.1.ogg",
+          "duration": 0.22,
+          "gain_db": 0,
+          "lowpass": 8500,
+          "member_sha256": "4a3e80705619cbd7500682ab51004011ddf67e14ccf1818ceb9e5b539fe42b75",
+          "decoded_seconds": 0.966917,
+          "trim_start_seconds": 0.085792,
+          "source_peak_dbfs": 2.247
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-1.wav",
+          "duration": 0.15,
+          "gain_db": -7,
+          "delay": 0.015,
+          "member_sha256": "9a15c881345c1ce1c39cc31f52f081c8c4dc81fa41111e0079400f39d3ba0e45",
+          "decoded_seconds": 0.126042,
+          "trim_start_seconds": 0.020125,
+          "source_peak_dbfs": 0.0
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.28,
+        "bytes": 26924,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -20.147,
+        "sha256": "c0170d321f67865b4221b36c278ad211d5620200c482cfbbdd994d31d8b5916f"
+      }
+    },
+    {
+      "id": "attack_02",
+      "file": "attack_02.wav",
+      "role": "御剑二式：较高剑鸣，保持实体武器感",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "sword",
+          "member": "sword - StarNinjas/sword.3.ogg",
+          "duration": 0.24,
+          "gain_db": 0,
+          "pitch": 1.08,
+          "lowpass": 9000,
+          "member_sha256": "ce09eb2987531d1323415065d7811a9cf0ea8639766d9fa77655d602e7e14989",
+          "decoded_seconds": 0.576792,
+          "trim_start_seconds": 0.0275,
+          "source_peak_dbfs": 1.794
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-4.wav",
+          "duration": 0.18,
+          "gain_db": -6,
+          "delay": 0.012,
+          "member_sha256": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c",
+          "decoded_seconds": 0.145833,
+          "trim_start_seconds": 0.021708,
+          "source_peak_dbfs": -0.631
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.3,
+        "bytes": 28844,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -24.036,
+        "sha256": "b92f9aca6f37d3d280f11f260edc364c6005208e4b09ec620ead3aabb78ead1b"
+      }
+    },
+    {
+      "id": "attack_03",
+      "file": "attack_03.wav",
+      "role": "御剑三式：较厚双层破空，不靠纯增音量",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "sword",
+          "member": "sword - StarNinjas/sword.5.ogg",
+          "duration": 0.3,
+          "gain_db": 0,
+          "pitch": 0.92,
+          "member_sha256": "135d1b26aad8d2f2205e56c14cd0162755a883e9419d6fd955cb978126a77452",
+          "decoded_seconds": 1.157125,
+          "trim_start_seconds": 0.225646,
+          "source_peak_dbfs": 2.138
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-8.wav",
+          "duration": 0.24,
+          "gain_db": -5,
+          "member_sha256": "113a3709ad889ad2fcf38eaceaf4eb9d67ffe1e96713fed93a6f0aed08769980",
+          "decoded_seconds": 0.153667,
+          "trim_start_seconds": 0.027062,
+          "source_peak_dbfs": -1.501
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-10.wav",
+          "duration": 0.2,
+          "gain_db": -11,
+          "delay": 0.07,
+          "pitch": 0.85,
+          "member_sha256": "4f7381a76f280d3f36f962ac3f44f16f77eec44797f30715d063c81ea3859024",
+          "decoded_seconds": 0.147063,
+          "trim_start_seconds": 0.008479,
+          "source_peak_dbfs": -0.78
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.4,
+        "bytes": 38444,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -21.73,
+        "sha256": "94d5e98265b5386af941bf3db5d16fc2b66c335359e9d41f5a98ba4786973a2c"
+      }
+    },
+    {
+      "id": "sword_art",
+      "file": "sword_art.wav",
+      "role": "青锋剑诀：剑鸣骨架＋两道延迟风切，区别普通一剑",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "sword",
+          "member": "sword - StarNinjas/sword.9.ogg",
+          "duration": 0.48,
+          "gain_db": 0,
+          "pitch": 0.9,
+          "lowpass": 9500,
+          "member_sha256": "11d11e060c3172cf0573620e9c6f57855eca017c7ab4a995a1aa276f176eb4b7",
+          "decoded_seconds": 1.537,
+          "trim_start_seconds": 0.406417,
+          "source_peak_dbfs": 0.747
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-7.wav",
+          "duration": 0.23,
+          "gain_db": -5,
+          "delay": 0.02,
+          "member_sha256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+          "decoded_seconds": 0.1875,
+          "trim_start_seconds": 0.012958,
+          "source_peak_dbfs": -0.309
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-9.wav",
+          "duration": 0.23,
+          "gain_db": -8,
+          "delay": 0.095,
+          "pitch": 1.12,
+          "member_sha256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1",
+          "decoded_seconds": 0.175792,
+          "trim_start_seconds": 0.025521,
+          "source_peak_dbfs": 0.0
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.62,
+        "bytes": 59564,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -22.75,
+        "sha256": "22b0caef78937aa32caaf643ff2de174495b2c7103442e283104609abe82cd3c"
+      }
+    },
+    {
+      "id": "guard_cast",
+      "file": "guard_cast.wav",
+      "role": "护体展开：低金属聚拢后灵光稳定，避免西式上行琶音",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "clash",
+          "member": "sword_clash.6.ogg",
+          "duration": 0.34,
+          "gain_db": -5,
+          "reverse": true,
+          "fade_in": 0.09,
+          "lowpass": 2600,
+          "member_sha256": "4c7643dbcd813eb614a56451652987d37ba587fac3309303aa0ab9a27d3a7e71",
+          "decoded_seconds": 1.323542,
+          "trim_start_seconds": 0.213104,
+          "source_peak_dbfs": -4.131
+        },
+        {
+          "source": "rpg",
+          "member": "item_gem_01.ogg",
+          "duration": 0.35,
+          "gain_db": 0,
+          "delay": 0.21,
+          "pitch": 0.72,
+          "lowpass": 4200,
+          "member_sha256": "8a5d2964febb0c69cc4df2ee5257d173f2cae6960d9534df0001dbf356f27028",
+          "decoded_seconds": 0.342854,
+          "trim_start_seconds": 0.001687,
+          "source_peak_dbfs": 2.191
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.7,
+        "bytes": 67244,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -30.685,
+        "sha256": "5fffe26a6c395d5ad3d1ce6542ec4f03f7d8f035f2fa17d7f216f390db2f508e"
+      }
+    },
+    {
+      "id": "dodge",
+      "file": "dodge.wav",
+      "role": "身法：干净短风切，无传送爆破",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "swishes",
+          "member": "swishes/swish-12.wav",
+          "duration": 0.22,
+          "gain_db": 0,
+          "pitch": 0.85,
+          "highpass": 160,
+          "member_sha256": "0513a86d428d9ed8601e93b8554580a5932c6c1a82d39d81a8f48883f1807a67",
+          "decoded_seconds": 0.089479,
+          "trim_start_seconds": 0.008625,
+          "source_peak_dbfs": -1.091
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.23,
+        "bytes": 22124,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -23.652,
+        "sha256": "8a1dcbf645db7ca0e4d79e435f40fe0d9e3686d73270656920ea46dd92e8b9e9"
+      }
+    },
+    {
+      "id": "hit",
+      "file": "hit.wav",
+      "role": "剑刃实接触：短金属与闷实质感；只在命中时播放",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "clash",
+          "member": "sword_clash.2.ogg",
+          "duration": 0.19,
+          "gain_db": -3,
+          "lowpass": 6500,
+          "member_sha256": "e09f222b70d53f2967514d076e2ae50c21526ac640fe4919965f964af043da1a",
+          "decoded_seconds": 0.801104,
+          "trim_start_seconds": 0.02675,
+          "source_peak_dbfs": 4.508
+        },
+        {
+          "source": "rpg",
+          "member": "wood_02.ogg",
+          "duration": 0.16,
+          "gain_db": 0,
+          "lowpass": 3500,
+          "member_sha256": "e64b95a1ec7675f28f8837ee4e4e81aa8e5b28e272159a0b3ed124fed037fc4f",
+          "decoded_seconds": 0.18825,
+          "trim_start_seconds": 0.0,
+          "source_peak_dbfs": -0.76
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.23,
+        "bytes": 22124,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -25.228,
+        "sha256": "672f7a7f20e89050e48d73051231a9ea1ee390f2c08312ba5487ed08726fc119"
+      }
+    },
+    {
+      "id": "hurt",
+      "file": "hurt.wav",
+      "role": "玩家受伤：低木质冲击与少量碎石，不使用怪物叫声",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "rpg",
+          "member": "wood_01.ogg",
+          "duration": 0.21,
+          "gain_db": 0,
+          "pitch": 0.8,
+          "lowpass": 2500,
+          "member_sha256": "55d4527a1f7d8e158eff0921f7a533340ab6be69a7b9b52fdac7a19b9d8e1cb2",
+          "decoded_seconds": 0.299146,
+          "trim_start_seconds": 0.003208,
+          "source_peak_dbfs": -5.776
+        },
+        {
+          "source": "rpg",
+          "member": "stones_04.ogg",
+          "duration": 0.21,
+          "gain_db": -9,
+          "delay": 0.02,
+          "member_sha256": "66f1cef820f66d86414d481b37a48a7b7ea11f4a5d7358372ebcfb506af0e652",
+          "decoded_seconds": 0.383396,
+          "trim_start_seconds": 0.017854,
+          "source_peak_dbfs": 2.84
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.28,
+        "bytes": 26924,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -29.094,
+        "sha256": "a196a6a881e8dbc08a5a9cd187a4e476a044a012af036c5c912950a144540c8a"
+      }
+    },
+    {
+      "id": "guard",
+      "file": "guard.wav",
+      "role": "护体承击：低金属共振，不同于血肉命中",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "clash",
+          "member": "sword_clash.7.ogg",
+          "duration": 0.27,
+          "gain_db": 0,
+          "pitch": 0.75,
+          "lowpass": 4200,
+          "member_sha256": "6763e519e7b31250a78f514d2b8b4f4e73a3bb105c980844ea687d698364b80c",
+          "decoded_seconds": 1.5635,
+          "trim_start_seconds": 0.158979,
+          "source_peak_dbfs": 1.106
+        },
+        {
+          "source": "rpg",
+          "member": "item_gem_02.ogg",
+          "duration": 0.22,
+          "gain_db": -9,
+          "delay": 0.015,
+          "member_sha256": "a5f4b0b3ae0e272765619289ef6709513e0dfa0785d7559e8a223176a8bcf181",
+          "decoded_seconds": 0.199583,
+          "trim_start_seconds": 0.007063,
+          "source_peak_dbfs": -1.791
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.34,
+        "bytes": 32684,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -26.281,
+        "sha256": "9cc8d2adcc3aeeb83e243751797eb24dec498b9024f5ab693b988d4e06a906e8"
+      }
+    },
+    {
+      "id": "evade",
+      "file": "evade.wav",
+      "role": "成功避开：轻、近、短的擦身风切",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "swishes",
+          "member": "swishes/swish-13.wav",
+          "duration": 0.18,
+          "gain_db": 0,
+          "pitch": 1.16,
+          "highpass": 800,
+          "member_sha256": "698230ba3fe05a68c18d68cd6b3a07fb98e6c1198bb1a4238592ee9912c02c77",
+          "decoded_seconds": 0.061083,
+          "trim_start_seconds": 0.004812,
+          "source_peak_dbfs": -4.1
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.19,
+        "bytes": 18284,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -24.866,
+        "sha256": "54351dedb8ae5ba6521c237aa7c547cbcdb66114c29788b0100f39d874ee01e4"
+      }
+    },
+    {
+      "id": "break",
+      "file": "break.wav",
+      "role": "阵眼破裂：石屑崩散＋短促金属裂响，不用电影大爆炸",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "rpg",
+          "member": "stones_03.ogg",
+          "duration": 0.7,
+          "gain_db": 0,
+          "pitch": 0.84,
+          "lowpass": 7200,
+          "member_sha256": "b86d143d7ef4974c2b97fda9e5d1861482646eec754e15935eeb3680ea0d71da",
+          "decoded_seconds": 1.428021,
+          "trim_start_seconds": 0.0,
+          "source_peak_dbfs": 2.937
+        },
+        {
+          "source": "clash",
+          "member": "sword_clash.10.ogg",
+          "duration": 0.45,
+          "gain_db": -8,
+          "pitch": 0.72,
+          "member_sha256": "61d40c241c5df7722249983938109564a8470245116fe34d23d2a35324d3a4f1",
+          "decoded_seconds": 1.177146,
+          "trim_start_seconds": 0.280146,
+          "source_peak_dbfs": 5.792
+        },
+        {
+          "source": "rpg",
+          "member": "stones_01.ogg",
+          "duration": 0.5,
+          "gain_db": -8,
+          "delay": 0.15,
+          "member_sha256": "d11ce95031c2c36ae2a00979620fa95a7a3f5c6d6f2ac86962ed292aa556be8d",
+          "decoded_seconds": 0.680833,
+          "trim_start_seconds": 0.019667,
+          "source_peak_dbfs": 2.952
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.87,
+        "bytes": 83564,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -30.513,
+        "sha256": "15a6efcc256c38d2e4c003416f014533ad50e98cfb17a22e01c9526ba7c1a0b5"
+      }
+    },
+    {
+      "id": "death",
+      "file": "death.wav",
+      "role": "敌人消散：失力坠落与余气散开，无额外人声",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "rpg",
+          "member": "stones_02.ogg",
+          "duration": 0.53,
+          "gain_db": 0,
+          "pitch": 0.73,
+          "lowpass": 2200,
+          "fade_out": 0.16,
+          "member_sha256": "57dc6b85ee986e68ddc4b7fb2b41cc1c885151677d32439fdb299492a3103a65",
+          "decoded_seconds": 1.064875,
+          "trim_start_seconds": 0.120458,
+          "source_peak_dbfs": -0.456
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-9.wav",
+          "duration": 0.29,
+          "gain_db": -9,
+          "delay": 0.17,
+          "pitch": 0.65,
+          "lowpass": 3200,
+          "member_sha256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1",
+          "decoded_seconds": 0.302896,
+          "trim_start_seconds": 0.047833,
+          "source_peak_dbfs": 0.0
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.7,
+        "bytes": 67244,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -29.889,
+        "sha256": "21bcd5a11e44912a04a70edf7f2bfc3f37043ec02b9ca04ceff05a3d1d9ca030"
+      }
+    },
+    {
+      "id": "enemy_spell",
+      "file": "enemy_spell.wav",
+      "role": "通用灵弹备用：收短的火气与气流；当前符箓邪修使用独立符纸音",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "basic_spells",
+          "member": "Fire Spell Impacts/Fire Spell Impact 3.wav",
+          "duration": 0.43,
+          "gain_db": -5,
+          "lowpass": 5200,
+          "fade_out": 0.13,
+          "member_sha256": "5d54547593efd13eeda5ca237118774117591769ebc3421f0f06f9755b7b514d",
+          "decoded_seconds": 1.875,
+          "trim_start_seconds": 0.000292,
+          "source_peak_dbfs": -1.385
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-5.wav",
+          "duration": 0.18,
+          "gain_db": 0,
+          "member_sha256": "4db41f2d2f97caf94627be05ff2870217fecc86534cf30f2aab413b847a0d50a",
+          "decoded_seconds": 0.127083,
+          "trim_start_seconds": 0.014854,
+          "source_peak_dbfs": 0.0
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.53,
+        "bytes": 50924,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -23.262,
+        "sha256": "042d08438ec557f2a2fe6c11a720f3500bca2658eee08f5d531f125c909756cd"
+      }
+    },
+    {
+      "id": "guardian_spell",
+      "file": "guardian_spell.wav",
+      "role": "筑基守阵灵弹：降重心、叠加低层与第二波，播放增益同炼气",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "basic_spells",
+          "member": "Fire Spell Impacts/Fire Spell Impact 4.wav",
+          "duration": 0.64,
+          "gain_db": -3,
+          "pitch": 0.79,
+          "lowpass": 4000,
+          "fade_out": 0.16,
+          "member_sha256": "76c83a8a62b5250169a46a88288ceaf98879e50fceb5a2475b328ffd79de9c11",
+          "decoded_seconds": 2.373438,
+          "trim_start_seconds": 0.041979,
+          "source_peak_dbfs": -3.645
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-7.wav",
+          "duration": 0.25,
+          "gain_db": 0,
+          "pitch": 0.8,
+          "member_sha256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+          "decoded_seconds": 0.234375,
+          "trim_start_seconds": 0.016792,
+          "source_peak_dbfs": -0.364
+        },
+        {
+          "source": "rpg",
+          "member": "stones_04.ogg",
+          "duration": 0.34,
+          "gain_db": -10,
+          "delay": 0.09,
+          "lowpass": 1700,
+          "member_sha256": "66f1cef820f66d86414d481b37a48a7b7ea11f4a5d7358372ebcfb506af0e652",
+          "decoded_seconds": 0.383396,
+          "trim_start_seconds": 0.018958,
+          "source_peak_dbfs": -4.089
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.76,
+        "bytes": 73004,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -21.924,
+        "sha256": "1c2303bba53211b8189c6aae2b43f65a212dd42502b8dca8b8ba9d4ef5d9f570"
+      }
+    },
+    {
+      "id": "talisman_cast",
+      "file": "talisman_cast.wav",
+      "role": "符箓邪修释放：纸张起手，120ms 后引燃与一次性释放",
+      "status": "integrated",
+      "layers": [
+        {
+          "source": "paper",
+          "member": "WAV/Paper Sound - 1.wav",
+          "duration": 0.23,
+          "gain_db": 0,
+          "highpass": 350,
+          "member_sha256": "d04ac578637259182dc4c9e03664217d9c80c0da90d5784563dbe43bd6a264cc",
+          "decoded_seconds": 0.487625,
+          "trim_start_seconds": 0.0,
+          "source_peak_dbfs": -11.432
+        },
+        {
+          "source": "basic_spells",
+          "member": "Fire Spell Impacts/Fire Spell Impact 5.wav",
+          "duration": 0.48,
+          "gain_db": -4,
+          "delay": 0.12,
+          "lowpass": 7000,
+          "member_sha256": "3ccc4743cdcfc8b7c1bd500472ebb1567e40b9bedb37ac99df25924fed45046d",
+          "decoded_seconds": 1.875,
+          "trim_start_seconds": 0.036229,
+          "source_peak_dbfs": -0.931
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.73,
+        "bytes": 70124,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -26.544,
+        "sha256": "f395566181274cff8aa72c68a28242d8afb6b192795d2cfbe3ed039ee876a0ef"
+      }
+    },
+    {
+      "id": "spell_fire",
+      "file": "spell_fire.wav",
+      "role": "火法预备：短爆燃与余焰；用于真实命中阶段",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "basic_spells",
+          "member": "Fire Spell Impacts/Fire Spell Impact 1.wav",
+          "duration": 0.85,
+          "gain_db": 0,
+          "fade_out": 0.2,
+          "member_sha256": "0ed8aa723a1189da00f115d7402508a291906bd249a80036e71a59f1020e67eb",
+          "decoded_seconds": 2.997333,
+          "trim_start_seconds": 0.047375,
+          "source_peak_dbfs": 0.0
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.91,
+        "bytes": 87404,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -21.892,
+        "sha256": "b0cc31e5951d61c11807f6c369e0e98e70dda209f52587848dd745572255e286"
+      }
+    },
+    {
+      "id": "spell_ice",
+      "file": "spell_ice.wav",
+      "role": "冰法预备：结晶脆裂，不叠火焰或金属",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "basic_spells",
+          "member": "Ice Spell Impacts/Ice Spell Impact 3.wav",
+          "duration": 0.8,
+          "gain_db": 0,
+          "highpass": 180,
+          "fade_out": 0.17,
+          "member_sha256": "735223f61fbc20b45f4b2ef9090d45d95c81550258372613e87b3900817e9aa8",
+          "decoded_seconds": 1.953833,
+          "trim_start_seconds": 0.004687,
+          "source_peak_dbfs": -1.785
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.87,
+        "bytes": 83564,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -26.038,
+        "sha256": "078b0fe798231c2801aed0fca2ddabf7d4b2f0da44620db210f9a4b7d352d4b9"
+      }
+    },
+    {
+      "id": "spell_lightning",
+      "file": "spell_lightning.wav",
+      "role": "雷法预备：电裂瞬态＋短滚动尾部，避免激光长音",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "basic_spells",
+          "member": "Lightning Spell Impacts/Lightning Spell Impact 1.wav",
+          "duration": 0.89,
+          "gain_db": 0,
+          "highpass": 100,
+          "lowpass": 10500,
+          "fade_out": 0.18,
+          "member_sha256": "15d3a0491e6e51e14cea718dbdb3d597163b0bc00e0fc0fadf1d1d68b0f8b853",
+          "decoded_seconds": 3.68,
+          "trim_start_seconds": 0.0,
+          "source_peak_dbfs": -0.01
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.95,
+        "bytes": 91244,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -24.072,
+        "sha256": "d7b36a53b2ed8bbe2097b644d6f60bad017c3332b74f64f7c1abee271d0673a5"
+      }
+    },
+    {
+      "id": "spell_wind",
+      "file": "spell_wind.wav",
+      "role": "风法预备：三层不同速度气流，不使用剑刃金属层",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "swishes",
+          "member": "swishes/swish-7.wav",
+          "duration": 0.28,
+          "gain_db": 0,
+          "pitch": 0.65,
+          "member_sha256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+          "decoded_seconds": 0.288479,
+          "trim_start_seconds": 0.017354,
+          "source_peak_dbfs": -0.511
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-8.wav",
+          "duration": 0.27,
+          "gain_db": -5,
+          "delay": 0.12,
+          "pitch": 0.8,
+          "member_sha256": "113a3709ad889ad2fcf38eaceaf4eb9d67ffe1e96713fed93a6f0aed08769980",
+          "decoded_seconds": 0.192083,
+          "trim_start_seconds": 0.034563,
+          "source_peak_dbfs": -1.445
+        },
+        {
+          "source": "swishes",
+          "member": "swishes/swish-10.wav",
+          "duration": 0.23,
+          "gain_db": -10,
+          "delay": 0.29,
+          "member_sha256": "4f7381a76f280d3f36f962ac3f44f16f77eec44797f30715d063c81ea3859024",
+          "decoded_seconds": 0.125,
+          "trim_start_seconds": 0.006771,
+          "source_peak_dbfs": -0.811
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.66,
+        "bytes": 63404,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -21.797,
+        "sha256": "fa944ed9e49ccd91e3aa1c876aeb431ab1ab64d9fc6446655a7e5825ff428f9f"
+      }
+    },
+    {
+      "id": "spell_earth",
+      "file": "spell_earth.wav",
+      "role": "土法预备：低闷震动＋石粒延迟散落",
+      "status": "reserved_not_gameplay",
+      "layers": [
+        {
+          "source": "rpg",
+          "member": "stones_03.ogg",
+          "duration": 0.63,
+          "gain_db": 0,
+          "pitch": 0.65,
+          "lowpass": 3500,
+          "member_sha256": "b86d143d7ef4974c2b97fda9e5d1861482646eec754e15935eeb3680ea0d71da",
+          "decoded_seconds": 1.845417,
+          "trim_start_seconds": 0.0,
+          "source_peak_dbfs": 2.561
+        },
+        {
+          "source": "rpg",
+          "member": "stones_04.ogg",
+          "duration": 0.44,
+          "gain_db": -7,
+          "delay": 0.17,
+          "pitch": 0.9,
+          "member_sha256": "66f1cef820f66d86414d481b37a48a7b7ea11f4a5d7358372ebcfb506af0e652",
+          "decoded_seconds": 0.426,
+          "trim_start_seconds": 0.020167,
+          "source_peak_dbfs": 2.849
+        }
+      ],
+      "audio": {
+        "duration_seconds": 0.79,
+        "bytes": 75884,
+        "peak_dbfs": -6.0,
+        "rms_dbfs": -30.488,
+        "sha256": "a409e1e503f3fea537c09deb60391e3ad627f21c5b81b857ddf171a3486b032a"
+      }
+    }
+  ]
+}

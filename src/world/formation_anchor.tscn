@@ -86,6 +86,7 @@ position = Vector3(0, 0.66, 0)
 shape = SubResource("Shape_base")
 
 [node name="RealmLabel" type="Label3D" parent="."]
+pixel_size = 0.012
 position = Vector3(0, 1.55, 0)
 billboard = 1
 no_depth_test = true

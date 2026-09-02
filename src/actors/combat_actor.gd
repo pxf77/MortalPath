@@ -6,6 +6,7 @@ signal realm_changed(actor)
 signal damage_received(actor, amount: float, source)
 signal damage_modifier_changed(actor, incoming_multiplier: float)
 signal died(actor)
+signal impact_resolved(actor, source, kind: StringName, amount: float)
 
 @export_group("Identity")
 @export var actor_name: String = "修士"
@@ -24,6 +25,9 @@ var defense: float = 0.0
 var invulnerable: bool = false
 var is_dead: bool = false
 var incoming_damage_multiplier: float = 1.0
+var hit_pause_enabled: bool = true
+var _hit_pause_left: float = 0.0
+var _knockback_velocity := Vector3.ZERO
 
 
 func _ready() -> void:
@@ -50,7 +54,10 @@ func refresh_stats(full_restore: bool = false) -> void:
 
 
 func receive_attack(attacker: CombatActor, skill_multiplier: float = 1.0) -> float:
-	if is_dead or invulnerable or not is_instance_valid(attacker):
+	if is_dead or not is_instance_valid(attacker):
+		return 0.0
+	if invulnerable:
+		impact_resolved.emit(self, attacker, &"evade", 0.0)
 		return 0.0
 
 	var calculated_damage: float = DamageRules.calculate_damage(
@@ -64,6 +71,17 @@ func receive_attack(attacker: CombatActor, skill_multiplier: float = 1.0) -> flo
 	damage = maxf(0.1, damage)
 
 	current_health = maxf(0.0, current_health - damage)
+	var kind: StringName = &"guard" if incoming_damage_multiplier < 0.99 else &"hit"
+	if current_health <= 0.0:
+		kind = &"break" if is_in_group("demo_objectives") else &"death"
+	request_hit_pause(0.055 if kind == &"death" or kind == &"break" else 0.04)
+	attacker.request_hit_pause(0.045)
+	# Fixed anchors and higher-realm opponents cannot be pushed by low-realm hits.
+	if not is_in_group("demo_objectives") and attacker.major_realm >= major_realm:
+		var away := global_position - attacker.global_position
+		away.y = 0.0
+		_knockback_velocity = away.normalized() * (1.0 if kind == &"guard" else 4.0)
+	impact_resolved.emit(self, attacker, kind, damage)
 	damage_received.emit(self, damage, attacker)
 	health_changed.emit(self, current_health, max_health)
 
@@ -71,6 +89,32 @@ func receive_attack(attacker: CombatActor, skill_multiplier: float = 1.0) -> flo
 		_die()
 
 	return damage
+
+
+func request_hit_pause(duration: float) -> void:
+	if hit_pause_enabled:
+		_hit_pause_left = maxf(_hit_pause_left, minf(duration, 0.065))
+
+
+func advance_hit_pause(delta: float) -> bool:
+	if not hit_pause_enabled:
+		_hit_pause_left = 0.0
+	if _hit_pause_left <= 0.0:
+		return false
+	_hit_pause_left = maxf(0.0, _hit_pause_left - delta)
+	velocity = Vector3.ZERO
+	return true
+
+
+func move_with_impact(delta: float) -> void:
+	velocity += _knockback_velocity
+	move_and_slide()
+	_knockback_velocity = _knockback_velocity.move_toward(Vector3.ZERO, 32.0 * delta)
+
+
+func clear_impact_motion() -> void:
+	_hit_pause_left = 0.0
+	_knockback_velocity = Vector3.ZERO
 
 
 func set_incoming_damage_multiplier(multiplier: float) -> void:

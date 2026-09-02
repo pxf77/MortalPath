@@ -23,14 +23,18 @@ src/
 ├── cultivation/
 │   └── realm_rules.gd           # 境界、阶段、威胁指数与神识判断
 ├── combat/
-│   └── damage_rules.gd          # 伤害与境界穿透
+│   ├── damage_rules.gd          # 伤害与境界穿透
+│   ├── demo_rules.gd            # 连击、消耗与目标规则
+│   ├── combat_projectile.gd     # 远程术法
+│   ├── combat_feedback.gd       # 场景局部反馈与独立相机偏移
+│   └── combat_audio.gd          # CC0 采样音效映射、连击变体和有界声部
 ├── actors/
 │   ├── combat_actor.gd          # 战斗实体最小公共能力
 │   ├── player/                  # 玩家输入与攻击
 │   └── enemies/                 # 最小敌人行为
 └── main/
     ├── main.gd                  # 场景组合、相机和 HUD
-    └── main.tscn                # Combat Lab
+    └── main.tscn                # 青岚谷 Demo
 ```
 
 ## 依赖方向
@@ -49,7 +53,7 @@ DamageRules + RealmRules
 
 ## 当前刻意保持简单的部分
 
-- 玩家只有移动、普攻、闪避；
+- 玩家只有移动、三段普攻、剑诀、护体、闪避；
 - 敌人只有接近、预警、攻击和冷却；
 - 没有引入行为树或复杂层级状态机；
 - 没有装备、背包、任务和存档框架；
@@ -57,6 +61,8 @@ DamageRules + RealmRules
 - 没有将所有数值抽象成难以追踪的配置系统。
 
 这些能力应在垂直切片出现真实需求时再增加。
+
+M1 的接触事实由 `CombatActor.impact_resolved` 发布；反馈层只读取事件，不改变伤害数值。短命中停顿与击退属于实体自身的运动状态，不写全局时间倍率；震屏只写相机的独立显示偏移。前摇期间锁定攻击朝向，正常输入仍可缓冲或以身法取消。
 
 ## 下一阶段扩展点
 

@@ -14,6 +14,7 @@ var _time_left: float = 4.0
 
 
 func _ready() -> void:
+	add_to_group("combat_projectiles")
 	_time_left = lifetime
 	body_entered.connect(_on_body_entered)
 
@@ -31,6 +32,8 @@ func configure(
 	speed = new_speed
 	_time_left = lifetime
 
+	if DisplayServer.get_name() == "headless":
+		return
 	var material := StandardMaterial3D.new()
 	material.albedo_color = tint
 	material.emission_enabled = true
@@ -53,6 +56,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
+	if is_queued_for_deletion():
+		return
 	if source_actor == null or not is_instance_valid(source_actor):
 		queue_free()
 		return

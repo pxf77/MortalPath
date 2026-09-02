@@ -1,6 +1,8 @@
 class_name TrainingEnemy
 extends CombatActor
 
+signal spell_released(cue: StringName)
+
 enum CombatStyle {
 	MELEE,
 	RANGED,
@@ -30,18 +32,19 @@ const PROJECTILE_SCENE := preload("res://src/combat/combat_projectile.tscn")
 
 @export_group("Presentation")
 @export var body_tint: Color = Color(0.76, 0.24, 0.22, 1.0)
+@export var ranged_audio_cue: StringName = &"enemy_spell"
 
 @onready var _body_mesh: MeshInstance3D = $BodyMesh
 @onready var _telegraph: MeshInstance3D = $Telegraph
 @onready var _projectile_origin: Node3D = $ProjectileOrigin
 @onready var _realm_label: Label3D = $RealmLabel
+@onready var _guard_visual: MeshInstance3D = $GuardVisual
 
 var ai_enabled: bool = true
 var _target: CombatActor = null
 var _attack_cooldown_left: float = 0.0
 var _windup_left: float = 0.0
 var _attack_kind: int = AttackKind.NONE
-var _damage_flash_left: float = 0.0
 var _unique_material: StandardMaterial3D = null
 
 
@@ -52,17 +55,18 @@ func _ready() -> void:
 	_telegraph.visible = false
 	if DisplayServer.get_name() != "headless":
 		_apply_unique_tint()
-	damage_received.connect(_on_damage_received)
 	realm_changed.connect(_on_realm_changed)
+	damage_modifier_changed.connect(_on_damage_modifier_changed)
 	_update_realm_label()
 
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	if advance_hit_pause(delta):
+		return
 
 	_attack_cooldown_left = maxf(0.0, _attack_cooldown_left - delta)
-	_update_damage_flash(delta)
 	_acquire_target()
 
 	if not ai_enabled or _target == null or _target.is_dead:
@@ -89,13 +93,14 @@ func _physics_process(delta: float) -> void:
 			_:
 				_tick_melee(offset, distance)
 
-	move_and_slide()
+	move_with_impact(delta)
 	_clamp_to_arena()
 
 
 func set_ai_enabled(enabled: bool) -> void:
 	ai_enabled = enabled
 	if not enabled:
+		clear_impact_motion()
 		velocity = Vector3.ZERO
 		_windup_left = 0.0
 		_attack_kind = AttackKind.NONE
@@ -209,6 +214,7 @@ func _spawn_projectile() -> void:
 	get_tree().current_scene.add_child(projectile)
 	projectile.global_position = _projectile_origin.global_position
 	projectile.configure(self, direction, attack_multiplier, projectile_speed, body_tint)
+	spell_released.emit(&"guardian_spell" if combat_style == CombatStyle.GUARDIAN else ranged_audio_cue)
 
 
 func _update_windup_visual() -> void:
@@ -228,20 +234,6 @@ func _apply_unique_tint() -> void:
 		_body_mesh.material_override = _unique_material
 
 
-func _on_damage_received(_actor, _amount: float, _source) -> void:
-	_damage_flash_left = 0.09
-	if _unique_material != null:
-		_unique_material.albedo_color = Color(0.95, 0.90, 0.78, 1.0)
-
-
-func _update_damage_flash(delta: float) -> void:
-	if _damage_flash_left <= 0.0:
-		return
-	_damage_flash_left = maxf(0.0, _damage_flash_left - delta)
-	if _damage_flash_left <= 0.0 and _unique_material != null:
-		_unique_material.albedo_color = body_tint
-
-
 func _clamp_to_arena() -> void:
 	global_position.x = clampf(global_position.x, -arena_half_extent, arena_half_extent)
 	global_position.z = clampf(global_position.z, -arena_half_extent, arena_half_extent)
@@ -249,6 +241,10 @@ func _clamp_to_arena() -> void:
 
 func _on_realm_changed(_actor) -> void:
 	_update_realm_label()
+
+
+func _on_damage_modifier_changed(_actor, multiplier: float) -> void:
+	_guard_visual.visible = multiplier < 0.99
 
 
 func _update_realm_label() -> void:

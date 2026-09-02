@@ -35,7 +35,8 @@ func set_active(enabled: bool) -> void:
 	_disc.visible = true
 	_core.visible = true
 	_label.text = "遁光阵\n%s" % ("已开启" if enabled else "受锁灵阵压制")
-	_label.modulate = Color(0.72, 0.96, 0.84, 1.0) if enabled else Color(0.58, 0.62, 0.60, 1.0)
+	if DisplayServer.get_name() != "headless":
+		_label.modulate = Color(0.72, 0.96, 0.84, 1.0) if enabled else Color(0.58, 0.62, 0.60, 1.0)
 	if _disc_material != null:
 		_disc_material.albedo_color = Color(0.28, 0.78, 0.58, 0.34) if enabled else Color(0.28, 0.34, 0.31, 0.18)
 		_disc_material.emission = Color(0.16, 0.72, 0.48, 1.0) if enabled else Color(0.10, 0.14, 0.12, 1.0)

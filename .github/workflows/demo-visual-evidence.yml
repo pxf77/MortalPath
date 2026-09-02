@@ -2,61 +2,71 @@ name: Demo visual evidence
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
   pull_request:
     paths:
       - "src/**"
-      - "tests/demo_visual_capture.gd"
+      - "tests/**"
+      - "scripts/**"
+      - "tools/**"
+      - "assets/**"
+      - "project.godot"
+      - "toolchain.lock.json"
       - ".github/workflows/demo-visual-evidence.yml"
 
 jobs:
   capture:
     runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/cache@v4
+        with:
+          path: .tools
+          key: godot-linux-editor-${{ hashFiles('toolchain.lock.json') }}
+
+      - name: Install exact official editor
+        run: python3 tools/godot_toolchain.py install --github
+
       - name: Install virtual display, encoder and CJK fonts
         shell: bash
         run: |
           set -euo pipefail
-          apt-get update
-          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+          sudo apt-get update
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             xvfb xauth ffmpeg libgl1-mesa-dri libglx-mesa0 mesa-utils \
             fontconfig fonts-noto-cjk
           fc-cache -f
-          fc-list :lang=zh | head -n 3
-          rm -rf /var/lib/apt/lists/*
+          fc-list :lang=zh | sed -n '1,3p'
 
       - name: Import project and build script class cache
         shell: bash
-        env:
-          HOME: /tmp/godot-home
         run: |
           set -euo pipefail
-          mkdir -p "$HOME"
-          godot --headless --editor --path . --quit 2>&1 | tee /tmp/godot-import.log
-          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-import.log; then
-            echo "Godot import reported script errors."
-            exit 1
-          fi
+          godot --headless --path . --import 2>&1 | tee /tmp/godot-import.log
+          bash scripts/check-godot-log.sh /tmp/godot-import.log
           test -s .godot/global_script_class_cache.cfg
 
       - name: Run graphical demo and record evidence
         shell: bash
         env:
-          HOME: /tmp/godot-home
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           set -euo pipefail
-          rm -rf demo-evidence
-          mkdir -p demo-evidence "$HOME"
+          mkdir -p demo-evidence
 
           Xvfb :99 -screen 0 1280x720x24 -ac +extension GLX +render -noreset \
             > /tmp/xvfb.log 2>&1 &
           XVFB_PID=$!
+          trap 'kill "$XVFB_PID" 2>/dev/null || true' EXIT
           export DISPLAY=:99
           sleep 2
 
@@ -102,10 +112,7 @@ jobs:
             exit "$GODOT_STATUS"
           fi
 
-          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-visual-demo.log; then
-            echo "Graphical demo reported script errors."
-            exit 1
-          fi
+          bash scripts/check-godot-log.sh /tmp/godot-visual-demo.log
 
           test -s demo-evidence/mortalpath-demo-v0.1.mp4
           test "$(find demo-evidence -maxdepth 1 -name '*.png' | wc -l)" -eq 7
@@ -123,7 +130,6 @@ jobs:
             -i demo-evidence/palette.png \
             -lavfi "fps=10,scale=960:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=3" \
             demo-evidence/mortalpath-demo-v0.1.gif
-          rm demo-evidence/palette.png
 
           ffmpeg -y \
             -framerate 1 \
@@ -137,7 +143,31 @@ jobs:
           test -s demo-evidence/contact-sheet.png
           du -h demo-evidence/*
 
+      - name: Validate graphical feedback and record three normal-input completions with audio
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          set -euo pipefail
+          mkdir -p demo-evidence/normal-input
+          timeout 180s xvfb-run -a godot --path . --display-driver x11 \
+            --rendering-method gl_compatibility --fixed-fps 60 \
+            --script res://tests/combat_feedback_runner.gd 2>&1 | tee demo-evidence/feedback.log
+          bash scripts/check-godot-log.sh demo-evidence/feedback.log
+          timeout 300s xvfb-run -a -s "-screen 0 1280x720x24" \
+            godot --path . --display-driver x11 --rendering-method gl_compatibility \
+            --fixed-fps 60 --write-movie demo-evidence/normal-input/runs.avi \
+            --script res://tests/demo_input_runner.gd -- \
+            --capture --output=res://demo-evidence/normal-input \
+            2>&1 | tee demo-evidence/normal-input/godot.log
+          bash scripts/check-godot-log.sh demo-evidence/normal-input/godot.log
+          ffmpeg -y -i demo-evidence/normal-input/runs.avi \
+            -c:v libx264 -preset fast -crf 23 -pix_fmt yuv420p \
+            -c:a aac -b:a 160k -movflags +faststart demo-evidence/normal-input/runs.mp4
+          test -s demo-evidence/normal-input/input-runs.json
+
       - name: Upload visual demo evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mortalpath-demo-visual-evidence

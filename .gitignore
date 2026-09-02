@@ -3,9 +3,11 @@
 .import/
 
 # Builds
-build/
+build/*
+!build/.gdignore
 dist/
 exports/
+demo-evidence/
 
 # Editors and OS
 .vscode/
@@ -14,3 +16,4 @@ exports/
 Thumbs.db
 *.swp
 *.tmp
+.tools/

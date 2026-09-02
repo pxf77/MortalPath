@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://src/actors/enemies/training_enemy.gd" id="1_enemy"]
 
@@ -39,6 +39,18 @@ top_radius = 1.65
 bottom_radius = 1.65
 height = 0.035
 
+[sub_resource type="StandardMaterial3D" id="Material_guard"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.53, 0.47, 0.78, 0.14)
+
+[sub_resource type="SphereMesh" id="Mesh_guard"]
+material = SubResource("Material_guard")
+radius = 0.91
+height = 1.82
+radial_segments = 20
+rings = 10
+
 [node name="TrainingEnemy" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 1
@@ -64,7 +76,13 @@ mesh = SubResource("Mesh_telegraph")
 [node name="ProjectileOrigin" type="Node3D" parent="."]
 position = Vector3(0, 0.82, -0.62)
 
+[node name="GuardVisual" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.83, 0)
+visible = false
+mesh = SubResource("Mesh_guard")
+
 [node name="RealmLabel" type="Label3D" parent="."]
+pixel_size = 0.012
 position = Vector3(0, 1.9, 0)
 billboard = 1
 no_depth_test = true

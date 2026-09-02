@@ -10,22 +10,33 @@ on:
 jobs:
   headless-rules:
     runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pinned official toolchain
+        uses: actions/cache@v4
+        with:
+          path: |
+            .tools
+            ~/.local/share/godot/export_templates
+          key: godot-linux-templates-${{ hashFiles('toolchain.lock.json') }}
+
+      - name: Install exact editor and matching export templates
+        run: python3 tools/godot_toolchain.py install --templates --github
+
       - name: Import project
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --editor --path . --quit 2>&1 | tee /tmp/godot-import.log
-          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-import.log; then
-            echo "Godot import reported script errors."
-            exit 1
-          fi
+          godot --headless --path . --import 2>&1 | tee /tmp/godot-import.log
+          bash scripts/check-godot-log.sh /tmp/godot-import.log
 
       - name: Check every GDScript
         shell: bash
@@ -34,21 +45,20 @@ jobs:
           find src tests -type f -name '*.gd' -print | sort > /tmp/gdscript-files.txt
           while IFS= read -r script; do
             echo "Checking $script"
-            godot --headless --disable-render-loop --path . --check-only --script "res://$script"
+            godot --headless --disable-render-loop --path . --check-only --script "res://$script" 2>&1 | tee /tmp/gdscript-check.log
+            bash scripts/check-godot-log.sh /tmp/gdscript-check.log
           done < /tmp/gdscript-files.txt
 
-      - name: Smoke test main scene
-        shell: bash
-        run: |
-          set -euo pipefail
-          godot --headless --disable-render-loop --path . --quit-after 30 2>&1 | tee /tmp/godot-smoke.log
-          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-smoke.log; then
-            echo "Main scene smoke test reported script errors."
-            exit 1
-          fi
+      - name: Run complete demo regression gate
+        run: bash scripts/validate-demo.sh
 
-      - name: Run rule tests
-        run: godot --headless --disable-render-loop --path . --script res://tests/test_runner.gd
+      - name: Export and boot Linux release
+        run: bash scripts/validate-export.sh
 
-      - name: Run demo flow test
-        run: godot --headless --disable-render-loop --path . --script res://tests/demo_scene_runner.gd
+      - name: Upload input metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: normal-input-evidence
+          path: build/m1-evidence/validation/
+          if-no-files-found: warn
