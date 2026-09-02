@@ -1,0 +1,128 @@
+name: Demo visual evidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/demo_visual_capture.gd"
+      - ".github/workflows/demo-visual-evidence.yml"
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install virtual display and encoder
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            xvfb xauth ffmpeg libgl1-mesa-dri libglx-mesa0 mesa-utils
+          rm -rf /var/lib/apt/lists/*
+
+      - name: Run graphical demo and record evidence
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          set -euo pipefail
+          rm -rf demo-evidence
+          mkdir -p demo-evidence
+
+          Xvfb :99 -screen 0 1280x720x24 -ac +extension GLX +render -noreset \
+            > /tmp/xvfb.log 2>&1 &
+          XVFB_PID=$!
+          export DISPLAY=:99
+          sleep 2
+
+          godot \
+            --path . \
+            --display-driver x11 \
+            --rendering-method gl_compatibility \
+            --resolution 1280x720 \
+            --position 0,0 \
+            --script res://tests/demo_visual_capture.gd \
+            > /tmp/godot-visual-demo.log 2>&1 &
+          GODOT_PID=$!
+
+          sleep 1
+          ffmpeg -y \
+            -f x11grab \
+            -video_size 1280x720 \
+            -framerate 20 \
+            -i :99.0 \
+            -an \
+            -c:v libx264 \
+            -preset veryfast \
+            -crf 20 \
+            -pix_fmt yuv420p \
+            demo-evidence/mortalpath-demo-v0.1.mp4 \
+            > /tmp/ffmpeg-record.log 2>&1 &
+          FFMPEG_PID=$!
+
+          set +e
+          wait "$GODOT_PID"
+          GODOT_STATUS=$?
+          set -e
+
+          sleep 1
+          kill -INT "$FFMPEG_PID" 2>/dev/null || true
+          wait "$FFMPEG_PID" 2>/dev/null || true
+          kill "$XVFB_PID" 2>/dev/null || true
+
+          cat /tmp/godot-visual-demo.log
+          if [ "$GODOT_STATUS" -ne 0 ]; then
+            cat /tmp/xvfb.log || true
+            cat /tmp/ffmpeg-record.log || true
+            exit "$GODOT_STATUS"
+          fi
+
+          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-visual-demo.log; then
+            echo "Graphical demo reported script errors."
+            exit 1
+          fi
+
+          test -s demo-evidence/mortalpath-demo-v0.1.mp4
+          test "$(find demo-evidence -maxdepth 1 -name '*.png' | wc -l)" -eq 7
+
+      - name: Build GIF and contact sheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -y \
+            -i demo-evidence/mortalpath-demo-v0.1.mp4 \
+            -vf "fps=10,scale=960:-1:flags=lanczos,palettegen=stats_mode=diff" \
+            demo-evidence/palette.png
+          ffmpeg -y \
+            -i demo-evidence/mortalpath-demo-v0.1.mp4 \
+            -i demo-evidence/palette.png \
+            -lavfi "fps=10,scale=960:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=3" \
+            demo-evidence/mortalpath-demo-v0.1.gif
+          rm demo-evidence/palette.png
+
+          ffmpeg -y \
+            -framerate 1 \
+            -pattern_type glob \
+            -i 'demo-evidence/[0-9][0-9]-*.png' \
+            -vf "scale=640:-1,tile=2x4:padding=8:margin=8" \
+            -frames:v 1 \
+            demo-evidence/contact-sheet.png
+
+          test -s demo-evidence/mortalpath-demo-v0.1.gif
+          test -s demo-evidence/contact-sheet.png
+          du -h demo-evidence/*
+
+      - name: Upload visual demo evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortalpath-demo-visual-evidence
+          path: demo-evidence/
+          if-no-files-found: error
+          retention-days: 14
