@@ -34,6 +34,14 @@ func _run() -> void:
 	_assert_equal(demo.remaining_anchor_count_for_test(), 0, "测试应能清除全部阵眼")
 	_assert_true(demo.escape_portal_active_for_test(), "阵眼全部破坏后遁光阵应开启")
 
+	var portal := demo.get_node("EscapePortal") as EscapePortal
+	var player := demo.get_node("Player") as PlayerController
+	_assert_true(portal != null and player != null, "Demo 应存在遁光阵和玩家")
+	if portal != null and player != null:
+		portal.escaped.emit(player)
+		await process_frame
+		_assert_equal(demo.phase_name_for_test(), "victory", "进入遁光阵后应完成 Demo")
+
 	demo.queue_free()
 	await process_frame
 	if _failures == 0:
