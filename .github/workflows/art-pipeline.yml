@@ -1,0 +1,335 @@
+name: Art Pipeline P0
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "art_pipeline/**"
+      - "docs/art-direction/**"
+      - ".github/workflows/art-pipeline.yml"
+      - ".gitattributes"
+      - ".gitignore"
+  push:
+    branches:
+      - main
+      - "feat/**"
+    paths:
+      - "art_pipeline/**"
+      - "docs/art-direction/**"
+      - ".github/workflows/art-pipeline.yml"
+      - ".gitattributes"
+      - ".gitignore"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: art-pipeline-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ART_ROOT: art_pipeline
+
+jobs:
+  preflight:
+    name: Manifest and script tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run pipeline unit tests
+        run: python -m unittest discover -s art_pipeline/tests -v
+
+      - name: Validate manifests
+        run: |
+          mkdir -p art_pipeline/reports
+          python art_pipeline/tools/validate_manifest.py \
+            --report art_pipeline/reports/manifest-validation.json
+
+  export:
+    name: Blender export and glTF validation
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read pinned toolchain
+        id: toolchain
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          lock = json.loads(Path("art_pipeline/toolchain.lock.json").read_text())
+          for prefix, section in (
+              ("blender", lock["blender"]),
+              ("validator", lock["gltf_validator"]),
+          ):
+              for key, value in section.items():
+                  print(f"{prefix}_{key}={value}")
+          PY
+
+      - name: Cache Blender
+        uses: actions/cache@v4
+        with:
+          path: .art-tools/blender-${{ steps.toolchain.outputs.blender_version }}
+          key: blender-linux-${{ steps.toolchain.outputs.blender_version }}
+
+      - name: Install pinned Blender
+        shell: bash
+        env:
+          BLENDER_VERSION: ${{ steps.toolchain.outputs.blender_version }}
+          BLENDER_ARCHIVE: ${{ steps.toolchain.outputs.blender_archive_name }}
+          BLENDER_URL: ${{ steps.toolchain.outputs.blender_archive_url }}
+          BLENDER_CHECKSUM_URL: ${{ steps.toolchain.outputs.blender_checksum_url }}
+        run: |
+          set -euo pipefail
+          blender_dir="$GITHUB_WORKSPACE/.art-tools/blender-$BLENDER_VERSION"
+          if [[ ! -x "$blender_dir/blender" ]]; then
+            mkdir -p "$blender_dir"
+            curl --fail --location --retry 3 "$BLENDER_URL" -o "$RUNNER_TEMP/$BLENDER_ARCHIVE"
+            curl --fail --location --retry 3 "$BLENDER_CHECKSUM_URL" -o "$RUNNER_TEMP/blender.sha256"
+            grep -F "$BLENDER_ARCHIVE" "$RUNNER_TEMP/blender.sha256" > "$RUNNER_TEMP/blender.selected.sha256"
+            test -s "$RUNNER_TEMP/blender.selected.sha256"
+            (
+              cd "$RUNNER_TEMP"
+              sha256sum --check blender.selected.sha256
+            )
+            tar -xJf "$RUNNER_TEMP/$BLENDER_ARCHIVE" -C "$blender_dir" --strip-components=1
+          fi
+          "$blender_dir/blender" --version
+          echo "$blender_dir" >> "$GITHUB_PATH"
+
+      - name: Cache Khronos glTF Validator
+        uses: actions/cache@v4
+        with:
+          path: .art-tools/gltf-validator-${{ steps.toolchain.outputs.validator_version }}
+          key: gltf-validator-linux-${{ steps.toolchain.outputs.validator_version }}
+
+      - name: Install pinned Khronos glTF Validator
+        id: validator
+        shell: bash
+        env:
+          VALIDATOR_VERSION: ${{ steps.toolchain.outputs.validator_version }}
+          VALIDATOR_ARCHIVE: ${{ steps.toolchain.outputs.validator_archive_name }}
+          VALIDATOR_URL: ${{ steps.toolchain.outputs.validator_archive_url }}
+        run: |
+          set -euo pipefail
+          validator_dir="$GITHUB_WORKSPACE/.art-tools/gltf-validator-$VALIDATOR_VERSION"
+          if ! find "$validator_dir" -type f -name gltf_validator -perm -u+x -print -quit 2>/dev/null | grep -q .; then
+            rm -rf "$validator_dir"
+            mkdir -p "$validator_dir"
+            curl --fail --location --retry 3 "$VALIDATOR_URL" -o "$RUNNER_TEMP/$VALIDATOR_ARCHIVE"
+            tar -xJf "$RUNNER_TEMP/$VALIDATOR_ARCHIVE" -C "$validator_dir"
+            find "$validator_dir" -type f -name gltf_validator -exec chmod +x {} +
+          fi
+          validator_bin="$(find "$validator_dir" -type f -name gltf_validator -print -quit)"
+          test -x "$validator_bin"
+          echo "bin=$validator_bin" >> "$GITHUB_OUTPUT"
+
+      - name: Build Blender source and runtime assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p \
+            art_pipeline/work/source \
+            art_pipeline/runtime \
+            art_pipeline/reports/previews \
+            art_pipeline/reports/assets
+
+          python - <<'PY' > "$RUNNER_TEMP/blender-jobs.tsv"
+          import json
+          from pathlib import Path
+          for manifest_path in sorted(Path("art_pipeline/manifests").rglob("*.json")):
+              manifest = json.loads(manifest_path.read_text())
+              source = manifest["source"]
+              if source["type"] not in {"blend", "blender_python"}:
+                  continue
+              print("\t".join((
+                  str(manifest_path),
+                  manifest["id"],
+                  source["type"],
+                  source["path"],
+              )))
+          PY
+
+          while IFS=$'\t' read -r manifest asset_id source_type source_path; do
+            [[ -n "$manifest" ]] || continue
+            if [[ "$source_type" == "blender_python" ]]; then
+              source_blend="art_pipeline/work/source/${asset_id}.blend"
+              blender --background --python "$source_path" -- --output "$source_blend"
+            else
+              source_blend="$source_path"
+            fi
+
+            blender --background "$source_blend" \
+              --python art_pipeline/tools/blender/export_asset.py \
+              -- --manifest "$manifest"
+
+            blender --background "$source_blend" \
+              --python art_pipeline/tools/blender/render_preview.py \
+              -- --manifest "$manifest"
+          done < "$RUNNER_TEMP/blender-jobs.tsv"
+
+      - name: Validate generated runtime files
+        shell: bash
+        env:
+          VALIDATOR_BIN: ${{ steps.validator.outputs.bin }}
+        run: |
+          set -euo pipefail
+          python art_pipeline/tools/validate_manifest.py \
+            --check-runtime \
+            --report art_pipeline/reports/manifest-validation.json
+
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          for manifest_path in sorted(Path("art_pipeline/manifests").rglob("*.json")):
+              manifest = json.loads(manifest_path.read_text())
+              runtime = Path(manifest["runtime"]["path"])
+              report = Path("art_pipeline/reports/assets") / f"{manifest['id']}.json"
+              subprocess.check_call([
+                  sys.executable,
+                  "art_pipeline/tools/inspect_glb.py",
+                  "--manifest", str(manifest_path),
+                  "--output", str(report),
+              ])
+          PY
+
+          while IFS= read -r -d '' asset; do
+            asset_id="$(basename "$asset" .glb)"
+            "$VALIDATOR_BIN" -a -o "$asset" \
+              > "art_pipeline/reports/assets/${asset_id}.khronos.json"
+          done < <(find art_pipeline/runtime -type f -name '*.glb' -print0)
+
+          python art_pipeline/tools/build_catalog.py
+
+      - name: Summarize exported assets
+        shell: bash
+        run: |
+          {
+            echo "## Art Pipeline export"
+            echo
+            echo '```text'
+            find art_pipeline/runtime -type f ! -name .gitkeep -printf '%P  %s bytes\n' | sort
+            echo '```'
+            echo
+            echo "Khronos reports and Blender previews are attached in the art-runtime artifact."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload runtime and review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: art-runtime
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            art_pipeline/runtime
+            art_pipeline/reports
+
+  godot-import:
+    name: Godot 4.3 import smoke test
+    needs: export
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download runtime assets
+        uses: actions/download-artifact@v4
+        with:
+          name: art-runtime
+          path: art_pipeline/build/export
+
+      - name: Stage assets in Godot fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf art_pipeline/fixtures/godot/assets
+          mkdir -p art_pipeline/fixtures/godot/assets
+          cp -R art_pipeline/build/export/runtime/. art_pipeline/fixtures/godot/assets/
+
+      - name: Import assets
+        run: godot --headless --editor --path art_pipeline/fixtures/godot --quit
+
+      - name: Run Godot asset smoke test
+        run: |
+          godot --headless \
+            --path art_pipeline/fixtures/godot \
+            --script res://tools/asset_smoke_test.gd
+
+      - name: Upload Godot smoke report
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-smoke
+          if-no-files-found: error
+          retention-days: 30
+          path: art_pipeline/fixtures/godot/reports/godot-smoke.json
+
+  package:
+    name: Build snapshot Art Pack
+    needs:
+      - export
+      - godot-import
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download export outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: art-runtime
+          path: art_pipeline/build/export
+
+      - name: Download Godot report
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-smoke
+          path: art_pipeline/build/godot
+
+      - name: Build deterministic Art Pack
+        run: |
+          python art_pipeline/tools/build_art_pack.py \
+            --runtime-root art_pipeline/build/export/runtime \
+            --catalog art_pipeline/build/export/reports/asset-catalog.json \
+            --godot-report art_pipeline/build/godot/godot-smoke.json
+
+      - name: Upload Art Pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: art-pack
+          if-no-files-found: error
+          retention-days: 30
+          path: art_pipeline/dist

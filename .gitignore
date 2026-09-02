@@ -7,6 +7,22 @@ build/
 dist/
 exports/
 
+# MortalPath art pipeline generated data
+.art-tools/
+art_pipeline/build/
+art_pipeline/work/
+art_pipeline/runtime/*
+!art_pipeline/runtime/.gitkeep
+art_pipeline/reports/*
+!art_pipeline/reports/.gitkeep
+art_pipeline/dist/*
+!art_pipeline/dist/.gitkeep
+art_pipeline/fixtures/godot/.godot/
+art_pipeline/fixtures/godot/assets/*
+!art_pipeline/fixtures/godot/assets/.gitkeep
+art_pipeline/fixtures/godot/reports/*
+!art_pipeline/fixtures/godot/reports/.gitkeep
+
 # Editors and OS
 .vscode/
 .idea/

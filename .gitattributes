@@ -1,0 +1,7 @@
+# MortalPath art source files managed by Git LFS.
+# Keep lightweight runtime exports, manifests, SVG guides and reports in normal Git.
+art_pipeline/source/**/*.blend filter=lfs diff=lfs merge=lfs -text
+art_pipeline/source/**/*.psd filter=lfs diff=lfs merge=lfs -text
+art_pipeline/source/**/*.kra filter=lfs diff=lfs merge=lfs -text
+art_pipeline/source/**/*.exr filter=lfs diff=lfs merge=lfs -text
+art_pipeline/source/**/*.wav filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "prop_pipeline_marker",
+  "kind": "prop",
+  "milestone": "pipeline_p0",
+  "source": {
+    "type": "blender_python",
+    "path": "art_pipeline/source/bootstrap/prop_pipeline_marker.py"
+  },
+  "runtime": {
+    "path": "art_pipeline/runtime/props/prop_pipeline_marker.glb"
+  },
+  "preview": {
+    "path": "art_pipeline/reports/previews/prop_pipeline_marker.png"
+  },
+  "scale": {
+    "unit": "meter",
+    "expected_height_m": {
+      "min": 1.0,
+      "max": 2.2
+    }
+  },
+  "budget": {
+    "triangles_lod0_max": 5000,
+    "materials_max": 3,
+    "bones_max": 0,
+    "animations_max": 0,
+    "textures_max_size": 2048
+  },
+  "art": {
+    "palette": "mortal_path_base_v1",
+    "style": "grounded_xianxia_painterly_3d",
+    "realm": "none"
+  },
+  "provenance": {
+    "type": "original",
+    "license": "project_owned"
+  }
+}

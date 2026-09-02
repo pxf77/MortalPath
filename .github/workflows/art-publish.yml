@@ -1,0 +1,35 @@
+name: Publish Art Pack
+
+on:
+  push:
+    tags:
+      - "artpack-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/art-pipeline.yml
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download Art Pack
+        uses: actions/download-artifact@v4
+        with:
+          name: art-pack
+          path: release-assets
+
+      - name: Publish versioned release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" \
+            release-assets/* \
+            --verify-tag \
+            --title "MortalPath Art Pack $GITHUB_REF_NAME" \
+            --generate-notes

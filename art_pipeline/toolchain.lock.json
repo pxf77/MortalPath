@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "blender": {
+    "version": "5.2.1",
+    "archive_name": "blender-5.2.1-linux-x64.tar.xz",
+    "archive_url": "https://download.blender.org/release/Blender5.2/blender-5.2.1-linux-x64.tar.xz",
+    "checksum_url": "https://download.blender.org/release/Blender5.2/blender-5.2.1.sha256"
+  },
+  "godot": {
+    "version": "4.3",
+    "ci_image": "barichello/godot-ci:4.3"
+  },
+  "gltf_validator": {
+    "version": "2.0.0-dev.3.10",
+    "archive_name": "gltf_validator-2.0.0-dev.3.10-linux64.tar.xz",
+    "archive_url": "https://github.com/KhronosGroup/glTF-Validator/releases/download/2.0.0-dev.3.10/gltf_validator-2.0.0-dev.3.10-linux64.tar.xz"
+  },
+  "python": {
+    "version": "3.12"
+  }
+}

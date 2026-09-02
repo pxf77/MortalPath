@@ -46,6 +46,34 @@
 - [`docs/art-direction/art-review-checklist.md`](docs/art-direction/art-review-checklist.md)
 - [`docs/art-direction/production-plan.md`](docs/art-direction/production-plan.md)
 
+## 美术资源流水线 P0
+
+项目已增加可独立迁移的 `art_pipeline/`：
+
+```text
+源资产 / 程序化源
+  → Blender 5.2.1 后台导出
+  → Manifest、预算与 Khronos glTF 校验
+  → Godot 4.3 导入冒烟
+  → 预览、资产目录与 Art Pack
+```
+
+当前流水线先在游戏仓库内打通，目录结构按后续 `MortalPath-Art` 独立仓库设计。它严格区分 `source/`、`runtime/`、`reports/` 与 `dist/`，不会让游戏运行时直接依赖 DCC 源文件。
+
+本地预检：
+
+```bash
+python -m unittest discover -s art_pipeline/tests -v
+python art_pipeline/tools/validate_manifest.py
+```
+
+相关文档：
+
+- [`art_pipeline/README.md`](art_pipeline/README.md)
+- [`docs/art-direction/art-pipeline.md`](docs/art-direction/art-pipeline.md)
+- [`.github/workflows/art-pipeline.yml`](.github/workflows/art-pipeline.yml)
+- [`.github/workflows/art-publish.yml`](.github/workflows/art-publish.yml)
+
 ## 运行
 
 1. 使用 Godot 4.3 或更高版本打开仓库根目录。
@@ -83,10 +111,12 @@ godot --headless --path . --script res://tests/test_runner.gd
 
 ```text
 .
+├── .github/workflows/            # Godot 与美术生产 CI
+├── art_pipeline/                 # 可迁移的美术源资产生产流水线
 ├── assets/
-│   └── art-guides/              # 美术参考板与基础色板
+│   └── art-guides/               # 美术参考板与基础色板
 ├── docs/
-│   ├── art-direction/            # 美术圣经、境界视觉层级与生产规范
+│   ├── art-direction/            # 美术圣经、视觉层级、生产规范与流水线
 │   ├── architecture.md
 │   ├── game-vision.md
 │   ├── realm-and-combat.md
