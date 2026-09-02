@@ -18,10 +18,34 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Import project
-        run: godot --headless --editor --path . --quit
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --editor --path . --quit 2>&1 | tee /tmp/godot-import.log
+          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-import.log; then
+            echo "Godot import reported script errors."
+            exit 1
+          fi
+
+      - name: Check every GDScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          find src tests -type f -name '*.gd' -print | sort > /tmp/gdscript-files.txt
+          while IFS= read -r script; do
+            echo "Checking $script"
+            godot --headless --path . --check-only --script "res://$script"
+          done < /tmp/gdscript-files.txt
 
       - name: Smoke test main scene
-        run: godot --headless --path . --quit-after 30
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --quit-after 30 2>&1 | tee /tmp/godot-smoke.log
+          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-smoke.log; then
+            echo "Main scene smoke test reported script errors."
+            exit 1
+          fi
 
       - name: Run rule tests
         run: godot --headless --path . --script res://tests/test_runner.gd
