@@ -2,6 +2,7 @@ extends SceneTree
 
 const RealmRulesScript = preload("res://src/cultivation/realm_rules.gd")
 const DamageRulesScript = preload("res://src/combat/damage_rules.gd")
+const DemoRulesScript = preload("res://src/combat/demo_rules.gd")
 
 var _failures: int = 0
 
@@ -11,6 +12,9 @@ func _initialize() -> void:
 	_test_realm_penetration()
 	_test_cross_realm_damage()
 	_test_realm_labels()
+	_test_demo_combo_rules()
+	_test_demo_spirit_rules()
+	_test_demo_objective_text()
 
 	if _failures == 0:
 		print("MortalPath rule tests passed.")
@@ -86,6 +90,36 @@ func _test_realm_labels() -> void:
 		RealmRulesScript.realm_label(RealmRulesScript.MajorRealm.FOUNDATION_ESTABLISHMENT, 1),
 		"筑基初期",
 		"筑基阶段标签"
+	)
+
+
+func _test_demo_combo_rules() -> void:
+	_assert_approx(DemoRulesScript.combo_multiplier(1), 0.85, "第一段御剑倍率")
+	_assert_approx(DemoRulesScript.combo_multiplier(2), 1.0, "第二段御剑倍率")
+	_assert_approx(DemoRulesScript.combo_multiplier(3), 1.35, "第三段御剑倍率")
+	_assert_true(
+		DemoRulesScript.combo_cooldown(3) > DemoRulesScript.combo_cooldown(1),
+		"第三段收招应比第一段更长"
+	)
+
+
+func _test_demo_spirit_rules() -> void:
+	_assert_true(DemoRulesScript.can_spend_spirit(30.0, 30.0), "灵力等于消耗时应可施法")
+	_assert_true(not DemoRulesScript.can_spend_spirit(29.0, 30.0), "灵力不足时不可施法")
+	_assert_approx(DemoRulesScript.spirit_after_spend(80.0, 30.0), 50.0, "灵力扣除")
+	_assert_approx(DemoRulesScript.spirit_after_spend(20.0, 30.0), 20.0, "不足时不得扣除灵力")
+
+
+func _test_demo_objective_text() -> void:
+	_assert_equal(
+		DemoRulesScript.escape_objective(2, false),
+		"破坏锁灵阵眼（剩余 2）",
+		"破阵目标文案"
+	)
+	_assert_equal(
+		DemoRulesScript.escape_objective(0, true),
+		"阵眼已破：前往南侧遁光阵撤离",
+		"撤离目标文案"
 	)
 
 

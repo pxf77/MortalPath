@@ -1,47 +1,109 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://src/main/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/actors/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://src/actors/enemies/training_enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" path="res://src/world/escape_portal.tscn" id="3_portal"]
 
 [sub_resource type="Environment" id="Environment_main"]
 background_mode = 1
-background_color = Color(0.027, 0.031, 0.043, 1)
+background_color = Color(0.045, 0.055, 0.052, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.48, 0.56, 0.68, 1)
-ambient_light_energy = 0.7
+ambient_light_color = Color(0.46, 0.54, 0.50, 1)
+ambient_light_energy = 0.72
 tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="Material_floor"]
-albedo_color = Color(0.14, 0.18, 0.17, 1)
-roughness = 0.9
+albedo_color = Color(0.13, 0.17, 0.15, 1)
+roughness = 0.94
 
 [sub_resource type="PlaneMesh" id="Mesh_floor"]
 material = SubResource("Material_floor")
-size = Vector2(28, 28)
+size = Vector2(30, 30)
 
-[sub_resource type="StandardMaterial3D" id="Material_center"]
+[sub_resource type="StandardMaterial3D" id="Material_path"]
+albedo_color = Color(0.20, 0.19, 0.16, 1)
+roughness = 0.92
+
+[sub_resource type="PlaneMesh" id="Mesh_path"]
+material = SubResource("Material_path")
+size = Vector2(6.2, 27.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_circle"]
 transparency = 1
 shading_mode = 0
-albedo_color = Color(0.48, 0.7, 0.58, 0.12)
+albedo_color = Color(0.34, 0.56, 0.46, 0.10)
 
-[sub_resource type="CylinderMesh" id="Mesh_center"]
-material = SubResource("Material_center")
-top_radius = 5.2
-bottom_radius = 5.2
+[sub_resource type="CylinderMesh" id="Mesh_circle"]
+material = SubResource("Material_circle")
+top_radius = 6.2
+bottom_radius = 6.2
 height = 0.025
+radial_segments = 48
+
+[sub_resource type="StandardMaterial3D" id="Material_stone"]
+albedo_color = Color(0.28, 0.31, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_stone"]
+material = SubResource("Material_stone")
+size = Vector3(1.15, 0.55, 1.15)
+
+[sub_resource type="CylinderMesh" id="Mesh_pillar"]
+material = SubResource("Material_stone")
+top_radius = 0.42
+bottom_radius = 0.52
+height = 2.2
+radial_segments = 12
 
 [sub_resource type="StyleBoxFlat" id="Style_panel"]
-bg_color = Color(0.025, 0.03, 0.045, 0.88)
+bg_color = Color(0.035, 0.045, 0.043, 0.91)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.35, 0.48, 0.55, 0.8)
+border_color = Color(0.31, 0.49, 0.42, 0.78)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_message"]
+bg_color = Color(0.025, 0.03, 0.03, 0.84)
+border_width_top = 1
+border_color = Color(0.30, 0.40, 0.36, 0.65)
+
+[sub_resource type="StyleBoxFlat" id="Style_overlay"]
+bg_color = Color(0.055, 0.065, 0.06, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.46, 0.68, 0.56, 0.9)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Style_health_bg"]
+bg_color = Color(0.12, 0.14, 0.13, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_health_fill"]
+bg_color = Color(0.62, 0.22, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_spirit_fill"]
+bg_color = Color(0.24, 0.62, 0.49, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
@@ -50,84 +112,234 @@ script = ExtResource("1_main")
 environment = SubResource("Environment_main")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-55, -35, 0)
-light_energy = 1.1
+rotation_degrees = Vector3(-58, -32, 0)
+light_color = Color(0.91, 0.84, 0.72, 1)
+light_energy = 1.15
 shadow_enabled = true
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("Mesh_floor")
 
+[node name="StonePath" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.006, 0)
+mesh = SubResource("Mesh_path")
+
 [node name="RealmCircle" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.02, 0)
-mesh = SubResource("Mesh_center")
+position = Vector3(0, 0.025, -1.0)
+mesh = SubResource("Mesh_circle")
+
+[node name="NorthWestStone" type="MeshInstance3D" parent="."]
+position = Vector3(-9.8, 0.28, -9.2)
+rotation_degrees = Vector3(0, 18, 0)
+mesh = SubResource("Mesh_stone")
+
+[node name="NorthEastStone" type="MeshInstance3D" parent="."]
+position = Vector3(9.6, 0.28, -8.8)
+rotation_degrees = Vector3(0, -21, 0)
+mesh = SubResource("Mesh_stone")
+
+[node name="SouthWestStone" type="MeshInstance3D" parent="."]
+position = Vector3(-10.2, 0.28, 8.9)
+rotation_degrees = Vector3(0, -13, 0)
+mesh = SubResource("Mesh_stone")
+
+[node name="SouthEastStone" type="MeshInstance3D" parent="."]
+position = Vector3(9.9, 0.28, 9.4)
+rotation_degrees = Vector3(0, 25, 0)
+mesh = SubResource("Mesh_stone")
+
+[node name="WestPillar" type="MeshInstance3D" parent="."]
+position = Vector3(-11.8, 1.1, -0.8)
+mesh = SubResource("Mesh_pillar")
+
+[node name="EastPillar" type="MeshInstance3D" parent="."]
+position = Vector3(11.8, 1.1, -0.8)
+mesh = SubResource("Mesh_pillar")
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector3(0, 0, 4)
+position = Vector3(0, 0, 7.2)
 
-[node name="QiEnemy" parent="." instance=ExtResource("3_enemy")]
-position = Vector3(-4.5, 0, -1.5)
-actor_name = "炼气邪修"
-major_realm = 1
-minor_stage = 6
-base_max_health = 100.0
-body_tint = Color(0.78, 0.26, 0.22, 1)
+[node name="Actors" type="Node3D" parent="."]
 
-[node name="FoundationEnemy" parent="." instance=ExtResource("3_enemy")]
-position = Vector3(5.5, 0, -2.5)
-actor_name = "筑基修士"
-major_realm = 2
-minor_stage = 1
-base_max_health = 110.0
-detection_range = 5.5
-move_speed = 3.2
-attack_multiplier = 1.15
-body_tint = Color(0.58, 0.26, 0.78, 1)
+[node name="EscapePortal" parent="." instance=ExtResource("3_portal")]
+position = Vector3(0, 0, 11.1)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-position = Vector3(10.5, 14, 14.5)
+position = Vector3(10.8, 14.2, 18.0)
 projection = 1
-size = 18.0
+size = 20.0
 current = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="PanelContainer" parent="HUD"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 650.0
-offset_bottom = 272.0
+[node name="PlayerPanel" type="PanelContainer" parent="HUD"]
+offset_left = 22.0
+offset_top = 20.0
+offset_right = 560.0
+offset_bottom = 188.0
 theme_override_styles/panel = SubResource("Style_panel")
 
-[node name="Margin" type="MarginContainer" parent="HUD/Panel"]
+[node name="Margin" type="MarginContainer" parent="HUD/PlayerPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_bottom = 12
 
-[node name="VBox" type="VBoxContainer" parent="HUD/Panel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="HUD/PlayerPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Title" type="Label" parent="HUD/PlayerPanel/Margin/VBox"]
+layout_mode = 2
+text = "MortalPath · 青岚谷脱身"
+theme_override_colors/font_color = Color(0.84, 0.90, 0.84, 1)
+theme_override_font_sizes/font_size = 21
+
+[node name="PlayerStatus" type="Label" parent="HUD/PlayerPanel/Margin/VBox"]
+layout_mode = 2
+text = "无名修士 · 炼气6层"
+theme_override_font_sizes/font_size = 17
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/PlayerPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+theme_override_styles/background = SubResource("Style_health_bg")
+theme_override_styles/fill = SubResource("Style_health_fill")
+
+[node name="SpiritBar" type="ProgressBar" parent="HUD/PlayerPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+theme_override_styles/background = SubResource("Style_health_bg")
+theme_override_styles/fill = SubResource("Style_spirit_fill")
+
+[node name="SkillStatus" type="Label" parent="HUD/PlayerPanel/Margin/VBox"]
+layout_mode = 2
+text = "J 三段御剑 | Q 青锋剑诀 | E 护体灵光 | Space 身法"
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.77, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="ObjectivePanel" type="PanelContainer" parent="HUD"]
+offset_left = 728.0
+offset_top = 20.0
+offset_right = 1258.0
+offset_bottom = 132.0
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Margin" type="MarginContainer" parent="HUD/ObjectivePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="HUD/ObjectivePanel/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="HUD/Panel/Margin/VBox"]
+[node name="Objective" type="Label" parent="HUD/ObjectivePanel/Margin/VBox"]
 layout_mode = 2
-text = "MortalPath · 境界战斗试验场"
-theme_override_font_sizes/font_size = 22
+text = "当前目标：等待进入青岚谷"
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 18
 
-[node name="PlayerStatus" type="Label" parent="HUD/Panel/Margin/VBox"]
+[node name="Threat" type="Label" parent="HUD/ObjectivePanel/Margin/VBox"]
 layout_mode = 2
-text = "玩家状态"
+text = "阶段：战前准备"
+theme_override_colors/font_color = Color(0.86, 0.66, 0.45, 1)
 
-[node name="EnemyStatus" type="Label" parent="HUD/Panel/Margin/VBox"]
+[node name="MessagePanel" type="PanelContainer" parent="HUD"]
+offset_left = 184.0
+offset_top = 638.0
+offset_right = 1096.0
+offset_bottom = 704.0
+theme_override_styles/panel = SubResource("Style_message")
+
+[node name="Margin" type="MarginContainer" parent="HUD/MessagePanel"]
 layout_mode = 2
-text = "敌人状态"
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
 
-[node name="Message" type="Label" parent="HUD/Panel/Margin/VBox"]
+[node name="Message" type="Label" parent="HUD/MessagePanel/Margin"]
 layout_mode = 2
 text = "战斗记录"
+horizontal_alignment = 1
 autowrap_mode = 2
+theme_override_colors/font_color = Color(0.80, 0.84, 0.80, 1)
+theme_override_font_sizes/font_size = 16
 
-[node name="Controls" type="Label" parent="HUD/Panel/Margin/VBox"]
+[node name="Overlay" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Shade" type="ColorRect" parent="HUD/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.015, 0.02, 0.018, 0.72)
+
+[node name="Panel" type="PanelContainer" parent="HUD/Overlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -345.0
+offset_top = -178.0
+offset_right = 345.0
+offset_bottom = 178.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_overlay")
+
+[node name="Margin" type="MarginContainer" parent="HUD/Overlay/Panel"]
 layout_mode = 2
-text = "移动 WASD/方向键 | 攻击 左键/J | 闪避 Space/K | 突破 B | 重置 R"
-theme_override_colors/font_color = Color(0.7, 0.78, 0.82, 1)
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 26
+
+[node name="VBox" type="VBoxContainer" parent="HUD/Overlay/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="HUD/Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+text = "青岚谷脱身"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.78, 0.91, 0.82, 1)
+theme_override_font_sizes/font_size = 34
+
+[node name="Body" type="Label" parent="HUD/Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Demo 说明"
+horizontal_alignment = 1
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.80, 0.76, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="Prompt" type="Label" parent="HUD/Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+text = "按 Enter 开始"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.90, 0.67, 0.40, 1)
+theme_override_font_sizes/font_size = 22

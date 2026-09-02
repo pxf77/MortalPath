@@ -1,59 +1,44 @@
 # MortalPath
 
-**MortalPath** 是一款固定斜俯视 2.5D 修仙即时战斗 RPG 的工程骨架。
+**MortalPath** 是一款固定斜俯视 2.5D 修仙即时战斗 RPG。
 
 项目采用“凡人流”修仙叙事：玩家从凡俗或炼气阶段起步，在境界森严、资源有限、强者真实存在的世界中，通过功法、法器、丹药、符箓、情报与战前准备逐步成长。具体人物、宗门、剧情与法宝设定保持原创。
 
-## 当前骨架
+## 初版 Demo：青岚谷脱身
 
-当前版本是一个可以直接运行的 **Combat Lab**：
-
-- Godot 4.3+，GDScript；
-- 3D 战斗平面 + 固定正交相机，形成 2.5D 斜俯视表现；
-- 单角色即时移动、普攻、闪避；
-- 炼气四层玩家；
-- 炼气六层敌人与筑基初期敌人；
-- 境界威胁指数、属性缩放与大境界穿透规则；
-- 调试突破能力，可直观看到筑基前后的战力差距；
-- 无外部生产素材，当前战斗对象仍使用 Godot 内置几何体；
-- 规则层 headless 测试。
-
-## 美术仓库
-
-首版美术基线为：
-
-> **凡尘山水·写意半写实**
+当前主场景已经从规则试验场演进为一段可完整结束的战斗 Demo：
 
 ```text
-3D 角色与场景
-+ 固定正交斜俯视
-+ 绘画化 PBR
-+ 低饱和自然环境
-+ 克制而可读的修仙特效
-+ 境界驱动的动作与战场差异
+击退三名炼气邪修
+  ↓
+筑基守阵修士现身
+  ↓
+承受大境界压制并破坏三处锁灵阵眼
+  ↓
+启动遁光阵撤离
 ```
 
-美术源资产、方向板、生产规范、校验工具与 Art Pack 发布已独立维护于：
+已实现：
 
-- [`pxf77/MortalPath-Art`](https://github.com/pxf77/MortalPath-Art)
+- Godot 4.3+、GDScript；
+- 3D 战斗平面与固定正交斜俯视镜头；
+- 三段御剑普攻及输入缓冲；
+- 主动剑诀、护体灵光、身法闪避；
+- 气血、灵力恢复、技能消耗和冷却；
+- 近战、远程与筑基守阵三种敌人行为；
+- 敌方攻击前摇、范围提示、远程术法飞行物；
+- 炼气同境界击杀与筑基大境界压制；
+- 锁灵阵眼、遁光阵、撤离胜利条件；
+- 开场、胜利、失败和重新挑战流程；
+- 规则测试、主场景冒烟和 Demo 阶段流转测试。
 
-仓库职责边界：
-
-```text
-MortalPath-Art
-  → 源资产 / Manifest / 自动导出 / 技术验收 / Art Pack
-  → 发布固定版本 Runtime Art Pack
-MortalPath
-  → 锁定 Art Pack 版本
-  → 在 Godot 场景中集成并执行游戏回归
-```
-
-游戏仓不直接依赖 `.blend`、`.psd`、`.kra` 等 DCC 源文件，也不把临时 Actions Artifact 当作长期资产源。
+当前仍使用工程占位几何体，目标是先验证玩法闭环、战斗可读性和境界秩序。正式美术资产将由独立美术仓库发布 Runtime Art Pack 后再接入。
 
 ## 运行
 
 1. 使用 Godot 4.3 或更高版本打开仓库根目录。
-2. 运行主场景 `res://src/main/main.tscn`，或直接运行项目。
+2. 运行项目或主场景 `res://src/main/main.tscn`。
+3. 按 `Enter` 开始 Demo。
 
 命令行：
 
@@ -61,27 +46,57 @@ MortalPath
 godot --path .
 ```
 
-规则测试：
-
-```bash
-godot --headless --path . --script res://tests/test_runner.gd
-```
-
 ## 操作
 
 | 操作 | 按键 |
 |---|---|
 | 移动 | `WASD` / 方向键 |
-| 御剑普攻 | 鼠标左键 / `J` |
+| 三段御剑 | 鼠标左键 / `J` |
+| 青锋剑诀 | `Q` |
+| 护体灵光 | `E` |
 | 身法闪避 | `Space` / `K` |
-| 调试突破 | `B` |
-| 重置试验场 | `R` |
+| 开始 / 结算后重开 | `Enter` |
+| 随时重置 | `R` |
 
-试验建议：
+战斗建议：
 
-1. 先攻击左侧炼气六层敌人，观察同一大境界内的正常交战。
-2. 再攻击右侧筑基初期敌人，观察低一大境界时的伤害衰减与被压制效果。
-3. 按 `B` 突破到筑基初期，再次交战。
+1. 连续输入普攻完成三段连击，第三段可以同时命中多个近身目标并回复少量灵力；
+2. `Q` 消耗灵力释放远距离贯穿剑诀；
+3. `E` 在敌人重击或筑基修士施法前展开护体灵光；
+4. 筑基修士出现后不要把击杀作为首要目标，优先破坏三处阵眼并进入南侧遁光阵。
+
+## 验证
+
+```bash
+# 境界、伤害、连击与灵力规则
+ godot --headless --path . --script res://tests/test_runner.gd
+
+# Demo 阶段、敌人生成、破阵和撤离入口流转
+ godot --headless --path . --script res://tests/demo_scene_runner.gd
+```
+
+GitHub Actions 还会执行 Godot 工程导入和主场景 headless 冒烟。
+
+## 美术仓库
+
+首版美术基线为：
+
+> **凡尘山水·写意半写实**
+
+美术源资产、方向板、生产规范、校验工具与 Art Pack 发布独立维护于：
+
+- [`pxf77/MortalPath-Art`](https://github.com/pxf77/MortalPath-Art)
+
+仓库职责边界：
+
+```text
+MortalPath-Art
+  → 源资产 / Manifest / 自动导出 / 技术验收 / Runtime Art Pack
+MortalPath
+  → 锁定 Art Pack 版本 / Godot 集成 / 游戏回归
+```
+
+游戏仓不直接依赖 `.blend`、`.psd`、`.kra` 等 DCC 源文件，也不把临时 Actions Artifact 当作长期资产源。
 
 ## 目录
 
@@ -89,25 +104,25 @@ godot --headless --path . --script res://tests/test_runner.gd
 .
 ├── docs/
 │   ├── architecture.md
+│   ├── demo-v0.1.md
 │   ├── game-vision.md
 │   ├── realm-and-combat.md
 │   └── roadmap.md
 ├── src/
-│   ├── actors/                   # 玩家、敌人与战斗实体
-│   ├── combat/                   # 伤害规则
+│   ├── actors/                   # 玩家、敌人和战斗实体
+│   ├── combat/                   # 伤害、Demo 战斗规则与飞行物
 │   ├── core/                     # 输入等基础能力
 │   ├── cultivation/              # 境界与修炼规则
-│   └── main/                     # Combat Lab 场景组合与 HUD
-├── tests/                        # 无插件的 headless 规则测试
+│   ├── main/                     # Demo 编排、场景与 HUD
+│   └── world/                    # 阵眼与遁光阵等交互目标
+├── tests/                        # 规则与 Demo 流程 headless 测试
 ├── project.godot
 └── README.md
 ```
 
 ## 首作范围基线
 
-首作建议控制在：
-
-- 玩家跨度：凡俗/炼气起步，结丹初期收束；
+- 玩家跨度：凡俗或炼气起步，结丹初期收束；
 - 一个主要宗门、一个坊市、三个野外区域、两个大型秘境；
 - 三条主要修炼流派；
 - 单主角、固定视角、区域式地图；
@@ -116,6 +131,7 @@ godot --headless --path . --script res://tests/test_runner.gd
 
 其他设计文档：
 
+- [`docs/demo-v0.1.md`](docs/demo-v0.1.md)
 - [`docs/game-vision.md`](docs/game-vision.md)
 - [`docs/realm-and-combat.md`](docs/realm-and-combat.md)
 - [`docs/architecture.md`](docs/architecture.md)
