@@ -43,7 +43,7 @@ jobs:
           set -euo pipefail
           # The runner's Azure mirror has stalled on CJK fonts and Mesa packages.
           # Use Ubuntu's signed official archive with bounded network retries.
-          for apt_source in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
+          for apt_source in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources /etc/apt/apt-mirrors.txt; do
             if [[ -f "$apt_source" ]]; then
               sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' "$apt_source"
             fi
