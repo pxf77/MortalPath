@@ -14,9 +14,10 @@ var _disc_material: StandardMaterial3D = null
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
-	_disc_material = _duplicate_surface_material(_disc)
-	if _disc_material != null:
-		_disc.material_override = _disc_material
+	if DisplayServer.get_name() != "headless":
+		_disc_material = _duplicate_surface_material(_disc)
+		if _disc_material != null:
+			_disc.material_override = _disc_material
 	set_active(false)
 
 
