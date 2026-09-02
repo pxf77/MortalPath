@@ -25,3 +25,6 @@ jobs:
 
       - name: Run rule tests
         run: godot --headless --path . --script res://tests/test_runner.gd
+
+      - name: Run demo flow test
+        run: godot --headless --path . --script res://tests/demo_scene_runner.gd
