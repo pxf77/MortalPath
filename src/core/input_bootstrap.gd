@@ -6,8 +6,10 @@ const KEY_ACTIONS := {
 	"move_up": [KEY_W, KEY_UP],
 	"move_down": [KEY_S, KEY_DOWN],
 	"attack": [KEY_J],
+	"sword_art": [KEY_Q],
+	"spirit_guard": [KEY_E],
 	"dodge": [KEY_SPACE, KEY_K],
-	"debug_breakthrough": [KEY_B],
+	"start_demo": [KEY_ENTER],
 	"restart": [KEY_R],
 }
 

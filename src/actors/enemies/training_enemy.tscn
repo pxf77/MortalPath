@@ -1,10 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://src/actors/enemies/training_enemy.gd" id="1_enemy"]
 
 [sub_resource type="StandardMaterial3D" id="Material_body"]
-albedo_color = Color(0.76, 0.24, 0.22, 1)
-roughness = 0.78
+albedo_color = Color(0.66, 0.24, 0.20, 1)
+roughness = 0.8
 
 [sub_resource type="CapsuleMesh" id="Mesh_body"]
 material = SubResource("Material_body")
@@ -14,6 +14,30 @@ height = 1.5
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.44
 height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="Material_marker"]
+albedo_color = Color(0.90, 0.70, 0.46, 1)
+emission_enabled = true
+emission = Color(0.72, 0.34, 0.18, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="BoxMesh" id="Mesh_marker"]
+material = SubResource("Material_marker")
+size = Vector3(0.13, 0.12, 0.50)
+
+[sub_resource type="StandardMaterial3D" id="Material_telegraph"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.82, 0.18, 0.12, 0.24)
+emission_enabled = true
+emission = Color(0.68, 0.12, 0.08, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="CylinderMesh" id="Mesh_telegraph"]
+material = SubResource("Material_telegraph")
+top_radius = 1.65
+bottom_radius = 1.65
+height = 0.035
 
 [node name="TrainingEnemy" type="CharacterBody3D"]
 collision_layer = 2
@@ -28,10 +52,22 @@ mesh = SubResource("Mesh_body")
 position = Vector3(0, 0.78, 0)
 shape = SubResource("Shape_body")
 
+[node name="FacingMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, -0.63)
+mesh = SubResource("Mesh_marker")
+
+[node name="Telegraph" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.045, 0)
+visible = false
+mesh = SubResource("Mesh_telegraph")
+
+[node name="ProjectileOrigin" type="Node3D" parent="."]
+position = Vector3(0, 0.82, -0.62)
+
 [node name="RealmLabel" type="Label3D" parent="."]
 position = Vector3(0, 1.9, 0)
 billboard = 1
 no_depth_test = true
-text = "训练敌人\n炼气一层"
+text = "敌人\n炼气1层"
 font_size = 28
 outline_size = 7

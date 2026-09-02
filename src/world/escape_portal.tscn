@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://src/world/escape_portal.gd" id="1_portal"]
+
+[sub_resource type="StandardMaterial3D" id="Material_disc"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.28, 0.34, 0.31, 0.18)
+emission_enabled = true
+emission = Color(0.10, 0.14, 0.12, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="CylinderMesh" id="Mesh_disc"]
+material = SubResource("Material_disc")
+top_radius = 1.65
+bottom_radius = 1.65
+height = 0.04
+radial_segments = 32
+
+[sub_resource type="StandardMaterial3D" id="Material_core"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.40, 0.82, 0.64, 0.20)
+emission_enabled = true
+emission = Color(0.18, 0.68, 0.50, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="CylinderMesh" id="Mesh_core"]
+material = SubResource("Material_core")
+top_radius = 0.48
+bottom_radius = 0.48
+height = 0.06
+radial_segments = 24
+
+[sub_resource type="CylinderShape3D" id="Shape_portal"]
+radius = 1.35
+height = 1.4
+
+[node name="EscapePortal" type="Area3D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_portal")
+
+[node name="Disc" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.045, 0)
+mesh = SubResource("Mesh_disc")
+
+[node name="Core" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+mesh = SubResource("Mesh_core")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.7, 0)
+shape = SubResource("Shape_portal")
+
+[node name="Label3D" type="Label3D" parent="."]
+position = Vector3(0, 1.1, 0)
+billboard = 1
+no_depth_test = true
+text = "遁光阵\n受锁灵阵压制"
+font_size = 28
+outline_size = 7
