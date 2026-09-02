@@ -3,7 +3,7 @@ extends RefCounted
 
 
 static func realm_penetration(attacker_realm: int, defender_realm: int) -> float:
-	var difference := attacker_realm - defender_realm
+	var difference: int = attacker_realm - defender_realm
 
 	match difference:
 		-2:
@@ -23,7 +23,7 @@ static func realm_penetration(attacker_realm: int, defender_realm: int) -> float
 
 
 static func control_efficiency(attacker_realm: int, defender_realm: int) -> float:
-	var difference := attacker_realm - defender_realm
+	var difference: int = attacker_realm - defender_realm
 
 	if difference <= -2:
 		return 0.05
@@ -43,10 +43,10 @@ static func calculate_damage(
 	attacker_realm: int,
 	defender_realm: int
 ) -> float:
-	var safe_attack := maxf(attacker_attack, 1.0)
-	var safe_defense := maxf(defender_defense, 0.0)
-	var defense_factor := safe_attack / (safe_attack + safe_defense)
-	var raw_damage := safe_attack * maxf(skill_multiplier, 0.0) * defense_factor
-	var final_damage := raw_damage * realm_penetration(attacker_realm, defender_realm)
-	var rounded_damage := round(final_damage * 10.0) / 10.0
+	var safe_attack: float = maxf(attacker_attack, 1.0)
+	var safe_defense: float = maxf(defender_defense, 0.0)
+	var defense_factor: float = safe_attack / (safe_attack + safe_defense)
+	var raw_damage: float = safe_attack * maxf(skill_multiplier, 0.0) * defense_factor
+	var final_damage: float = raw_damage * realm_penetration(attacker_realm, defender_realm)
+	var rounded_damage: float = snappedf(final_damage, 0.1)
 	return maxf(1.0, rounded_damage)
