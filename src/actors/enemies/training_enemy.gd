@@ -69,9 +69,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var offset := _target.global_position - global_position
+	var offset: Vector3 = _target.global_position - global_position
 	offset.y = 0.0
-	var distance := offset.length()
+	var distance: float = offset.length()
 
 	if _windup_left > 0.0:
 		velocity = Vector3.ZERO
@@ -158,7 +158,7 @@ func _move_in_direction(direction: Vector3) -> void:
 	if direction.length_squared() <= 0.001:
 		velocity = Vector3.ZERO
 		return
-	var normalized := direction.normalized()
+	var normalized: Vector3 = direction.normalized()
 	velocity = normalized * move_speed
 	_face_direction(normalized)
 
@@ -190,7 +190,7 @@ func _resolve_attack() -> void:
 	if _attack_kind == AttackKind.RANGED:
 		_spawn_projectile()
 	elif _attack_kind == AttackKind.MELEE:
-		var planar_distance := Vector2(
+		var planar_distance: float = Vector2(
 			_target.global_position.x - global_position.x,
 			_target.global_position.z - global_position.z
 		).length()
@@ -202,7 +202,7 @@ func _resolve_attack() -> void:
 func _spawn_projectile() -> void:
 	if _target == null or _target.is_dead:
 		return
-	var direction := _target.global_position + Vector3(0.0, 0.75, 0.0) - _projectile_origin.global_position
+	var direction: Vector3 = _target.global_position + Vector3(0.0, 0.75, 0.0) - _projectile_origin.global_position
 	direction = direction.normalized()
 	var projectile := PROJECTILE_SCENE.instantiate() as CombatProjectile
 	get_tree().current_scene.add_child(projectile)
@@ -211,16 +211,18 @@ func _spawn_projectile() -> void:
 
 
 func _update_windup_visual() -> void:
-	var progress := 1.0 - (_windup_left / maxf(attack_windup, 0.001))
-	var pulse := 1.0 + sin(progress * PI) * 0.12
+	var progress: float = 1.0 - (_windup_left / maxf(attack_windup, 0.001))
+	var pulse: float = 1.0 + sin(progress * PI) * 0.12
 	_body_mesh.scale = Vector3.ONE * pulse
 	_telegraph.rotation.y += 0.09
 
 
 func _apply_unique_tint() -> void:
-	var material := _body_mesh.get_active_material(0)
-	if material is StandardMaterial3D:
-		_unique_material = material.duplicate() as StandardMaterial3D
+	if _body_mesh.mesh == null or _body_mesh.mesh.get_surface_count() == 0:
+		return
+	var source_material: Material = _body_mesh.mesh.surface_get_material(0)
+	if source_material is StandardMaterial3D:
+		_unique_material = source_material.duplicate() as StandardMaterial3D
 		_unique_material.albedo_color = body_tint
 		_body_mesh.material_override = _unique_material
 
