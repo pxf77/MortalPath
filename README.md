@@ -18,9 +18,9 @@
 - 无外部生产素材，当前战斗对象仍使用 Godot 内置几何体；
 - 规则层 headless 测试。
 
-## 美术方向 v0.1
+## 美术仓库
 
-首版美术基线已定义为：
+首版美术基线为：
 
 > **凡尘山水·写意半写实**
 
@@ -33,18 +33,22 @@
 + 境界驱动的动作与战场差异
 ```
 
-![MortalPath 美术方向参考板](assets/art-guides/art-direction-board-v0.1.svg)
+美术源资产、方向板、生产规范、校验工具与 Art Pack 发布已独立维护于：
 
-参考板用于锁定构图、色彩、材质气质和境界递进。图中的生成文字、数值和界面不是正式设定，正式文字必须人工校对并在 UI 中重新排版。
+- [`pxf77/MortalPath-Art`](https://github.com/pxf77/MortalPath-Art)
 
-美术规范：
+仓库职责边界：
 
-- [`docs/art-direction/README.md`](docs/art-direction/README.md)
-- [`docs/art-direction/art-bible-v0.1.md`](docs/art-direction/art-bible-v0.1.md)
-- [`docs/art-direction/realm-visual-hierarchy.md`](docs/art-direction/realm-visual-hierarchy.md)
-- [`docs/art-direction/asset-production-spec.md`](docs/art-direction/asset-production-spec.md)
-- [`docs/art-direction/art-review-checklist.md`](docs/art-direction/art-review-checklist.md)
-- [`docs/art-direction/production-plan.md`](docs/art-direction/production-plan.md)
+```text
+MortalPath-Art
+  → 源资产 / Manifest / 自动导出 / 技术验收 / Art Pack
+  → 发布固定版本 Runtime Art Pack
+MortalPath
+  → 锁定 Art Pack 版本
+  → 在 Godot 场景中集成并执行游戏回归
+```
+
+游戏仓不直接依赖 `.blend`、`.psd`、`.kra` 等 DCC 源文件，也不把临时 Actions Artifact 当作长期资产源。
 
 ## 运行
 
@@ -83,10 +87,7 @@ godot --headless --path . --script res://tests/test_runner.gd
 
 ```text
 .
-├── assets/
-│   └── art-guides/              # 美术参考板与基础色板
 ├── docs/
-│   ├── art-direction/            # 美术圣经、境界视觉层级与生产规范
 │   ├── architecture.md
 │   ├── game-vision.md
 │   ├── realm-and-combat.md
