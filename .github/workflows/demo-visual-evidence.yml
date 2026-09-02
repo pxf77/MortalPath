@@ -27,14 +27,29 @@ jobs:
             xvfb xauth ffmpeg libgl1-mesa-dri libglx-mesa0 mesa-utils
           rm -rf /var/lib/apt/lists/*
 
+      - name: Import project and build script class cache
+        shell: bash
+        env:
+          HOME: /tmp/godot-home
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME"
+          godot --headless --editor --path . --quit 2>&1 | tee /tmp/godot-import.log
+          if grep -Eq "SCRIPT ERROR|Failed to load script" /tmp/godot-import.log; then
+            echo "Godot import reported script errors."
+            exit 1
+          fi
+          test -s .godot/global_script_class_cache.cfg
+
       - name: Run graphical demo and record evidence
         shell: bash
         env:
+          HOME: /tmp/godot-home
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           set -euo pipefail
           rm -rf demo-evidence
-          mkdir -p demo-evidence
+          mkdir -p demo-evidence "$HOME"
 
           Xvfb :99 -screen 0 1280x720x24 -ac +extension GLX +render -noreset \
             > /tmp/xvfb.log 2>&1 &
