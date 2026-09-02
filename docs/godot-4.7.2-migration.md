@@ -1,6 +1,6 @@
 # Godot 4.7.2 迁移记录
 
-日期：2026-09-02。唯一日常基线：**4.7.2 stable**，不自动追新；后续升级须另行完整回归。详见 [版本策略](godot-version-policy.md)。
+日期：2026-09-02（本地迁移）、2026-09-03（远端回归收尾）。唯一日常基线：**4.7.2 stable**，不自动追新；后续升级须另行完整回归。详见 [版本策略](godot-version-policy.md)。
 
 ## 工具链
 
@@ -22,7 +22,7 @@
 | headless / 实时图形 / MovieWriter 正常输入 | 每组 3 轮撤离成功，筑基守阵修士保持存活 |
 | 音频录像 | 全片峰值 -17.7 dBFS；第三轮 28–36 秒为数字静音 |
 | 20 个音效逐项试听录制 | 25.98 秒；主观音色与响度仍待人工签收 |
-| Linux x86_64 release 导出 | 通过；Linux 实际运行等待远端 CI |
+| Linux x86_64 release 导出 | 通过；导出包也已在远端 Linux CI 独立启动通过 |
 | macOS universal release 导出 | 通过，使用 Apple 原生 ad-hoc 签名 |
 | macOS 导出包独立启动 | 通过，不从源代码目录加载资源 |
 | 邻仓美术 | 26 项单元测试、Blender → GLB → 预览 → Godot → Art Pack、20 个 WAV 哈希及独立重建通过 |
@@ -31,8 +31,18 @@
 
 原始证据位于 `build/m1-evidence/validation/`、`godot472-graphical/`、`godot472-realtime/` 和 `godot472-audition/`。日志没有脚本/引擎错误或泄漏；4.3 的旧日志豁免已删除。历史失败诊断和缓存只作排查证据，不代表最终门禁结果。
 
-## 交付边界
+## 远端交付
 
-本地回归不是远端 CI 结果。首次推送被 GitHub 拒绝：当前 OAuth 凭据缺少修改 workflow 文件所需的 `workflow` scope，远端 main 尚未更新。授权后须推送两仓并核对新提交的 GitHub Actions；不宣称尚未发生的远端验证通过。
+GitHub `workflow` 授权已经生效，两个仓库的 `main` 均已推送。项目本地 Git 凭据配置改用已授权的 GitHub CLI，解决了旧钥匙串凭据优先造成的首次推送失败。
+
+- [Godot checks #33652169813](https://github.com/pxf77/MortalPath/actions/runs/33652169813)：验证 `fa20268c7f91b926bd238ed55d4298e924bd50f5`，固定 4.7.2 导入、全部脚本解析、规则/流程、160 项反馈、3 轮正常输入及 Linux release 导出和独立启动通过。
+- [Demo visual evidence #33652169798](https://github.com/pxf77/MortalPath/actions/runs/33652169798)：同一游戏提交的实时图形音频、7 张展示截图、GIF/总览图、161 项反馈测试、3 轮正常输入录像及录制音轨信号检查全部通过。录像和原始日志保存在该运行的 artifact 中。
+- [Art Pipeline P0 #33649680982](https://github.com/pxf77/MortalPath-Art/actions/runs/33649680982)：美术提交 `1c0cf6b87f2d25414edc9db342ed92053709a3b0` 的 26 项测试、Blender/Khronos/Godot/Art Pack 四个任务全部通过。
+
+图形 CI 首次运行暴露 Linux runner 没有 ALSA 声卡的问题，截图测试本身成功，但音频驱动初始化错误被严格日志门禁拦截。现为实时图形测试配置 PulseAudio 虚拟输出，并断言实际驱动不可降级；MovieWriter 单独验证录制音轨非静音且不削波。没有放宽错误门禁。本机新增驱动检查的正向测试（CoreAudio，161 项）和负向测试（拒绝 Dummy 降级）均通过。
+
+重试期间还遇到 Ubuntu Azure 镜像下载超时；图形 CI 已改用 Ubuntu 官方主镜像（包括 runner 的独立镜像列表），限定网络超时/重试及依赖安装总时限。中途停滞或被新提交替代的运行已取消，最终验收以上述成功运行及其精确提交为准。本记录之后的纯文档提交不重复运行相同代码的 CI。
+
+## 交付边界
 
 本轮不创建发布标签，不宣称完成 M1 人工手感/听感签收，也不宣称 macOS Developer ID 公证或商店发布完成。
