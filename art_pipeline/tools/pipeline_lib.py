@@ -98,6 +98,7 @@ def validate_manifest(
     manifest_path: Path | None = None,
     check_source: bool = True,
     check_runtime: bool = False,
+    check_preview: bool = False,
 ) -> list[str]:
     errors: list[str] = []
     prefix = f"{manifest_path}: " if manifest_path else ""
@@ -162,6 +163,12 @@ def validate_manifest(
             errors.append("preview.path must be under art_pipeline/reports/previews/")
         if not preview_path.endswith((".png", ".webp")):
             errors.append("preview.path must be PNG or WebP")
+        try:
+            preview_file = repo_path(preview_path)
+            if check_preview and (not preview_file.is_file() or preview_file.stat().st_size == 0):
+                errors.append(f"preview file does not exist or is empty: {preview_path}")
+        except PipelineError as exc:
+            errors.append(str(exc))
 
     scale = require_mapping(manifest.get("scale"), "scale", errors)
     if scale.get("unit") != "meter":

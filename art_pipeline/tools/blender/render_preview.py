@@ -58,6 +58,8 @@ def main() -> None:
     scene.display.shading.cavity_type = "WORLD"
     scene.display.shading.curvature_ridge_factor = 1.4
     scene.display.shading.curvature_valley_factor = 1.1
+    if scene.world is None:
+        scene.world = bpy.data.worlds.new("review_world")
     scene.world.color = (0.055, 0.065, 0.06)
 
     minimum, maximum = mesh_bounds()

@@ -28,6 +28,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Require generated runtime files to exist.",
     )
+    parser.add_argument(
+        "--check-preview",
+        action="store_true",
+        help="Require generated preview files to exist and be non-empty.",
+    )
     parser.add_argument("--report", type=Path, default=None)
     return parser.parse_args()
 
@@ -52,6 +57,7 @@ def main() -> int:
                 manifest_path=path,
                 check_source=True,
                 check_runtime=args.check_runtime,
+                check_preview=args.check_preview,
             )
         )
         asset_id = manifest.get("id")
@@ -69,6 +75,7 @@ def main() -> int:
         "manifest_count": len(manifests),
         "asset_ids": sorted(asset_ids),
         "check_runtime": args.check_runtime,
+        "check_preview": args.check_preview,
         "errors": errors,
         "ok": not errors,
         "manifests": [relative_to_repo(path) for path, _ in manifests],

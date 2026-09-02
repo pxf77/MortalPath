@@ -46,6 +46,18 @@ class ManifestTests(unittest.TestCase):
         errors = validate_manifest(invalid, check_source=False)
         self.assertTrue(any("runtime.path must be under" in error for error in errors))
 
+    def test_missing_preview_is_rejected_when_requested(self) -> None:
+        invalid = copy.deepcopy(self.manifest)
+        invalid["preview"]["path"] = (
+            "art_pipeline/reports/previews/definitely_missing_preview.png"
+        )
+        errors = validate_manifest(
+            invalid,
+            check_source=False,
+            check_preview=True,
+        )
+        self.assertTrue(any("preview file does not exist" in error for error in errors))
+
 
 class GlbInspectionTests(unittest.TestCase):
     @staticmethod

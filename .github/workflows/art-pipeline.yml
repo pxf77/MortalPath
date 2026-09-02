@@ -13,7 +13,6 @@ on:
   push:
     branches:
       - main
-      - "feat/**"
     paths:
       - "art_pipeline/**"
       - "docs/art-direction/**"
@@ -169,25 +168,40 @@ jobs:
                   manifest["id"],
                   source["type"],
                   source["path"],
+                  manifest["runtime"]["path"],
+                  manifest["preview"]["path"],
               )))
           PY
 
-          while IFS=$'\t' read -r manifest asset_id source_type source_path; do
+          while IFS=$'\t' read -r manifest asset_id source_type source_path runtime_path preview_path; do
             [[ -n "$manifest" ]] || continue
             if [[ "$source_type" == "blender_python" ]]; then
               source_blend="art_pipeline/work/source/${asset_id}.blend"
-              blender --background --python "$source_path" -- --output "$source_blend"
+              if ! blender --background --python "$source_path" -- --output "$source_blend"; then
+                echo "::error::Blender source generation failed for $asset_id"
+                exit 1
+              fi
+              test -s "$source_blend"
             else
               source_blend="$source_path"
+              test -s "$source_blend"
             fi
 
-            blender --background "$source_blend" \
+            if ! blender --background "$source_blend" \
               --python art_pipeline/tools/blender/export_asset.py \
-              -- --manifest "$manifest"
+              -- --manifest "$manifest"; then
+              echo "::error::GLB export failed for $asset_id"
+              exit 1
+            fi
+            test -s "$runtime_path"
 
-            blender --background "$source_blend" \
+            if ! blender --background "$source_blend" \
               --python art_pipeline/tools/blender/render_preview.py \
-              -- --manifest "$manifest"
+              -- --manifest "$manifest"; then
+              echo "::error::Preview render failed for $asset_id"
+              exit 1
+            fi
+            test -s "$preview_path"
           done < "$RUNNER_TEMP/blender-jobs.tsv"
 
       - name: Validate generated runtime files
@@ -198,6 +212,7 @@ jobs:
           set -euo pipefail
           python art_pipeline/tools/validate_manifest.py \
             --check-runtime \
+            --check-preview \
             --report art_pipeline/reports/manifest-validation.json
 
           python - <<'PY'
@@ -208,7 +223,6 @@ jobs:
 
           for manifest_path in sorted(Path("art_pipeline/manifests").rglob("*.json")):
               manifest = json.loads(manifest_path.read_text())
-              runtime = Path(manifest["runtime"]["path"])
               report = Path("art_pipeline/reports/assets") / f"{manifest['id']}.json"
               subprocess.check_call([
                   sys.executable,
