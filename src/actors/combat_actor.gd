@@ -31,11 +31,11 @@ func _ready() -> void:
 
 
 func refresh_stats(full_restore: bool = false) -> void:
-	var previous_ratio := 1.0
+	var previous_ratio: float = 1.0
 	if max_health > 0.0:
 		previous_ratio = current_health / max_health
 
-	var scale := RealmRules.stat_scale(major_realm, minor_stage)
+	var scale: float = RealmRules.stat_scale(major_realm, minor_stage)
 	max_health = maxf(1.0, base_max_health * scale)
 	attack_power = maxf(1.0, base_attack * scale)
 	defense = maxf(0.0, base_defense * scale)
@@ -53,14 +53,14 @@ func receive_attack(attacker: CombatActor, skill_multiplier: float = 1.0) -> flo
 	if is_dead or invulnerable or not is_instance_valid(attacker):
 		return 0.0
 
-	var calculated_damage := DamageRules.calculate_damage(
+	var calculated_damage: float = DamageRules.calculate_damage(
 		attacker.attack_power,
 		defense,
 		skill_multiplier,
 		attacker.major_realm,
 		major_realm
 	)
-	var damage := round(calculated_damage * incoming_damage_multiplier * 10.0) / 10.0
+	var damage: float = snappedf(calculated_damage * incoming_damage_multiplier, 0.1)
 	damage = maxf(0.1, damage)
 
 	current_health = maxf(0.0, current_health - damage)
@@ -88,7 +88,7 @@ func restore_full() -> void:
 func restore_health(amount: float) -> float:
 	if is_dead or amount <= 0.0:
 		return 0.0
-	var before := current_health
+	var before: float = current_health
 	current_health = minf(max_health, current_health + amount)
 	health_changed.emit(self, current_health, max_health)
 	return current_health - before
