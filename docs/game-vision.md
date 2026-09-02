@@ -84,4 +84,4 @@
 
 项目可以参考传统凡人流修仙叙事中的成长节奏、资源竞争和境界秩序，但不复制任何现有作品的具体人物、剧情、宗门、功法、法宝名称、服装、场景或标志性桥段。
 
-美术细则见 [`art-direction/README.md`](art-direction/README.md)。
+美术细则、资产预算与生产规范由独立仓库 [`pxf77/MortalPath-Art`](https://github.com/pxf77/MortalPath-Art) 维护。

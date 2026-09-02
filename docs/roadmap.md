@@ -2,7 +2,7 @@
 
 ## A0 · Art Direction Lock
 
-状态：**已建立 v0.1 基线**
+状态：**已建立 v0.1 基线，并迁移至独立美术仓库**
 
 目标：在制作正式角色、场景和特效前，锁定可供 M1～M3 使用的初版美术方向。
 
@@ -13,11 +13,12 @@
 - 角色、场景、材质、光照、VFX 与 UI 方向；
 - 筑基、结丹、元婴的视觉层级；
 - 资产预算、目录、生产流程与验收清单；
-- 初版参考板和基础色板。
+- 初版参考板和基础色板；
+- 独立 Blender → glTF → Godot → Art Pack 生产流水线。
 
-下一步：制作无字正式 Style Frame、首个角色套件、Realm Slice 场景套件和战斗 VFX 套件。
+下一步：在 `MortalPath-Art` 制作无字正式 Style Frame、首个角色套件、Realm Slice 场景套件和战斗 VFX 套件。
 
-详见 [`art-direction/production-plan.md`](art-direction/production-plan.md)。
+详见 [`MortalPath-Art / production-plan.md`](https://github.com/pxf77/MortalPath-Art/blob/main/docs/art-direction/production-plan.md)。
 
 ## M0 · Combat Lab
 
@@ -61,7 +62,7 @@
 - 玩家能读懂敌人预警；
 - 不能只靠连续按普攻解决全部敌人；
 - 身法、灵力和距离管理均有实际价值；
-- 美术样本符合 `docs/art-direction/art-review-checklist.md`；
+- 美术样本符合 [`MortalPath-Art / art-review-checklist.md`](https://github.com/pxf77/MortalPath-Art/blob/main/docs/art-direction/art-review-checklist.md)；
 - 特效峰值帧仍能看清玩家、敌人和危险区。
 
 ## M2 · Realm Slice
