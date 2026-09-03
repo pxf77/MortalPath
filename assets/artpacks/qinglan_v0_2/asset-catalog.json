@@ -1,0 +1,645 @@
+{
+  "asset_count": 13,
+  "assets": [
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 177424,
+      "id": "chr_enemy_melee_qi_a",
+      "kind": "character",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/chr_enemy_melee_qi_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/characters/chr_enemy_melee_qi_a.glb",
+      "sha256": "67582844862464ffcad317be0f54cc03b2a6cb1a49890fa98042c6c5ba65e9be",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.9349999614059925,
+          "max": [
+            0.7000000178813934,
+            2.009999968111515,
+            1.3521999716758728
+          ],
+          "min": [
+            -0.5075726360082626,
+            0.07500000670552254,
+            -0.4270990490913391
+          ],
+          "size": [
+            1.207572653889656,
+            1.9349999614059925,
+            1.779299020767212
+          ]
+        },
+        "images": 0,
+        "materials": 6,
+        "meshes": 16,
+        "nodes": 16,
+        "primitives": 16,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 2374
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 208904,
+      "id": "chr_enemy_talisman_qi_a",
+      "kind": "character",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/chr_enemy_talisman_qi_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/characters/chr_enemy_talisman_qi_a.glb",
+      "sha256": "5c3db44c5b7d02d90e02dc235c0786890581fef5c0da0fb30199ebf2735235e3",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.9349999614059925,
+          "max": [
+            0.584805965423584,
+            2.009999968111515,
+            0.4270990490913391
+          ],
+          "min": [
+            -0.584805965423584,
+            0.07500000670552254,
+            -0.4270990490913391
+          ],
+          "size": [
+            1.169611930847168,
+            1.9349999614059925,
+            0.8541980981826782
+          ]
+        },
+        "images": 0,
+        "materials": 7,
+        "meshes": 19,
+        "nodes": 19,
+        "primitives": 19,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 2856
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "foundation_establishment",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 248048,
+      "id": "chr_guardian_foundation_a",
+      "kind": "character",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/chr_guardian_foundation_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/characters/chr_guardian_foundation_a.glb",
+      "sha256": "cbe6fdbcd5a8dc79070dc705be2eb8bdcab801eeed6460e571403f416c78fc28",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.9349999614059925,
+          "max": [
+            1.0050000250339508,
+            2.009999968111515,
+            0.9693999886512756
+          ],
+          "min": [
+            -0.8400000110268593,
+            0.07500000670552254,
+            -0.5419999957084656
+          ],
+          "size": [
+            1.84500003606081,
+            1.9349999614059925,
+            1.5113999843597412
+          ]
+        },
+        "images": 0,
+        "materials": 7,
+        "meshes": 20,
+        "nodes": 20,
+        "primitives": 20,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 3362
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 186220,
+      "id": "chr_player_qi_refining_a",
+      "kind": "character",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/chr_player_qi_refining_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/characters/chr_player_qi_refining_a.glb",
+      "sha256": "8657e4063598d023e20c939cc2b5914335d3b2666e251d85d142c6c709a2083c",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.9349999614059925,
+          "max": [
+            0.7300000041723251,
+            2.009999968111515,
+            1.0128000229597092
+          ],
+          "min": [
+            -0.46611665189266205,
+            0.07500000670552254,
+            -0.4270990490913391
+          ],
+          "size": [
+            1.1961166560649872,
+            1.9349999614059925,
+            1.4398990720510483
+          ]
+        },
+        "images": 0,
+        "materials": 7,
+        "meshes": 17,
+        "nodes": 17,
+        "primitives": 17,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 2482
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "none",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 435460,
+      "id": "env_qinglan_bamboo_set_a",
+      "kind": "environment",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/env_qinglan_bamboo_set_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/environments/env_qinglan_bamboo_set_a.glb",
+      "sha256": "c5709b6c0acabb45ce65632078d64a7531ee7a8ab473525c3c71494728e27295",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 3.6013377904891968,
+          "max": [
+            1.9654588997364044,
+            3.6005072593688965,
+            0.8778778910636902
+          ],
+          "min": [
+            -1.7704168260097504,
+            -0.000830531120300293,
+            -1.0053504407405853
+          ],
+          "size": [
+            3.735875725746155,
+            3.6013377904891968,
+            1.8832283318042755
+          ]
+        },
+        "images": 0,
+        "materials": 4,
+        "meshes": 46,
+        "nodes": 46,
+        "primitives": 46,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 5832
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "none",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 74456,
+      "id": "env_qinglan_cliff_set_a",
+      "kind": "environment",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/env_qinglan_cliff_set_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/environments/env_qinglan_cliff_set_a.glb",
+      "sha256": "3f57f4863345f2e07f1baa5534c464714645efb1f863107158fdf8ffe0be6c39",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 3.293552875518799,
+          "max": [
+            2.7672499418258667,
+            3.18277645111084,
+            0.8141245469450951
+          ],
+          "min": [
+            -2.791750192642212,
+            -0.11077642440795898,
+            -1.0237502455711365
+          ],
+          "size": [
+            5.559000134468079,
+            3.293552875518799,
+            1.8378747925162315
+          ]
+        },
+        "images": 0,
+        "materials": 3,
+        "meshes": 6,
+        "nodes": 6,
+        "primitives": 6,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 924
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "none",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 133624,
+      "id": "env_qinglan_path_set_a",
+      "kind": "environment",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/env_qinglan_path_set_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/environments/env_qinglan_path_set_a.glb",
+      "sha256": "5e83df1c1620e6e1555c536ab385a07de4e7bfce685fb6ed87764ed10c001925",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 0.32899999618530273,
+          "max": [
+            3.2557148933410645,
+            0.32899999618530273,
+            5.714390277862549
+          ],
+          "min": [
+            -3.52020400762558,
+            0.0,
+            -5.767524480819702
+          ],
+          "size": [
+            6.775918900966644,
+            0.32899999618530273,
+            11.481914758682251
+          ]
+        },
+        "images": 0,
+        "materials": 4,
+        "meshes": 17,
+        "nodes": 17,
+        "primitives": 17,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 1836
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 182384,
+      "id": "prop_escape_portal_qinglan_a",
+      "kind": "prop",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/prop_escape_portal_qinglan_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/props/prop_escape_portal_qinglan_a.glb",
+      "sha256": "54c4e0fec630973b0f7b59cfb4f59cc43b8b8054598b970e43d04ce9e1e4c027",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 0.26000000536441803,
+          "max": [
+            2.1500000953674316,
+            0.26000000536441803,
+            2.1500000953674316
+          ],
+          "min": [
+            -2.1500000953674316,
+            0.0,
+            -2.1500000953674316
+          ],
+          "size": [
+            4.300000190734863,
+            0.26000000536441803,
+            4.300000190734863
+          ]
+        },
+        "images": 0,
+        "materials": 3,
+        "meshes": 12,
+        "nodes": 12,
+        "primitives": 12,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 2504
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 119696,
+      "id": "prop_formation_anchor_qinglan_a",
+      "kind": "prop",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/prop_formation_anchor_qinglan_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/props/prop_formation_anchor_qinglan_a.glb",
+      "sha256": "23217424dea924cfae5beae6f9bce63c292a99d6f2685c2333412a0b530aa957",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.3949999809265137,
+          "max": [
+            0.7200000286102295,
+            1.3949999809265137,
+            0.7200000286102295
+          ],
+          "min": [
+            -0.7200000286102295,
+            0.0,
+            -0.7200000286102295
+          ],
+          "size": [
+            1.440000057220459,
+            1.3949999809265137,
+            1.440000057220459
+          ]
+        },
+        "images": 0,
+        "materials": 4,
+        "meshes": 9,
+        "nodes": 9,
+        "primitives": 9,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 1588
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "foundation_establishment",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 63588,
+      "id": "vfx_guard_ripple_a",
+      "kind": "vfx",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/vfx_guard_ripple_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/vfx/vfx_guard_ripple_a.glb",
+      "sha256": "e79008ffe3cc68ad59409cdb779b897120700f7d4cacb562fc105ba0f9b8be5e",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 1.5836506932973862,
+          "max": [
+            0.8649999499320984,
+            1.662000060081482,
+            0.8649999499320984
+          ],
+          "min": [
+            -0.8649999499320984,
+            0.07834936678409576,
+            -0.8649999499320984
+          ],
+          "size": [
+            1.7299998998641968,
+            1.5836506932973862,
+            1.7299998998641968
+          ]
+        },
+        "images": 0,
+        "materials": 2,
+        "meshes": 3,
+        "nodes": 3,
+        "primitives": 3,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 1008
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 19188,
+      "id": "vfx_qingfeng_blade_a",
+      "kind": "vfx",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/vfx_qingfeng_blade_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/vfx/vfx_qingfeng_blade_a.glb",
+      "sha256": "3893011c0fc2b3e6dd22834dfdd462af0f1bca7a122671294d8bbed8e302de7d",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 0.30000001192092896,
+          "max": [
+            0.2750000059604645,
+            0.24500001966953278,
+            6.469999819993973
+          ],
+          "min": [
+            -0.2750000059604645,
+            -0.05499999225139618,
+            0.0
+          ],
+          "size": [
+            0.550000011920929,
+            0.30000001192092896,
+            6.469999819993973
+          ]
+        },
+        "images": 0,
+        "materials": 2,
+        "meshes": 3,
+        "nodes": 3,
+        "primitives": 3,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 222
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 11016,
+      "id": "vfx_sword_arc_qi_a",
+      "kind": "vfx",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/vfx_sword_arc_qi_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/vfx/vfx_sword_arc_qi_a.glb",
+      "sha256": "9cb5ab02f3da44935728529b3fc1410ab6a836f948ea632157f99c73391e8d42",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 0.09500000113621354,
+          "max": [
+            1.9233671426773071,
+            0.0925000011920929,
+            2.319999933242798
+          ],
+          "min": [
+            -1.9233671426773071,
+            -0.0024999999441206455,
+            0.4026188850402832
+          ],
+          "size": [
+            3.8467342853546143,
+            0.09500000113621354,
+            1.9173810482025146
+          ]
+        },
+        "images": 0,
+        "materials": 2,
+        "meshes": 2,
+        "nodes": 2,
+        "primitives": 2,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 248
+      }
+    },
+    {
+      "art": {
+        "palette": "mortal_path_base_v1",
+        "realm": "qi_refining",
+        "style": "grounded_xianxia_painterly_3d"
+      },
+      "file_size_bytes": 50528,
+      "id": "wpn_flying_sword_qi_a",
+      "kind": "weapon",
+      "milestone": "artpack_v0_2_qinglan_valley",
+      "preview_path": "reports/previews/wpn_flying_sword_qi_a.png",
+      "provenance": {
+        "license": "project_owned",
+        "type": "original_procedural_prototype"
+      },
+      "runtime_path": "runtime/weapons/wpn_flying_sword_qi_a.glb",
+      "sha256": "1e8187a7f7391ba5c1230a214a435733920ab663dbea2458a9eb24e4004bff3a",
+      "stats": {
+        "animations": 0,
+        "bones": 0,
+        "bounds": {
+          "coordinate_space": "scene_world_y_up",
+          "height_m": 0.13519999384880066,
+          "max": [
+            0.12999999523162842,
+            0.26760000735521317,
+            0.828000009059906
+          ],
+          "min": [
+            -0.12999999523162842,
+            0.1324000135064125,
+            -0.5999999940395355
+          ],
+          "size": [
+            0.25999999046325684,
+            0.13519999384880066,
+            1.4280000030994415
+          ]
+        },
+        "images": 0,
+        "materials": 3,
+        "meshes": 5,
+        "nodes": 5,
+        "primitives": 5,
+        "skins": 0,
+        "textures": 0,
+        "triangles": 662
+      }
+    }
+  ],
+  "schema_version": 1,
+  "source_commit": "3d7d37b64efdedde2edd8509743dd2db4631a943",
+  "source_repository": "pxf77/MortalPath-Art"
+}

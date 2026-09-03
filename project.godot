@@ -12,6 +12,7 @@ boot_splash/bg_color=Color(0.027, 0.031, 0.043, 1)
 [autoload]
 
 InputBootstrap="*res://src/core/input_bootstrap.gd"
+QinglanArtBootstrap="*res://src/art/qinglan_art_bootstrap.gd"
 
 [display]
 
