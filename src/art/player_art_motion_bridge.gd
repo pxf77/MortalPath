@@ -4,6 +4,8 @@ extends Node
 ## Animation and ribbon trails never own movement, hit detection or damage timing.
 
 const HIT_HEAVY_RATIO := 0.18
+const MIN_PLAYBACK_SPEED := 0.01
+const MAX_DURATION_ALIGNMENT_SPEED := 4.0
 
 var _player: PlayerController = null
 var _visual: Node3D = null
@@ -92,6 +94,8 @@ func _on_action_started(action: StringName, combo_step: int) -> void:
 		combo_step,
 		_logic_windup_seconds(action, combo_step)
 	)
+	if action == &"dodge" and is_instance_valid(_player):
+		speed = _duration_aligned_speed(clip, _player.dodge_duration)
 	_play_transient(clip, speed)
 
 
@@ -106,6 +110,9 @@ func _on_action_released(action: StringName, combo_step: int) -> void:
 	if not rule.is_empty() and is_instance_valid(_trail):
 		_trail.emit_for(rule)
 	if _animation_player != null and _active_custom_speed > 0.001:
+		# AnimationPlayer multiplies play(custom_speed) by speed_scale. The windup
+		# uses an accelerated custom speed; after release, its reciprocal restores
+		# the remaining recovery frames to authored 1x speed.
 		_animation_player.speed_scale = 1.0 / _active_custom_speed
 
 
@@ -118,6 +125,12 @@ func _on_damage_received(_actor, amount: float, _source) -> void:
 
 func _on_died(_actor) -> void:
 	_dead = true
+	# CombatActor hides dead actors before emitting died. Restore presentation
+	# visibility only; collision and physics remain disabled by the combat core.
+	if is_instance_valid(_player):
+		_player.visible = true
+	if is_instance_valid(_visual):
+		_visual.visible = true
 	if is_instance_valid(_trail):
 		_trail.stop_emission()
 	_play_transient(&"death", 1.0)
@@ -148,7 +161,7 @@ func _play_transient(clip: StringName, custom_speed: float) -> void:
 	if resolved == &"":
 		return
 	_animation_player.speed_scale = 1.0
-	_active_custom_speed = maxf(0.01, custom_speed)
+	_active_custom_speed = maxf(MIN_PLAYBACK_SPEED, custom_speed)
 	_animation_player.play(resolved, 0.06, _active_custom_speed)
 	_transient_animation = resolved
 	_loop_clip = &""
@@ -178,11 +191,25 @@ func _resolve_clip(clip: StringName) -> StringName:
 
 
 func _logic_windup_seconds(action: StringName, combo_step: int) -> float:
-	if action == &"attack":
-		return 0.06 + float(clampi(combo_step, 1, 3)) * 0.025
-	if action == &"sword_art":
-		return 0.16
-	return 0.0
+	if not is_instance_valid(_player):
+		return 0.0
+	return _player.action_windup_seconds(action, combo_step)
+
+
+func _duration_aligned_speed(clip: StringName, target_duration: float) -> float:
+	if _animation_player == null or target_duration <= 0.001:
+		return 1.0
+	var resolved := _resolve_clip(clip)
+	if resolved == &"":
+		return 1.0
+	var animation := _animation_player.get_animation(resolved)
+	if animation == null or animation.length <= 0.001:
+		return 1.0
+	return clampf(
+		animation.length / target_duration,
+		MIN_PLAYBACK_SPEED,
+		MAX_DURATION_ALIGNMENT_SPEED
+	)
 
 
 func _find_animation_player(node: Node) -> AnimationPlayer:
@@ -231,3 +258,13 @@ func last_release_clip_for_test() -> StringName:
 
 func current_playback_speed_for_test() -> float:
 	return _active_custom_speed
+
+
+func effective_playback_speed_for_test() -> float:
+	if _animation_player == null:
+		return 0.0
+	return _active_custom_speed * _animation_player.speed_scale
+
+
+func transient_animation_for_test() -> StringName:
+	return _transient_animation

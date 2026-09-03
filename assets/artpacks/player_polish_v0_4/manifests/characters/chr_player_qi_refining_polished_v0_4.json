@@ -77,7 +77,7 @@
     "version": "painterly_pbr_v0_1",
     "materials": {
       "mat_player_cloth_moss": {
-        "roughness": {"min": 0.78, "max": 0.9},
+        "roughness": {"min": 0.78, "max": 0.90},
         "metallic": {"min": 0.0, "max": 0.05}
       },
       "mat_player_cloth_ink": {
@@ -93,11 +93,11 @@
         "metallic": {"min": 0.62, "max": 0.82}
       },
       "mat_player_skin_warm": {
-        "roughness": {"min": 0.62, "max": 0.8},
+        "roughness": {"min": 0.62, "max": 0.80},
         "metallic": {"min": 0.0, "max": 0.02}
       },
       "mat_player_hair_ink": {
-        "roughness": {"min": 0.8, "max": 0.94},
+        "roughness": {"min": 0.80, "max": 0.94},
         "metallic": {"min": 0.0, "max": 0.02}
       },
       "mat_player_jade_muted": {

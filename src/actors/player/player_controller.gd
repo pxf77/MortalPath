@@ -61,6 +61,9 @@ var _pending_attack: StringName = &""
 var _windup_left: float = 0.0
 var _queued_actions: Dictionary = {}
 const INPUT_BUFFER_SECONDS := 0.24
+const ATTACK_WINDUP_BASE_SECONDS := 0.06
+const ATTACK_WINDUP_STEP_SECONDS := 0.025
+const SWORD_ART_WINDUP_SECONDS := 0.16
 
 
 func _ready() -> void:
@@ -199,6 +202,15 @@ func is_guard_active() -> bool:
 	return _guard_time_left > 0.0
 
 
+func action_windup_seconds(action: StringName, combo_step: int = 0) -> float:
+	match action:
+		&"attack":
+			return ATTACK_WINDUP_BASE_SECONDS + float(clampi(combo_step, 1, 3)) * ATTACK_WINDUP_STEP_SECONDS
+		&"sword_art":
+			return SWORD_ART_WINDUP_SECONDS
+	return 0.0
+
+
 func _request_combo_attack() -> void:
 	if _dodge_time_left > 0.0:
 		return
@@ -216,7 +228,7 @@ func _perform_combo_attack() -> void:
 	_attack_cooldown_left = DemoRules.combo_cooldown(_combo_step)
 	_combo_window_left = combo_window
 	_pending_attack = &"attack"
-	_windup_left = 0.06 + float(_combo_step) * 0.025
+	_windup_left = action_windup_seconds(&"attack", _combo_step)
 	_attack_visual_left = _windup_left + 0.12
 	_attack_indicator.visible = true
 	_attack_indicator.scale = Vector3.ONE
@@ -258,7 +270,7 @@ func _try_sword_art() -> void:
 
 	_sword_art_cooldown_left = sword_art_cooldown
 	_pending_attack = &"sword_art"
-	_windup_left = 0.16
+	_windup_left = action_windup_seconds(&"sword_art")
 	_sword_art_visual_left = _windup_left + 0.18
 	_sword_art_indicator.visible = true
 	action_started.emit(&"sword_art", 0)

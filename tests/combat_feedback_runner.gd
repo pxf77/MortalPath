@@ -165,17 +165,31 @@ func _test_feedback_and_terminal_state() -> void:
 	var feedback := demo.get_node("CombatFeedback") as CombatFeedback
 	var enemy := get_nodes_in_group("combat_enemies")[0] as TrainingEnemy
 	var untouched := get_nodes_in_group("combat_enemies")[1] as TrainingEnemy
+	var enemy_flash_target := feedback.flash_target_for_test(enemy)
+	var untouched_flash_target := feedback.flash_target_for_test(untouched)
+	_check(enemy_flash_target != null, "受击对象必须具有可用的局部闪光目标")
+	_check(untouched_flash_target != null, "未受击对象必须具有独立的局部闪光目标")
 	enemy.receive_attack(player)
-	_check(feedback.get("_flashes").has(enemy.get_node("BodyMesh").get_instance_id()), "受击对象有独立的局部闪光状态")
+	_check(
+		enemy_flash_target != null
+		and feedback.get("_flashes").has(enemy_flash_target.get_instance_id()),
+		"受击对象仅记录真实可见网格的局部闪光状态"
+	)
+	var fallback := enemy.get_node("BodyMesh") as MeshInstance3D
+	if enemy_flash_target != null and fallback != enemy_flash_target:
+		_check(
+			not feedback.get("_flashes").has(fallback.get_instance_id()),
+			"隐藏回退网格不得重复注册闪光状态"
+		)
 	if DisplayServer.get_name() != "headless":
-		_check(enemy.get_node("BodyMesh").material_overlay != null, "图形模式实际应用闪光材质")
-	_check(untouched.get_node("BodyMesh").material_overlay == null, "闪光不污染共享材质")
+		_check(enemy_flash_target != null and enemy_flash_target.material_overlay != null, "图形模式实际应用闪光材质")
+	_check(untouched_flash_target != null and untouched_flash_target.material_overlay == null, "闪光不污染共享材质")
 	feedback.set_reduced_motion(true)
 	_check(feedback.camera_offset() == Vector2.ZERO, "减弱动态完全关闭震屏")
 	_check(not player.advance_hit_pause(0.01), "减弱动态清理已有命中停顿")
 	await _frames(16)
 	_check(feedback.get("_flashes").is_empty(), "闪光计时结束必须清理状态")
-	_check(enemy.get_node("BodyMesh").material_overlay == null, "闪光结束恢复原覆盖材质")
+	_check(enemy_flash_target == null or enemy_flash_target.material_overlay == null, "闪光结束恢复原覆盖材质")
 	demo.force_complete_phase_for_test()
 	await _frames(3)
 	var guardian: CombatActor = demo.get("_guardian")
