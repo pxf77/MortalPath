@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "version": "artpack-v0.4.0-player-polish",
+  "source_repository": "pxf77/MortalPath-Art",
+  "source_asset_commit": "3383041a6ea655d2c32ad75e617426b0605350bf",
+  "release_target_commit": "5923e0ccc217606341f2d4c0ccb50e5ec80db0a3",
+  "release_id": 381838934,
+  "release_archive": {
+    "name": "mortalpath-artpack-snapshot-5923e0ccc217.zip",
+    "sha256": "b15d7a95990d04ecd071cc9d6c56f0c779e90b52146a0cccadcf477dc32971a8"
+  },
+  "runtime_assets": [
+    {
+      "asset_id": "chr_player_qi_refining_polished_v0_4",
+      "path": "runtime/characters/chr_player_qi_refining_polished_v0_4.glb",
+      "size_bytes": 168708,
+      "sha256": "b45a22623cf45e2346bb93fc90243fe7f4f87b450486e135866d2f57a4a98303"
+    }
+  ]
+}

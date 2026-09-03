@@ -1,23 +1,25 @@
 class_name ArtPackRegistry
 extends RefCounted
 
-const PACK_VERSION := "artpack-v0.2.0-qinglan-valley"
-const PACK_ROOT := "res://assets/artpacks/qinglan_v0_2/runtime"
+const PACK_VERSION := "artpack-v0.4.0-player-polish"
+const QINGLAN_ROOT := "res://assets/artpacks/qinglan_v0_2/runtime"
+const PLAYER_POLISH_ROOT := "res://assets/artpacks/player_polish_v0_4/runtime"
 
 const ASSET_PATHS: Dictionary = {
-	&"chr_player_qi_refining_a": PACK_ROOT + "/characters/chr_player_qi_refining_a.glb",
-	&"chr_enemy_melee_qi_a": PACK_ROOT + "/characters/chr_enemy_melee_qi_a.glb",
-	&"chr_enemy_talisman_qi_a": PACK_ROOT + "/characters/chr_enemy_talisman_qi_a.glb",
-	&"chr_guardian_foundation_a": PACK_ROOT + "/characters/chr_guardian_foundation_a.glb",
-	&"env_qinglan_path_set_a": PACK_ROOT + "/environments/env_qinglan_path_set_a.glb",
-	&"env_qinglan_cliff_set_a": PACK_ROOT + "/environments/env_qinglan_cliff_set_a.glb",
-	&"env_qinglan_bamboo_set_a": PACK_ROOT + "/environments/env_qinglan_bamboo_set_a.glb",
-	&"prop_formation_anchor_qinglan_a": PACK_ROOT + "/props/prop_formation_anchor_qinglan_a.glb",
-	&"prop_escape_portal_qinglan_a": PACK_ROOT + "/props/prop_escape_portal_qinglan_a.glb",
-	&"wpn_flying_sword_qi_a": PACK_ROOT + "/weapons/wpn_flying_sword_qi_a.glb",
-	&"vfx_sword_arc_qi_a": PACK_ROOT + "/vfx/vfx_sword_arc_qi_a.glb",
-	&"vfx_qingfeng_blade_a": PACK_ROOT + "/vfx/vfx_qingfeng_blade_a.glb",
-	&"vfx_guard_ripple_a": PACK_ROOT + "/vfx/vfx_guard_ripple_a.glb",
+	&"chr_player_qi_refining_a": QINGLAN_ROOT + "/characters/chr_player_qi_refining_a.glb",
+	&"chr_player_qi_refining_polished_v0_4": PLAYER_POLISH_ROOT + "/characters/chr_player_qi_refining_polished_v0_4.glb",
+	&"chr_enemy_melee_qi_a": QINGLAN_ROOT + "/characters/chr_enemy_melee_qi_a.glb",
+	&"chr_enemy_talisman_qi_a": QINGLAN_ROOT + "/characters/chr_enemy_talisman_qi_a.glb",
+	&"chr_guardian_foundation_a": QINGLAN_ROOT + "/characters/chr_guardian_foundation_a.glb",
+	&"env_qinglan_path_set_a": QINGLAN_ROOT + "/environments/env_qinglan_path_set_a.glb",
+	&"env_qinglan_cliff_set_a": QINGLAN_ROOT + "/environments/env_qinglan_cliff_set_a.glb",
+	&"env_qinglan_bamboo_set_a": QINGLAN_ROOT + "/environments/env_qinglan_bamboo_set_a.glb",
+	&"prop_formation_anchor_qinglan_a": QINGLAN_ROOT + "/props/prop_formation_anchor_qinglan_a.glb",
+	&"prop_escape_portal_qinglan_a": QINGLAN_ROOT + "/props/prop_escape_portal_qinglan_a.glb",
+	&"wpn_flying_sword_qi_a": QINGLAN_ROOT + "/weapons/wpn_flying_sword_qi_a.glb",
+	&"vfx_sword_arc_qi_a": QINGLAN_ROOT + "/vfx/vfx_sword_arc_qi_a.glb",
+	&"vfx_qingfeng_blade_a": QINGLAN_ROOT + "/vfx/vfx_qingfeng_blade_a.glb",
+	&"vfx_guard_ripple_a": QINGLAN_ROOT + "/vfx/vfx_guard_ripple_a.glb",
 }
 
 static var _scene_cache: Dictionary = {}

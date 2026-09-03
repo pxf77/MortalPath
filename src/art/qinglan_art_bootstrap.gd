@@ -52,7 +52,9 @@ func _bind_demo(scene: MortalPathMain) -> void:
 
 	var player := scene.get_node_or_null("Player") as PlayerController
 	if player != null:
-		_attach_character(player, &"chr_player_qi_refining_a")
+		var player_visual := _attach_character(player, &"chr_player_qi_refining_polished_v0_4")
+		if player_visual != null:
+			_install_player_motion(player, player_visual)
 		_install_player_vfx(player)
 
 	var portal := scene.get_node_or_null("EscapePortal") as EscapePortal
@@ -101,6 +103,15 @@ func _attach_character(actor: Node3D, asset_id: StringName) -> Node3D:
 	_hide_world_label(actor.get_node_or_null("RealmLabel"))
 	_tracked_visuals.append(weakref(actor))
 	return visual
+
+
+func _install_player_motion(player: PlayerController, visual: Node3D) -> void:
+	if player.get_node_or_null("PlayerArtMotionBridge") != null:
+		return
+	var bridge := PlayerArtMotionBridge.new()
+	bridge.name = "PlayerArtMotionBridge"
+	player.add_child(bridge)
+	bridge.configure(player, visual)
 
 
 func _install_player_vfx(player: PlayerController) -> void:
@@ -160,27 +171,13 @@ func _install_portal(portal: EscapePortal) -> void:
 func _install_environment() -> void:
 	if not is_instance_valid(_demo):
 		return
-	for node_name in [
-		"StonePath", "RealmCircle", "NorthWestStone", "NorthEastStone",
-		"SouthWestStone", "SouthEastStone", "WestPillar", "EastPillar"
-	]:
+	for node_name in ["StonePath", "RealmCircle", "NorthWestStone", "NorthEastStone", "SouthWestStone", "SouthEastStone", "WestPillar", "EastPillar"]:
 		_hide_geometry(_demo.get_node_or_null(node_name))
 
 	_spawn_environment(&"env_qinglan_path_set_a", Vector3.ZERO, 0.0)
-	for item in [
-		[Vector3(-9.2, 0.0, -7.2), 18.0],
-		[Vector3(9.0, 0.0, -6.4), -22.0],
-		[Vector3(-9.5, 0.0, 5.8), -12.0],
-		[Vector3(9.4, 0.0, 6.6), 24.0],
-		[Vector3(0.0, 0.0, -11.2), 6.0],
-	]:
+	for item in [[Vector3(-9.2, 0.0, -7.2), 18.0], [Vector3(9.0, 0.0, -6.4), -22.0], [Vector3(-9.5, 0.0, 5.8), -12.0], [Vector3(9.4, 0.0, 6.6), 24.0], [Vector3(0.0, 0.0, -11.2), 6.0]]:
 		_spawn_environment(&"env_qinglan_cliff_set_a", item[0], item[1])
-	for item in [
-		[Vector3(-8.0, 0.0, -1.8), 12.0],
-		[Vector3(8.2, 0.0, 1.2), -18.0],
-		[Vector3(-7.1, 0.0, 8.2), -8.0],
-		[Vector3(7.0, 0.0, -8.8), 26.0],
-	]:
+	for item in [[Vector3(-8.0, 0.0, -1.8), 12.0], [Vector3(8.2, 0.0, 1.2), -18.0], [Vector3(-7.1, 0.0, 8.2), -8.0], [Vector3(7.0, 0.0, -8.8), 26.0]]:
 		_spawn_environment(&"env_qinglan_bamboo_set_a", item[0], item[1])
 
 
