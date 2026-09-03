@@ -1,7 +1,7 @@
 extends SceneTree
 
 const MAIN_SCENE := preload("res://src/main/main.tscn")
-const EXPECTED_ASSET_COUNT := 13
+const EXPECTED_ASSET_COUNT := 14
 
 var _failures := 0
 var _checks := 0
@@ -12,9 +12,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	_check(ArtPackRegistry.PACK_VERSION == "artpack-v0.2.0-qinglan-valley", "Art Pack 版本必须固定")
+	_check(ArtPackRegistry.PACK_VERSION == "artpack-v0.4.0-player-polish", "Art Pack 版本必须固定")
 	var asset_ids := ArtPackRegistry.asset_ids()
-	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 13 个青岚谷运行时资产")
+	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 14 个运行时资产")
 	for asset_id in asset_ids:
 		_check(ArtPackRegistry.has_asset(asset_id), "运行时资产可解析：%s" % asset_id)
 		var instance := ArtPackRegistry.instantiate_asset(asset_id, "ContractProbe")
@@ -34,7 +34,8 @@ func _run() -> void:
 	_check(bootstrap != null and bootstrap.call("environment_instance_count_for_test") == 10, "场景挂载 1 组道路、5 组岩体与 4 组竹蕨")
 	var player := demo.get_node("Player") as PlayerController
 	var portal := demo.get_node("EscapePortal") as EscapePortal
-	_check(_asset_id(player) == "chr_player_qi_refining_a", "玩家挂载炼气角色资产")
+	_check(_asset_id(player) == "chr_player_qi_refining_polished_v0_4", "玩家挂载精修炼气角色资产")
+	_check(player.get_node_or_null("PlayerArtMotionBridge") != null, "玩家挂载动作与飞剑同步桥")
 	_check(_asset_id(portal) == "prop_escape_portal_qinglan_a", "遁光阵挂载运行时资产")
 	_check(not (player.get_node("RealmLabel") as Label3D).visible, "正式人物接入后隐藏玩家世界空间调试标签")
 	_check(not (portal.get_node("Label3D") as Label3D).visible, "正式遁光阵接入后隐藏世界空间说明标签")

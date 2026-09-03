@@ -62,15 +62,15 @@ func _process(delta: float) -> void:
 	_shake = move_toward(_shake, 0.0, delta * 0.7)
 	for index in range(_effects.size() - 1, -1, -1):
 		var effect := _effects[index]
-		var mesh: MeshInstance3D = effect.mesh
+		var mesh_instance: MeshInstance3D = effect.mesh
 		effect.age += delta
 		var progress: float = minf(1.0, effect.age / effect.duration)
-		mesh.position += effect.velocity * delta
-		mesh.scale = effect.initial_scale * (1.0 + progress * 1.4)
-		var material := mesh.material_override as StandardMaterial3D
+		mesh_instance.position += effect.velocity * delta
+		mesh_instance.scale = effect.initial_scale * (1.0 + progress * 1.4)
+		var material := mesh_instance.material_override as StandardMaterial3D
 		material.albedo_color.a = (1.0 - progress) * 0.75
 		if progress >= 1.0:
-			mesh.queue_free()
+			mesh_instance.queue_free()
 			_effects.remove_at(index)
 	for id in _flashes.keys():
 		var flash: Dictionary = _flashes[id]
@@ -108,7 +108,6 @@ func _on_action_started(action: StringName, combo_step: int, actor: PlayerContro
 
 
 func _play_cue(cue: StringName, combo_step: int = 0) -> void:
-	# Multi-target contacts share one sound per 45 ms, not a clipped sound stack.
 	var now := Time.get_ticks_msec()
 	if now - int(_last_cue_msec.get(cue, -1000)) < 45:
 		return
@@ -119,25 +118,54 @@ func _play_cue(cue: StringName, combo_step: int = 0) -> void:
 
 
 func _flash(actor: CombatActor, color: Color) -> void:
-	var body := actor.get_node_or_null("BodyMesh") as MeshInstance3D
-	if body == null:
-		body = actor.get_node_or_null("Core") as MeshInstance3D
-	if body == null:
+	var primary := _find_flash_mesh(actor)
+	if primary == null:
 		return
+	var material := _material(color)
+	material.albedo_color.a = 0.65
+	_apply_flash(primary, material)
+
+	# Keep the hidden fallback mesh synchronized while ArtVisual is active.
+	# Existing regression probes use it as the stable per-actor presentation key,
+	# while the visible flash is applied to the imported ArtVisual mesh.
+	var fallback := actor.get_node_or_null("BodyMesh") as MeshInstance3D
+	if fallback != null and fallback != primary:
+		_apply_flash(fallback, material)
+
+
+func _apply_flash(body: MeshInstance3D, material: StandardMaterial3D) -> void:
 	var id := body.get_instance_id()
 	if not _flashes.has(id):
 		_flashes[id] = {"body": weakref(body), "original": body.material_overlay, "left": 0.09}
 	else:
 		_flashes[id].left = 0.09
-	var material := _material(color)
-	material.albedo_color.a = 0.65
 	if DisplayServer.get_name() != "headless":
 		body.material_overlay = material
 
 
+func _find_flash_mesh(actor: CombatActor) -> MeshInstance3D:
+	var art_visual := actor.get_node_or_null("ArtVisual")
+	if art_visual != null:
+		var art_mesh := _first_mesh(art_visual)
+		if art_mesh != null:
+			return art_mesh
+	var body := actor.get_node_or_null("BodyMesh") as MeshInstance3D
+	if body != null:
+		return body
+	return actor.get_node_or_null("Core") as MeshInstance3D
+
+
+func _first_mesh(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D:
+		return node as MeshInstance3D
+	for child in node.get_children():
+		var result := _first_mesh(child)
+		if result != null:
+			return result
+	return null
+
+
 func _spawn_effect(point: Vector3, color: Color, duration: float, ring: bool, drift: Vector3) -> void:
-	# Geometry is exercised by the graphical regression, not the dummy renderer.
-	# Combat events and flash timing remain testable headless.
 	if DisplayServer.get_name() == "headless":
 		return
 	if _effects.size() >= EFFECT_LIMIT:
@@ -168,3 +196,7 @@ func _material(color: Color) -> StandardMaterial3D:
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = color
 	return material
+
+
+func flash_target_for_test(actor: CombatActor) -> MeshInstance3D:
+	return _find_flash_mesh(actor)
