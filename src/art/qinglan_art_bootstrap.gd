@@ -91,12 +91,14 @@ func _install_dynamic_actor(node: Node) -> void:
 func _attach_character(actor: Node3D, asset_id: StringName) -> Node3D:
 	var existing := actor.get_node_or_null("ArtVisual") as Node3D
 	if existing != null:
+		_hide_world_label(actor.get_node_or_null("RealmLabel"))
 		return existing
 	var visual := ArtPackRegistry.attach_asset(actor, asset_id, "ArtVisual")
 	if visual == null:
 		return null
 	_hide_geometry(actor.get_node_or_null("BodyMesh"))
 	_hide_geometry(actor.get_node_or_null("FacingMarker"))
+	_hide_world_label(actor.get_node_or_null("RealmLabel"))
 	_tracked_visuals.append(weakref(actor))
 	return visual
 
@@ -133,12 +135,14 @@ func _install_guard_vfx(guard: MeshInstance3D) -> void:
 
 func _install_anchor(anchor: FormationAnchor) -> void:
 	if anchor.get_node_or_null("ArtVisual") != null:
+		_hide_world_label(anchor.get_node_or_null("RealmLabel"))
 		return
 	var visual := ArtPackRegistry.attach_asset(anchor, &"prop_formation_anchor_qinglan_a", "ArtVisual")
 	if visual == null:
 		return
 	for node_name in ["Base", "Pillar", "Core", "Ring"]:
 		_hide_geometry(anchor.get_node_or_null(node_name))
+	_hide_world_label(anchor.get_node_or_null("RealmLabel"))
 	_tracked_visuals.append(weakref(anchor))
 
 
@@ -150,6 +154,7 @@ func _install_portal(portal: EscapePortal) -> void:
 		return
 	_hide_geometry(portal.get_node_or_null("Disc"))
 	_hide_geometry(portal.get_node_or_null("Core"))
+	_hide_world_label(portal.get_node_or_null("Label3D"))
 
 
 func _install_environment() -> void:
@@ -207,6 +212,7 @@ func _animate_world_art(delta: float) -> void:
 		if portal != null:
 			_hide_geometry(portal.get_node_or_null("Disc"))
 			_hide_geometry(portal.get_node_or_null("Core"))
+			_hide_world_label(portal.get_node_or_null("Label3D"))
 		var active := portal != null and portal.is_active()
 		_portal_visual.rotation.y += delta * (1.35 if active else 0.18)
 		var pulse := 1.0 + sin(Time.get_ticks_msec() * 0.006) * (0.035 if active else 0.008)
@@ -236,3 +242,8 @@ func bound_scene_for_test() -> MortalPathMain:
 func _hide_geometry(node: Node) -> void:
 	if node is GeometryInstance3D:
 		(node as GeometryInstance3D).visible = false
+
+
+func _hide_world_label(node: Node) -> void:
+	if node is Label3D:
+		(node as Label3D).visible = false
