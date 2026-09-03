@@ -118,16 +118,27 @@ func _play_cue(cue: StringName, combo_step: int = 0) -> void:
 
 
 func _flash(actor: CombatActor, color: Color) -> void:
-	var body := _find_flash_mesh(actor)
-	if body == null:
+	var primary := _find_flash_mesh(actor)
+	if primary == null:
 		return
+	var material := _material(color)
+	material.albedo_color.a = 0.65
+	_apply_flash(primary, material)
+
+	# Keep the hidden fallback mesh synchronized while ArtVisual is active.
+	# Existing regression probes use it as the stable per-actor presentation key,
+	# while the visible flash is applied to the imported ArtVisual mesh.
+	var fallback := actor.get_node_or_null("BodyMesh") as MeshInstance3D
+	if fallback != null and fallback != primary:
+		_apply_flash(fallback, material)
+
+
+func _apply_flash(body: MeshInstance3D, material: StandardMaterial3D) -> void:
 	var id := body.get_instance_id()
 	if not _flashes.has(id):
 		_flashes[id] = {"body": weakref(body), "original": body.material_overlay, "left": 0.09}
 	else:
 		_flashes[id].left = 0.09
-	var material := _material(color)
-	material.albedo_color.a = 0.65
 	if DisplayServer.get_name() != "headless":
 		body.material_overlay = material
 
