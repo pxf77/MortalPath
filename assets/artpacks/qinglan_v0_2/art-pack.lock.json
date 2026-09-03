@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "version": "artpack-v0.2.0-qinglan-valley",
+  "source_repository": "pxf77/MortalPath-Art",
+  "source_asset_commit": "3d7d37b64efdedde2edd8509743dd2db4631a943",
+  "runtime_snapshot_commit": "4f28bf5f58700052922fefb765f1c8339983c85a",
+  "artifact_run_id": 33705193100,
+  "artifact_id": 9874998683,
+  "artifact_sha256": "c0395e6aaa6161412874f22c0456932711d63f24636949fdee1eff7199f1119f",
+  "asset_count": 13,
+  "engine": "Godot 4.7.2",
+  "status": "released_runtime_promoted"
+}
