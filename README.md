@@ -30,11 +30,14 @@
 - 炼气同境界击杀与筑基大境界压制；
 - 锁灵阵眼、遁光阵、撤离胜利条件；
 - 开场、胜利、失败和重新挑战流程；
-- 规则测试、主场景冒烟和 Demo 阶段流转测试。
+- 规则测试、主场景冒烟和 Demo 阶段流转测试；
 - 短前摇、输入缓冲、命中停顿、局部受击与破阵反馈、[CC0 初版采样音效](assets/audio/README.md)；
-- 默认 / 减弱动态 / 静音三轮正常输入回归与技能使用记录。
+- 默认 / 减弱动态 / 静音三轮正常输入回归与技能使用记录；
+- 青岚谷 v0.2 道路、岩体、竹蕨、敌人、阵眼、遁光阵与基础 VFX Runtime Art Pack；
+- 主角 v0.4 共享骨架、11 项动作、7 类 PBR 材质和剑尖采样 Ribbon Trail；
+- 动作释放帧、战斗判定与飞剑轨迹同步契约。
 
-当前仍使用工程占位几何体，目标是先验证玩法闭环、战斗可读性和境界秩序。正式美术资产将由独立美术仓库发布 Runtime Art Pack 后再接入。
+当前画面已消费版本化 Runtime Art Pack，但仍属于程序化低模生产样本。它用于验证正交镜头轮廓、材质响应、动作时序、战斗可读性和跨仓发布流程，不等同于最终手工高模与正式动画质量。
 
 ## 运行
 
@@ -75,14 +78,23 @@ bash scripts/godot.sh
 ## 验证
 
 ```bash
+# 完整工程、战斗、Art Pack、主角动作与输入回归
+bash scripts/validate-demo.sh
+
 # 境界、伤害、连击与灵力规则
- bash scripts/godot.sh --headless --script res://tests/test_runner.gd
+bash scripts/godot.sh --headless --script res://tests/test_runner.gd
 
 # Demo 阶段、敌人生成、破阵和撤离入口流转
- bash scripts/godot.sh --headless --script res://tests/demo_scene_runner.gd
+bash scripts/godot.sh --headless --script res://tests/demo_scene_runner.gd
+
+# 青岚谷 Art Pack 资产与关卡挂载
+bash scripts/godot.sh --headless --script res://tests/qinglan_art_pack_runner.gd
+
+# 主角骨架、动作、PBR 材质、释放帧与飞剑轨迹契约
+bash scripts/godot.sh --headless --script res://tests/player_art_polish_runner.gd
 ```
 
-GitHub Actions 还会执行 Godot 工程导入和主场景 headless 冒烟。
+GitHub Actions 还会执行 Godot 工程导入、逐脚本解析、完整 Demo 回归、Linux Release 导出与图形化演示。
 
 本地完整回归：`bash scripts/validate-demo.sh`，导出验收：`bash scripts/validate-export.sh`。本地编辑器、匹配的导出模板、游戏 CI 和美术夹具统一从 `toolchain.lock.json` 读取 4.7.2；不再日常验证 4.3，不自动追随最新版。版本升级须单独完整回归，见 [`版本策略`](docs/godot-version-policy.md)。首批实施和待人工签收项目见 [`M1 验收记录`](docs/m1-validation.md)。自动通关不等于人工手感验收。
 
@@ -95,6 +107,16 @@ GitHub Actions 还会执行 Godot 工程导入和主场景 headless 冒烟。
 美术源资产、方向板、生产规范、校验工具与 Art Pack 发布独立维护于：
 
 - [`pxf77/MortalPath-Art`](https://github.com/pxf77/MortalPath-Art)
+
+当前固定消费：
+
+```text
+artpack-v0.2.0-qinglan-valley
+  → 青岚谷环境、敌人、阵器、飞剑与基础 VFX
+
+artpack-v0.4.0-player-polish
+  → humanoid_v1 主角、11 项动作、7 类 PBR 材质与飞剑轨迹契约
+```
 
 仓库职责边界：
 
@@ -111,6 +133,9 @@ MortalPath
 
 ```text
 .
+├── assets/
+│   ├── artpacks/                 # 已锁定版本的运行时美术资产与 Manifest
+│   └── audio/                    # 战斗音频和许可证
 ├── docs/
 │   ├── architecture.md
 │   ├── demo-v0.1.md
@@ -119,12 +144,13 @@ MortalPath
 │   └── roadmap.md
 ├── src/
 │   ├── actors/                   # 玩家、敌人和战斗实体
+│   ├── art/                      # Art Pack、动作合同与表现桥接
 │   ├── combat/                   # 伤害、Demo 战斗规则与飞行物
 │   ├── core/                     # 输入等基础能力
 │   ├── cultivation/              # 境界与修炼规则
 │   ├── main/                     # Demo 编排、场景与 HUD
 │   └── world/                    # 阵眼与遁光阵等交互目标
-├── tests/                        # 规则与 Demo 流程 headless 测试
+├── tests/                        # 规则、资产、表现与 Demo 流程测试
 ├── project.godot
 └── README.md
 ```
