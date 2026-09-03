@@ -1,7 +1,11 @@
 class_name ArtPackRegistry
 extends RefCounted
 
-const PACK_VERSION := "artpack-v0.4.0-player-polish"
+const QINGLAN_PACK_VERSION := "artpack-v0.2.0-qinglan-valley"
+const PLAYER_POLISH_PACK_VERSION := "artpack-v0.4.0-player-polish"
+# Compatibility alias for callers that only need the newest promoted pack.
+const PACK_VERSION := PLAYER_POLISH_PACK_VERSION
+
 const QINGLAN_ROOT := "res://assets/artpacks/qinglan_v0_2/runtime"
 const PLAYER_POLISH_ROOT := "res://assets/artpacks/player_polish_v0_4/runtime"
 
@@ -37,6 +41,15 @@ static func path_for(asset_id: StringName) -> String:
 	return String(ASSET_PATHS.get(asset_id, ""))
 
 
+static func pack_version_for(asset_id: StringName) -> String:
+	var path := path_for(asset_id)
+	if path.begins_with(PLAYER_POLISH_ROOT + "/"):
+		return PLAYER_POLISH_PACK_VERSION
+	if path.begins_with(QINGLAN_ROOT + "/"):
+		return QINGLAN_PACK_VERSION
+	return ""
+
+
 static func has_asset(asset_id: StringName) -> bool:
 	var path := path_for(asset_id)
 	return not path.is_empty() and ResourceLoader.exists(path, "PackedScene")
@@ -62,7 +75,7 @@ static func instantiate_asset(asset_id: StringName, node_name: String = "ArtVisu
 	if instance == null:
 		return null
 	instance.name = node_name
-	instance.set_meta("art_pack_version", PACK_VERSION)
+	instance.set_meta("art_pack_version", pack_version_for(asset_id))
 	instance.set_meta("art_asset_id", String(asset_id))
 	return instance
 

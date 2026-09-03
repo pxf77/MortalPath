@@ -34,6 +34,11 @@ func _run() -> void:
 	var bridge := player.get_node_or_null("PlayerArtMotionBridge") as PlayerArtMotionBridge
 	_check(visual != null, "玩家必须挂载 ArtVisual")
 	_check(visual != null and visual.get_meta("art_asset_id", "") == "chr_player_qi_refining_polished_v0_4", "玩家必须使用 v0.4 精修资产")
+	_check(
+		visual != null
+		and visual.get_meta("art_pack_version", "") == ArtPackRegistry.PLAYER_POLISH_PACK_VERSION,
+		"精修主角实例必须记录真实 v0.4 来源版本"
+	)
 	_check(bridge != null and bridge.is_ready_for_test(), "动作桥、AnimationPlayer、剑尖与 Trail 必须就绪")
 	if bridge == null:
 		await _finish(demo)
@@ -55,7 +60,13 @@ func _run() -> void:
 	for material_name in REQUIRED_MATERIALS:
 		_check(material_names.has(material_name), "Godot 必须导入 PBR 材质：%s" % material_name)
 
-	var expected_speed := PlayerArtMotionContract.playback_speed_for(&"attack", 1, 0.085)
+	_check(is_equal_approx(player.action_windup_seconds(&"attack", 1), 0.085), "第一式前摇由玩家控制器统一提供")
+	_check(is_equal_approx(player.action_windup_seconds(&"attack", 3), 0.135), "第三式前摇由玩家控制器统一提供")
+	_check(is_equal_approx(player.action_windup_seconds(&"sword_art"), 0.16), "剑诀前摇由玩家控制器统一提供")
+
+	var expected_speed := PlayerArtMotionContract.playback_speed_for(
+		&"attack", 1, player.action_windup_seconds(&"attack", 1)
+	)
 	_check(expected_speed > 1.0 and expected_speed < 2.0, "第一式前摇应按释放帧计算有限加速")
 	player.action_started.emit(&"attack", 1)
 	await process_frame
@@ -68,15 +79,29 @@ func _run() -> void:
 	await process_frame
 	_check(bridge.last_release_clip_for_test() == &"attack_light_1", "伤害释放信号记录第一式")
 	_check(trail != null and trail.started_count_for_test() == started_before + 1, "释放事件启动飞剑轨迹")
+	_check(is_equal_approx(bridge.effective_playback_speed_for_test(), 1.0), "释放后恢复段回到作者 1 倍速")
 	if trail != null:
 		var rule := trail.last_rule_for_test()
 		_check(is_equal_approx(float(rule.get("trail_duration_seconds", 0.0)), 0.16), "第一式轨迹持续时间来自 Manifest")
 		_check(is_equal_approx(float(rule.get("trail_width_m", 0.0)), 0.085), "第一式轨迹宽度来自 Manifest")
 		_check(trail.sample_count_for_test() >= 1, "释放时至少采样一个剑尖位置")
 
+	player.action_started.emit(&"dodge", 0)
+	await process_frame
+	_check(bridge.last_played_clip_for_test() == &"dodge", "身法信号驱动闪避动画")
+	_check(bridge.current_playback_speed_for_test() > 2.0, "闪避动作按 0.20 秒逻辑窗口加速")
+	await _frames(18)
+	_check(bridge.transient_animation_for_test() == &"", "闪避逻辑结束后不继续锁定闪避姿态")
+
 	var feedback := demo.get_node_or_null("CombatFeedback") as CombatFeedback
 	var flash_target := feedback.flash_target_for_test(player) if feedback != null else null
 	_check(visual != null and flash_target != null and (flash_target == visual or visual.is_ancestor_of(flash_target)), "命中闪白必须作用于真实 ArtVisual 网格")
+
+	player.force_defeat()
+	await _frames(2)
+	_check(player.visible, "玩家死亡后保持表现节点可见以播放死亡动作")
+	_check(bridge.last_played_clip_for_test() == &"death", "死亡信号驱动死亡动画")
+	_check(bridge.transient_animation_for_test() == bridge.resolve_clip_for_test(&"death"), "死亡动作不会被立即切回待机")
 
 	await _finish(demo)
 

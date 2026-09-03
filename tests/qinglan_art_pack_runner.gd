@@ -12,17 +12,37 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	_check(ArtPackRegistry.PACK_VERSION == "artpack-v0.4.0-player-polish", "Art Pack 版本必须固定")
+	_check(
+		ArtPackRegistry.QINGLAN_PACK_VERSION == "artpack-v0.2.0-qinglan-valley",
+		"青岚谷基础 Art Pack 版本必须固定"
+	)
+	_check(
+		ArtPackRegistry.PLAYER_POLISH_PACK_VERSION == "artpack-v0.4.0-player-polish",
+		"主角增量 Art Pack 版本必须固定"
+	)
 	var asset_ids := ArtPackRegistry.asset_ids()
 	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 14 个运行时资产")
 	for asset_id in asset_ids:
+		var expected_pack := ArtPackRegistry.pack_version_for(asset_id)
+		_check(not expected_pack.is_empty(), "运行时资产必须归属固定 Art Pack：%s" % asset_id)
 		_check(ArtPackRegistry.has_asset(asset_id), "运行时资产可解析：%s" % asset_id)
 		var instance := ArtPackRegistry.instantiate_asset(asset_id, "ContractProbe")
 		_check(instance != null, "运行时资产可实例化：%s" % asset_id)
 		if instance != null:
 			_check(ArtPackRegistry.mesh_count(instance) > 0, "运行时资产至少包含一个网格：%s" % asset_id)
 			_check(instance.get_meta("art_asset_id", "") == String(asset_id), "实例记录资产 ID：%s" % asset_id)
+			_check(instance.get_meta("art_pack_version", "") == expected_pack, "实例记录真实来源版本：%s" % asset_id)
 			instance.free()
+	_check(
+		ArtPackRegistry.pack_version_for(&"chr_enemy_melee_qi_a")
+		== ArtPackRegistry.QINGLAN_PACK_VERSION,
+		"青岚谷敌人不得误标为主角增量包"
+	)
+	_check(
+		ArtPackRegistry.pack_version_for(&"chr_player_qi_refining_polished_v0_4")
+		== ArtPackRegistry.PLAYER_POLISH_PACK_VERSION,
+		"精修主角必须标记为 v0.4 增量包"
+	)
 
 	var demo := MAIN_SCENE.instantiate() as MortalPathMain
 	root.add_child(demo)

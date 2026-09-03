@@ -16,5 +16,13 @@
       "size_bytes": 168708,
       "sha256": "b45a22623cf45e2346bb93fc90243fe7f4f87b450486e135866d2f57a4a98303"
     }
+  ],
+  "manifest_assets": [
+    {
+      "asset_id": "chr_player_qi_refining_polished_v0_4",
+      "path": "manifests/characters/chr_player_qi_refining_polished_v0_4.json",
+      "size_bytes": 3896,
+      "sha256": "768e3457be7d21c9b885c507db17486748ce9730c8deb2bcb76a458599407fa9"
+    }
   ]
 }
