@@ -22,7 +22,7 @@ jobs:
       - name: Download and verify the validated Art runtime
         shell: bash
         env:
-          ART_RUNTIME_URL: "https://sdmntprwestus.oaiusercontent.com/files/00000000-6040-8230-bd60-9cf7ce02c8c6/raw?se=2026-09-03T04%3A49%3A02Z&sp=r&sv=2026-02-06&sr=b&scid=c8c6b4cb-6cfb-55bb-9118-94acf550f87a&skoid=5e713cdb-766b-475e-a3ca-8adb6cf99aa0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-02T22%3A23%3A34Z&ske=2026-09-03T22%3A23%3A34Z&sks=b&skv=2026-02-06&sig=w2uFeLZItP6SPJHys2sWgysmX7SVn2Qe3aXUPpdc%2BmE%3D"
+          ART_RUNTIME_URL: "https://sdmntprwestus3.oaiusercontent.com/files/00000000-5db0-81fd-b1df-490295c0703b/raw?se=2026-09-03T04%3A59%3A05Z&sp=r&sv=2026-02-06&sr=b&scid=09b9ed80-e315-511a-b485-c5268b622eb6&skoid=5e713cdb-766b-475e-a3ca-8adb6cf99aa0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-02T22%3A32%3A59Z&ske=2026-09-03T22%3A32%3A59Z&sks=b&skv=2026-02-06&sig=YVJ7Yq9wjT5KjXgOZoBZpELOOMmETOUAme8wub1CN/c%3D"
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 "$ART_RUNTIME_URL" -o /tmp/art-runtime.zip
@@ -31,20 +31,16 @@ jobs:
           mkdir -p /tmp/qinglan-art-runtime
           unzip -q /tmp/art-runtime.zip -d /tmp/qinglan-art-runtime
 
-      - name: Apply game integration and promote runtime GLBs
+      - name: Promote runtime GLBs and immutable metadata
         shell: bash
         run: |
           set -euo pipefail
-          gzip -dc .migration/qinglan-integration.patch.gz.b64 | base64 --decode >/dev/null 2>&1 || true
-          base64 --decode .migration/qinglan-integration.patch.gz.b64 | gzip -dc | patch -p1
-
           pack_root="assets/artpacks/qinglan_v0_2"
           rm -rf "$pack_root/runtime"
           mkdir -p "$pack_root/runtime"
           cp -R /tmp/qinglan-art-runtime/runtime/. "$pack_root/runtime/"
           rm -f "$pack_root/runtime/props/prop_pipeline_marker.glb"
 
-          mkdir -p "$pack_root"
           python - <<'PY'
           import json
           from pathlib import Path
@@ -55,6 +51,7 @@ jobs:
           catalog['assets'] = [item for item in catalog['assets'] if item.get('id') != 'prop_pipeline_marker']
           catalog['asset_count'] = len(catalog['assets'])
           catalog['source_commit'] = '3d7d37b64efdedde2edd8509743dd2db4631a943'
+          target.parent.mkdir(parents=True, exist_ok=True)
           target.write_text(json.dumps(catalog, ensure_ascii=False, indent=2, sort_keys=True) + '\n', encoding='utf-8')
           PY
 
@@ -63,7 +60,7 @@ jobs:
             "schema_version": 1,
             "version": "artpack-v0.2.0-qinglan-valley",
             "source_repository": "pxf77/MortalPath-Art",
-            "source_asset_commit": "3d7d37b64efded2edd8509743dd2db4631a943",
+            "source_asset_commit": "3d7d37b64efdedde2edd8509743dd2db4631a943",
             "runtime_snapshot_commit": "4f28bf5f58700052922fefb765f1c8339983c85a",
             "artifact_run_id": 33705193100,
             "artifact_id": 9874998683,
