@@ -129,6 +129,50 @@ class ArtPackIntegrityTests(unittest.TestCase):
         self.assertEqual(actual_runtime, expected_by_prefix["runtime"])
         self.assertEqual(actual_manifests, expected_by_prefix["manifests"])
 
+    def test_player_motion_release_manifest_and_runtime_are_exact(self) -> None:
+        pack_root = ART_PACK_ROOT / "player_motion_v0_5"
+        lock = load_object(pack_root / "art-pack.lock.json")
+        self.assertEqual(
+            lock.get("version"),
+            "artpack-v0.5.0-player-motion-refinement",
+        )
+        self.assertEqual(
+            lock.get("source_asset_commit"),
+            "4bae9b47e6b95b97406f676441dfffd8938a9cb7",
+        )
+        self.assertEqual(
+            lock.get("release_target_commit"),
+            "cf54156051b1524863a8ad52514d8ebba3505f8a",
+        )
+        archive = lock.get("release_archive")
+        self.assertIsInstance(archive, dict)
+        self.assertRegex(archive.get("sha256", ""), SHA256_PATTERN)
+
+        expected_by_prefix: dict[str, set[Path]] = {
+            "runtime": set(),
+            "manifests": set(),
+        }
+        for field, prefix in (
+            ("runtime_assets", "runtime"),
+            ("manifest_assets", "manifests"),
+        ):
+            entries = lock.get(field)
+            self.assertIsInstance(entries, list)
+            self.assertEqual(len(entries), 1)
+            for entry in entries:
+                self.assertIsInstance(entry, dict)
+                path = self.assert_locked_file(pack_root, entry, prefix)
+                expected_by_prefix[prefix].add(path)
+
+        actual_runtime = {
+            path.resolve() for path in (pack_root / "runtime").rglob("*.glb")
+        }
+        actual_manifests = {
+            path.resolve() for path in (pack_root / "manifests").rglob("*.json")
+        }
+        self.assertEqual(actual_runtime, expected_by_prefix["runtime"])
+        self.assertEqual(actual_manifests, expected_by_prefix["manifests"])
+
 
 if __name__ == "__main__":
     unittest.main()

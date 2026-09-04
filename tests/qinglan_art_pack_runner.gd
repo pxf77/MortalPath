@@ -1,7 +1,7 @@
 extends SceneTree
 
 const MAIN_SCENE := preload("res://src/main/main.tscn")
-const EXPECTED_ASSET_COUNT := 14
+const EXPECTED_ASSET_COUNT := 15
 
 var _failures := 0
 var _checks := 0
@@ -18,10 +18,14 @@ func _run() -> void:
 	)
 	_check(
 		ArtPackRegistry.PLAYER_POLISH_PACK_VERSION == "artpack-v0.4.0-player-polish",
-		"主角增量 Art Pack 版本必须固定"
+		"主角 v0.4 Art Pack 版本必须保留"
+	)
+	_check(
+		ArtPackRegistry.PLAYER_MOTION_PACK_VERSION == "artpack-v0.5.0-player-motion-refinement",
+		"主角 v0.5 Art Pack 版本必须固定"
 	)
 	var asset_ids := ArtPackRegistry.asset_ids()
-	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 14 个运行时资产")
+	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 15 个运行时资产")
 	for asset_id in asset_ids:
 		var expected_pack := ArtPackRegistry.pack_version_for(asset_id)
 		_check(not expected_pack.is_empty(), "运行时资产必须归属固定 Art Pack：%s" % asset_id)
@@ -41,7 +45,12 @@ func _run() -> void:
 	_check(
 		ArtPackRegistry.pack_version_for(&"chr_player_qi_refining_polished_v0_4")
 		== ArtPackRegistry.PLAYER_POLISH_PACK_VERSION,
-		"精修主角必须标记为 v0.4 增量包"
+		"旧精修主角必须保留真实 v0.4 来源"
+	)
+	_check(
+		ArtPackRegistry.pack_version_for(&"chr_player_qi_refining_refined_v0_5")
+		== ArtPackRegistry.PLAYER_MOTION_PACK_VERSION,
+		"动作精修主角必须标记为 v0.5 增量包"
 	)
 
 	var demo := MAIN_SCENE.instantiate() as MortalPathMain
@@ -54,7 +63,7 @@ func _run() -> void:
 	_check(bootstrap != null and bootstrap.call("environment_instance_count_for_test") == 10, "场景挂载 1 组道路、5 组岩体与 4 组竹蕨")
 	var player := demo.get_node("Player") as PlayerController
 	var portal := demo.get_node("EscapePortal") as EscapePortal
-	_check(_asset_id(player) == "chr_player_qi_refining_polished_v0_4", "玩家挂载精修炼气角色资产")
+	_check(_asset_id(player) == "chr_player_qi_refining_refined_v0_5", "玩家挂载 v0.5 动作精修角色资产")
 	_check(player.get_node_or_null("PlayerArtMotionBridge") != null, "玩家挂载动作与飞剑同步桥")
 	_check(_asset_id(portal) == "prop_escape_portal_qinglan_a", "遁光阵挂载运行时资产")
 	_check(not (player.get_node("RealmLabel") as Label3D).visible, "正式人物接入后隐藏玩家世界空间调试标签")
