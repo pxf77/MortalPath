@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "version": "artpack-v0.7.0-enemy-combat-vfx",
+  "source_repository": "pxf77/MortalPath-Art",
+  "source_asset_commit": "46065843e69f52f5c3ba43bab0d692e5ff94a6ed",
+  "release_target_commit": "ef32abf3d749fbd17d3bc70611881f5bd97ded0a",
+  "release_id": 382788513,
+  "release_archive": {
+    "name": "mortalpath-artpack-snapshot-ef32abf3d749.zip",
+    "sha256": "06727dbcab4db7009082b8fe6ad1ac106332038effb27edc3ab4c23808128cdd"
+  },
+  "runtime_assets": [
+    {
+      "asset_id": "vfx_enemy_melee_telegraph_v0_7",
+      "path": "runtime/vfx/vfx_enemy_melee_telegraph_v0_7.glb",
+      "size_bytes": 18396,
+      "sha256": "b22ada3264c3473bcb2fc3761de2ec4c3210e386421e353b03f8da0811dd230c"
+    },
+    {
+      "asset_id": "vfx_enemy_talisman_telegraph_v0_7",
+      "path": "runtime/vfx/vfx_enemy_talisman_telegraph_v0_7.glb",
+      "size_bytes": 130316,
+      "sha256": "3a1201bef826a0aa140bd446fcf993941772ac108c6fe10cc1ebd51176629631"
+    },
+    {
+      "asset_id": "vfx_guardian_telegraph_v0_7",
+      "path": "runtime/vfx/vfx_guardian_telegraph_v0_7.glb",
+      "size_bytes": 142456,
+      "sha256": "8c2d8eb565d32d3c9c81b99abc3a6ab33bea5f32dab27cb66728a387f03511c4"
+    },
+    {
+      "asset_id": "vfx_enemy_talisman_projectile_v0_7",
+      "path": "runtime/vfx/vfx_enemy_talisman_projectile_v0_7.glb",
+      "size_bytes": 47564,
+      "sha256": "20f3654b8704fab524f394db73d47977fe9d6056926d662f70903ae1e65e1cd2"
+    },
+    {
+      "asset_id": "vfx_guardian_projectile_v0_7",
+      "path": "runtime/vfx/vfx_guardian_projectile_v0_7.glb",
+      "size_bytes": 57772,
+      "sha256": "264b9eefefd2e824974761a725ebff2dd7d7a187464bb492f686556066966483"
+    },
+    {
+      "asset_id": "vfx_enemy_impact_qi_v0_7",
+      "path": "runtime/vfx/vfx_enemy_impact_qi_v0_7.glb",
+      "size_bytes": 61324,
+      "sha256": "417f93f6654db72d831a4d85142df64e14d6653d6edecb04a4a2de1369829263"
+    },
+    {
+      "asset_id": "vfx_guardian_impact_v0_7",
+      "path": "runtime/vfx/vfx_guardian_impact_v0_7.glb",
+      "size_bytes": 66368,
+      "sha256": "555775e6191603c766a2dac0eacd136d32d08330be4590a02491fe212aa57fe0"
+    }
+  ],
+  "manifest_assets": [
+    {
+      "asset_id": "vfx_enemy_melee_telegraph_v0_7",
+      "path": "manifests/vfx/vfx_enemy_melee_telegraph_v0_7.json",
+      "size_bytes": 1261,
+      "sha256": "e9e2fcfeb9233d8972e3fad9e7c5a84ab758acf2ba107e32dc290522e330b558"
+    },
+    {
+      "asset_id": "vfx_enemy_talisman_telegraph_v0_7",
+      "path": "manifests/vfx/vfx_enemy_talisman_telegraph_v0_7.json",
+      "size_bytes": 1290,
+      "sha256": "d6a964edfd0f4def5896e190a62af82bad308b3a3d929de609aafa8ce850828f"
+    },
+    {
+      "asset_id": "vfx_guardian_telegraph_v0_7",
+      "path": "manifests/vfx/vfx_guardian_telegraph_v0_7.json",
+      "size_bytes": 1291,
+      "sha256": "a02b5e0b76aeea5a155bd4291fee1c9b726951af1c27cf8587230bfd8ef6d69c"
+    },
+    {
+      "asset_id": "vfx_enemy_talisman_projectile_v0_7",
+      "path": "manifests/vfx/vfx_enemy_talisman_projectile_v0_7.json",
+      "size_bytes": 1271,
+      "sha256": "f96444c70bed84ae765cd84c2cb245059a6c573a3bd083c1852d7fd7c9adf2a8"
+    },
+    {
+      "asset_id": "vfx_guardian_projectile_v0_7",
+      "path": "manifests/vfx/vfx_guardian_projectile_v0_7.json",
+      "size_bytes": 1279,
+      "sha256": "5c795a763e4137adeed8ff5a47c17398274a0cba584fd63543e9e300ff241bb7"
+    },
+    {
+      "asset_id": "vfx_enemy_impact_qi_v0_7",
+      "path": "manifests/vfx/vfx_enemy_impact_qi_v0_7.json",
+      "size_bytes": 1188,
+      "sha256": "4923eeb28d43bb13adbe88fe35a79b5325a487ec8c4ffcba5ca5fbbd80c09773"
+    },
+    {
+      "asset_id": "vfx_guardian_impact_v0_7",
+      "path": "manifests/vfx/vfx_guardian_impact_v0_7.json",
+      "size_bytes": 1304,
+      "sha256": "a8f2a6f2a2c47a4bd565cb678c35f6bcfbaed52cb08310332b6c999ba50ab56b"
+    }
+  ]
+}

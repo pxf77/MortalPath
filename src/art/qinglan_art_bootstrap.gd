@@ -13,6 +13,7 @@ var _camera: Camera3D = null
 var _portal_visual: Node3D = null
 var _environment_instances: Array[Node3D] = []
 var _tracked_visuals: Array[WeakRef] = []
+var _enemy_vfx_bridge: EnemyCombatVfxBridge = null
 
 
 func _ready() -> void:
@@ -32,6 +33,8 @@ func _process(delta: float) -> void:
 func _on_node_added(node: Node) -> void:
 	if node is MortalPathMain:
 		call_deferred("_bind_demo", node)
+	elif node is CombatProjectile and is_instance_valid(_enemy_vfx_bridge):
+		call_deferred("_install_projectile_vfx", node)
 
 
 func _bind_current_scene() -> void:
@@ -52,6 +55,7 @@ func _bind_demo(scene: MortalPathMain) -> void:
 
 	var player := scene.get_node_or_null("Player") as PlayerController
 	if player != null:
+		_install_enemy_vfx_bridge(player)
 		var player_visual := _attach_character(player, &"chr_player_qi_refining_refined_v0_5")
 		if player_visual != null:
 			_install_player_motion(player, player_visual)
@@ -86,10 +90,25 @@ func _install_dynamic_actor(node: Node) -> void:
 		var enemy_visual := _attach_character(enemy, asset_id)
 		if enemy_visual != null:
 			_install_enemy_motion(enemy, enemy_visual, asset_id)
+		if is_instance_valid(_enemy_vfx_bridge):
+			_enemy_vfx_bridge.install_enemy(enemy)
 		if enemy.combat_style == TrainingEnemy.CombatStyle.GUARDIAN:
 			_install_guard_vfx(enemy.get_node_or_null("GuardVisual") as MeshInstance3D)
 	elif node is FormationAnchor:
 		_install_anchor(node as FormationAnchor)
+
+
+func _install_enemy_vfx_bridge(player: PlayerController) -> void:
+	if not is_instance_valid(_enemy_vfx_bridge):
+		_enemy_vfx_bridge = EnemyCombatVfxBridge.new()
+		_enemy_vfx_bridge.name = "EnemyCombatVfxBridge"
+		add_child(_enemy_vfx_bridge)
+	_enemy_vfx_bridge.configure(_demo, player)
+
+
+func _install_projectile_vfx(node: Node) -> void:
+	if node is CombatProjectile and is_instance_valid(_enemy_vfx_bridge):
+		_enemy_vfx_bridge.install_projectile(node as CombatProjectile)
 
 
 func _attach_character(actor: Node3D, asset_id: StringName) -> Node3D:
@@ -249,6 +268,10 @@ func environment_instance_count_for_test() -> int:
 
 func bound_scene_for_test() -> MortalPathMain:
 	return _demo
+
+
+func enemy_vfx_bridge_for_test() -> EnemyCombatVfxBridge:
+	return _enemy_vfx_bridge
 
 
 func _hide_geometry(node: Node) -> void:

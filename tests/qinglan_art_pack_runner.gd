@@ -1,7 +1,7 @@
 extends SceneTree
 
 const MAIN_SCENE := preload("res://src/main/main.tscn")
-const EXPECTED_ASSET_COUNT := 18
+const EXPECTED_ASSET_COUNT := 25
 
 var _failures := 0
 var _checks := 0
@@ -28,8 +28,12 @@ func _run() -> void:
 		ArtPackRegistry.ENEMY_MOTION_PACK_VERSION == "artpack-v0.6.0-enemy-motion-refinement",
 		"敌人与守关者 v0.6 Art Pack 版本必须固定"
 	)
+	_check(
+		ArtPackRegistry.ENEMY_VFX_PACK_VERSION == "artpack-v0.7.0-enemy-combat-vfx",
+		"敌方战斗 VFX v0.7 Art Pack 版本必须固定"
+	)
 	var asset_ids := ArtPackRegistry.asset_ids()
-	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 18 个运行时资产")
+	_check(asset_ids.size() == EXPECTED_ASSET_COUNT, "应登记 25 个运行时资产")
 	for asset_id in asset_ids:
 		var expected_pack := ArtPackRegistry.pack_version_for(asset_id)
 		_check(not expected_pack.is_empty(), "运行时资产必须归属固定 Art Pack：%s" % asset_id)
@@ -61,6 +65,11 @@ func _run() -> void:
 		== ArtPackRegistry.ENEMY_MOTION_PACK_VERSION,
 		"动作精修敌人必须标记为 v0.6 增量包"
 	)
+	_check(
+		ArtPackRegistry.pack_version_for(&"vfx_guardian_impact_v0_7")
+		== ArtPackRegistry.ENEMY_VFX_PACK_VERSION,
+		"敌方战斗特效必须标记为 v0.7 增量包"
+	)
 
 	var demo := MAIN_SCENE.instantiate() as MortalPathMain
 	root.add_child(demo)
@@ -70,6 +79,7 @@ func _run() -> void:
 	_check(bootstrap != null, "青岚谷美术运行时已注册为 Autoload")
 	_check(bootstrap != null and bootstrap.call("bound_scene_for_test") == demo, "美术运行时绑定当前 Demo")
 	_check(bootstrap != null and bootstrap.call("environment_instance_count_for_test") == 10, "场景挂载 1 组道路、5 组岩体与 4 组竹蕨")
+	_check(bootstrap != null and bootstrap.call("enemy_vfx_bridge_for_test") != null, "美术运行时挂载敌方战斗 VFX 薄桥")
 	var player := demo.get_node("Player") as PlayerController
 	var portal := demo.get_node("EscapePortal") as EscapePortal
 	_check(_asset_id(player) == "chr_player_qi_refining_refined_v0_5", "玩家挂载 v0.5 动作精修角色资产")
@@ -89,6 +99,7 @@ func _run() -> void:
 		melee_count += 1 if id == "chr_enemy_melee_qi_refined_v0_6" else 0
 		talisman_count += 1 if id == "chr_enemy_talisman_qi_refined_v0_6" else 0
 		_check(enemy.get_node_or_null("EnemyArtMotionBridge") != null, "炼气敌人挂载 v0.6 动作桥")
+		_check(enemy.get_node_or_null("Telegraph/EnemyTelegraphVisual") != null, "炼气敌人挂载 v0.7 警示资产")
 		_check(not (enemy.get_node("RealmLabel") as Label3D).visible, "正式敌人接入后隐藏世界空间调试标签")
 	_check(melee_count == 2, "两名近战敌人共享 v0.6 近战散修视觉")
 	_check(talisman_count == 1, "符箓邪修使用 v0.6 独立视觉")
@@ -103,6 +114,7 @@ func _run() -> void:
 	var guardian := demo.get("_guardian") as TrainingEnemy
 	_check(guardian != null and _asset_id(guardian) == "chr_guardian_foundation_refined_v0_6", "筑基守阵修士使用 v0.6 独立视觉")
 	_check(guardian != null and guardian.get_node_or_null("EnemyArtMotionBridge") != null, "筑基守阵修士挂载 v0.6 动作桥")
+	_check(guardian != null and guardian.get_node_or_null("Telegraph/EnemyTelegraphVisual") != null, "筑基守阵修士挂载 v0.7 警示资产")
 	_check(guardian != null and is_equal_approx(guardian.incoming_damage_multiplier, 0.32), "美术接入不改变筑基护体数值")
 	_check(guardian != null and not (guardian.get_node("RealmLabel") as Label3D).visible, "筑基守阵修士不显示重叠调试标签")
 

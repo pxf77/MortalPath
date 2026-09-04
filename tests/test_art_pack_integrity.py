@@ -223,6 +223,59 @@ class ArtPackIntegrityTests(unittest.TestCase):
         self.assertEqual(actual_runtime, expected_by_prefix["runtime"])
         self.assertEqual(actual_manifests, expected_by_prefix["manifests"])
 
+    def test_enemy_combat_vfx_release_manifest_and_runtime_are_exact(self) -> None:
+        pack_root = ART_PACK_ROOT / "enemy_combat_vfx_v0_7"
+        lock = load_object(pack_root / "art-pack.lock.json")
+        self.assertEqual(
+            lock.get("version"),
+            "artpack-v0.7.0-enemy-combat-vfx",
+        )
+        self.assertEqual(
+            lock.get("source_asset_commit"),
+            "46065843e69f52f5c3ba43bab0d692e5ff94a6ed",
+        )
+        self.assertEqual(
+            lock.get("release_target_commit"),
+            "ef32abf3d749fbd17d3bc70611881f5bd97ded0a",
+        )
+        archive = lock.get("release_archive")
+        self.assertIsInstance(archive, dict)
+        self.assertEqual(
+            archive.get("sha256"),
+            "06727dbcab4db7009082b8fe6ad1ac106332038effb27edc3ab4c23808128cdd",
+        )
+
+        expected_by_prefix: dict[str, set[Path]] = {
+            "runtime": set(),
+            "manifests": set(),
+        }
+        for field, prefix in (
+            ("runtime_assets", "runtime"),
+            ("manifest_assets", "manifests"),
+        ):
+            entries = lock.get(field)
+            self.assertIsInstance(entries, list)
+            self.assertEqual(len(entries), 7)
+            asset_ids: set[str] = set()
+            for entry in entries:
+                self.assertIsInstance(entry, dict)
+                asset_id = entry.get("asset_id")
+                self.assertIsInstance(asset_id, str)
+                self.assertNotIn(asset_id, asset_ids)
+                asset_ids.add(asset_id)
+                path = self.assert_locked_file(pack_root, entry, prefix)
+                self.assertNotIn(path, expected_by_prefix[prefix])
+                expected_by_prefix[prefix].add(path)
+
+        actual_runtime = {
+            path.resolve() for path in (pack_root / "runtime").rglob("*.glb")
+        }
+        actual_manifests = {
+            path.resolve() for path in (pack_root / "manifests").rglob("*.json")
+        }
+        self.assertEqual(actual_runtime, expected_by_prefix["runtime"])
+        self.assertEqual(actual_manifests, expected_by_prefix["manifests"])
+
 
 if __name__ == "__main__":
     unittest.main()

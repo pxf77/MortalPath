@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "vfx_guardian_telegraph_v0_7",
+  "kind": "vfx",
+  "milestone": "artpack_v0_7_enemy_combat_vfx",
+  "source": {"type": "blender_python", "path": "source/vfx/enemy_combat_vfx_v0_7.py"},
+  "runtime": {"path": "runtime/vfx/vfx_guardian_telegraph_v0_7.glb"},
+  "preview": {"path": "reports/previews/vfx_guardian_telegraph_v0_7.png"},
+  "scale": {"unit": "meter", "expected_height_m": {"min": 0.10, "max": 0.20}},
+  "budget": {"triangles_lod0_max": 3200, "materials_max": 2, "bones_max": 0, "animations_max": 0, "textures_max_size": 1024},
+  "art": {"palette": "enemy_combat_readability_v0_7", "style": "grounded_xianxia_painterly_3d", "realm": "foundation_establishment"},
+  "material_contract": {"version": "enemy_vfx_emissive_v0_7", "materials": ["mat_vfx_guardian_violet", "mat_vfx_guardian_jade"]},
+  "enemy_vfx_contract": {
+    "version": "enemy_combat_vfx_v0_7",
+    "purpose": "telegraph",
+    "role": "guardian",
+    "logic_binding": "attack_windup",
+    "presentation_nodes": ["presentation_guardian_warning_outer", "presentation_guardian_warning_middle", "presentation_guardian_warning_core"],
+    "pulse_scale": {"min": 0.88, "max": 1.12},
+    "rotation_degrees_per_second": -34.0
+  },
+  "provenance": {"type": "original", "license": "project_owned"}
+}

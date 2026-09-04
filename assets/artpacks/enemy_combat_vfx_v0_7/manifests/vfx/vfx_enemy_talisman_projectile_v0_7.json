@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "id": "vfx_enemy_talisman_projectile_v0_7",
+  "kind": "vfx",
+  "milestone": "artpack_v0_7_enemy_combat_vfx",
+  "source": {"type": "blender_python", "path": "source/vfx/enemy_combat_vfx_v0_7.py"},
+  "runtime": {"path": "runtime/vfx/vfx_enemy_talisman_projectile_v0_7.glb"},
+  "preview": {"path": "reports/previews/vfx_enemy_talisman_projectile_v0_7.png"},
+  "scale": {"unit": "meter", "expected_height_m": {"min": 0.70, "max": 0.90}},
+  "budget": {"triangles_lod0_max": 1800, "materials_max": 2, "bones_max": 0, "animations_max": 0, "textures_max_size": 1024},
+  "art": {"palette": "enemy_combat_readability_v0_7", "style": "grounded_xianxia_painterly_3d", "realm": "qi_refining"},
+  "material_contract": {"version": "enemy_vfx_emissive_v0_7", "materials": ["mat_vfx_projectile_paper", "mat_vfx_projectile_cinnabar"]},
+  "enemy_vfx_contract": {
+    "version": "enemy_combat_vfx_v0_7",
+    "purpose": "projectile",
+    "role": "talisman",
+    "logic_binding": "projectile_spawn",
+    "presentation_nodes": ["presentation_talisman_projectile_body", "presentation_talisman_projectile_mark", "presentation_talisman_projectile_ring_a"],
+    "rotation_degrees_per_second": 420.0
+  },
+  "provenance": {"type": "original", "license": "project_owned"}
+}

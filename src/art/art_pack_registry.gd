@@ -5,13 +5,15 @@ const QINGLAN_PACK_VERSION := "artpack-v0.2.0-qinglan-valley"
 const PLAYER_POLISH_PACK_VERSION := "artpack-v0.4.0-player-polish"
 const PLAYER_MOTION_PACK_VERSION := "artpack-v0.5.0-player-motion-refinement"
 const ENEMY_MOTION_PACK_VERSION := "artpack-v0.6.0-enemy-motion-refinement"
+const ENEMY_VFX_PACK_VERSION := "artpack-v0.7.0-enemy-combat-vfx"
 # Compatibility alias for callers that only need the newest promoted pack.
-const PACK_VERSION := ENEMY_MOTION_PACK_VERSION
+const PACK_VERSION := ENEMY_VFX_PACK_VERSION
 
 const QINGLAN_ROOT := "res://assets/artpacks/qinglan_v0_2/runtime"
 const PLAYER_POLISH_ROOT := "res://assets/artpacks/player_polish_v0_4/runtime"
 const PLAYER_MOTION_ROOT := "res://assets/artpacks/player_motion_v0_5/runtime"
 const ENEMY_MOTION_ROOT := "res://assets/artpacks/enemy_motion_v0_6/runtime"
+const ENEMY_VFX_ROOT := "res://assets/artpacks/enemy_combat_vfx_v0_7/runtime"
 
 const ASSET_PATHS: Dictionary = {
 	&"chr_player_qi_refining_a": QINGLAN_ROOT + "/characters/chr_player_qi_refining_a.glb",
@@ -32,6 +34,13 @@ const ASSET_PATHS: Dictionary = {
 	&"vfx_sword_arc_qi_a": QINGLAN_ROOT + "/vfx/vfx_sword_arc_qi_a.glb",
 	&"vfx_qingfeng_blade_a": QINGLAN_ROOT + "/vfx/vfx_qingfeng_blade_a.glb",
 	&"vfx_guard_ripple_a": QINGLAN_ROOT + "/vfx/vfx_guard_ripple_a.glb",
+	&"vfx_enemy_melee_telegraph_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_enemy_melee_telegraph_v0_7.glb",
+	&"vfx_enemy_talisman_telegraph_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_enemy_talisman_telegraph_v0_7.glb",
+	&"vfx_guardian_telegraph_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_guardian_telegraph_v0_7.glb",
+	&"vfx_enemy_talisman_projectile_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_enemy_talisman_projectile_v0_7.glb",
+	&"vfx_guardian_projectile_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_guardian_projectile_v0_7.glb",
+	&"vfx_enemy_impact_qi_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_enemy_impact_qi_v0_7.glb",
+	&"vfx_guardian_impact_v0_7": ENEMY_VFX_ROOT + "/vfx/vfx_guardian_impact_v0_7.glb",
 }
 
 static var _scene_cache: Dictionary = {}
@@ -51,6 +60,8 @@ static func path_for(asset_id: StringName) -> String:
 
 static func pack_version_for(asset_id: StringName) -> String:
 	var path := path_for(asset_id)
+	if path.begins_with(ENEMY_VFX_ROOT + "/"):
+		return ENEMY_VFX_PACK_VERSION
 	if path.begins_with(ENEMY_MOTION_ROOT + "/"):
 		return ENEMY_MOTION_PACK_VERSION
 	if path.begins_with(PLAYER_MOTION_ROOT + "/"):

@@ -36,9 +36,10 @@
 - 青岚谷 v0.2 道路、岩体、竹蕨、敌人、阵眼、遁光阵与基础 VFX Runtime Art Pack；
 - 主角 v0.5 共享骨架、8 根衣物辅助骨骼、30 项动作、绘画化贴图和剑尖采样 Ribbon Trail；
 - 八方向屏幕移动、起步/停止/急转过渡、四方向轻重受击与死亡飞剑坠落；
-- 动作释放帧、战斗判定与飞剑轨迹同步契约。
+- 动作释放帧、战斗判定与飞剑轨迹同步契约；
 - 敌人与守关者 v0.6 共享骨架、角色化移动/攻法/受击/死亡动作及筑基护体姿态；
-- 敌方攻击释放帧与既有 AI 前摇同步，表现桥不接管战斗规则。
+- 敌方攻击释放帧与既有 AI 前摇同步，表现桥不接管战斗规则；
+- 敌方战斗 VFX v0.7 提供近战/符修/守关者警示、两类投射物与两档命中效果。
 
 当前画面已消费版本化 Runtime Art Pack，但仍属于程序化低模生产样本。它用于验证正交镜头轮廓、材质响应、动作时序、战斗可读性和跨仓发布流程，不等同于最终手工高模与正式动画质量。
 
@@ -98,6 +99,9 @@ bash scripts/godot.sh --headless --script res://tests/player_motion_runner.gd
 
 # 敌人与守关者骨架、移动、攻法、受击、死亡及前摇同步契约
 bash scripts/godot.sh --headless --script res://tests/enemy_motion_runner.gd
+
+# 敌方警示、投射物、命中特效及 presentation-only 边界
+bash scripts/godot.sh --headless --script res://tests/enemy_combat_vfx_runner.gd
 ```
 
 GitHub Actions 还会执行 Godot 工程导入、逐脚本解析、完整 Demo 回归、Linux Release 导出与图形化演示。
@@ -125,6 +129,9 @@ artpack-v0.5.0-player-motion-refinement
 
 artpack-v0.6.0-enemy-motion-refinement
   → humanoid_v1 近战/符箓敌人及筑基守关者、角色化动作与释放帧契约
+
+artpack-v0.7.0-enemy-combat-vfx
+  → 三类蓄力警示、符箓/守关投射物、普通/守关命中特效及表现参数契约
 ```
 
 仓库职责边界：
