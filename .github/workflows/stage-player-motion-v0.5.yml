@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
-            'https://sdmntprcentralus.oaiusercontent.com/files/00000000-97c0-81f5-82c8-b57233f0c138/raw?se=2026-09-04T03%3A30%3A05Z&sp=r&sv=2026-02-06&sr=b&scid=32a5c915-c989-5180-b056-ff794ebde3ae&skoid=5e713cdb-766b-475e-a3ca-8adb6cf99aa0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-04T03%3A09%3A19Z&ske=2026-09-05T03%3A09%3A19Z&sks=b&skv=2026-02-06&sig=OCejNeT9cRxZ23rZK0FWeYWLh62AKzLw0%2FLrWiMz5E4%3D' \
+            'https://sdmntprwestus3.oaiusercontent.com/files/00000000-79f4-81fd-8f71-35e3f8cf26b3/raw?se=2026-09-04T03%3A49%3A26Z&sp=r&sv=2026-02-06&sr=b&scid=d264e80e-325f-5896-b6eb-4c88f2417780&skoid=5e713cdb-766b-475e-a3ca-8adb6cf99aa0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-04T03%3A14%3A02Z&ske=2026-09-05T03%3A14%3A02Z&sks=b&skv=2026-02-06&sig=ZdpcnWfAPsJyvOJvr4J06tvySUgpieNTioBGeuTDEhI%3D' \
             --output /tmp/artifact.zip
           mkdir -p /tmp/outer /tmp/inner
           unzip -q /tmp/artifact.zip -d /tmp/outer
