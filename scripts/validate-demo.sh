@@ -29,6 +29,19 @@ run_check rules --headless --path . --fixed-fps 60 --script res://tests/test_run
 run_check flow --headless --path . --fixed-fps 60 --script res://tests/demo_scene_runner.gd
 run_check artpack --headless --path . --fixed-fps 60 --script res://tests/qinglan_art_pack_runner.gd
 run_check player-motion --headless --path . --fixed-fps 60 --script res://tests/player_motion_runner.gd
+for fps in 30 60 120; do
+  run_check "trail-fps-$fps" \
+    --headless \
+    --path . \
+    --fixed-fps "$fps" \
+    --script res://tests/flying_sword_trail_fps_runner.gd \
+    -- "--fps=$fps" "--output=res://$evidence_dir/trail-$fps.json"
+done
+python3 tools/validate_trail_fps_reports.py \
+  "$evidence_dir/trail-30.json" \
+  "$evidence_dir/trail-60.json" \
+  "$evidence_dir/trail-120.json" \
+  --output "$evidence_dir/trail-fps-summary.json"
 run_check enemy-motion --headless --path . --fixed-fps 60 --script res://tests/enemy_motion_runner.gd
 run_check enemy-vfx --headless --path . --fixed-fps 60 --script res://tests/enemy_combat_vfx_runner.gd
 run_check feedback --headless --path . --fixed-fps 60 --script res://tests/combat_feedback_runner.gd
