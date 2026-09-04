@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "chr_enemy_talisman_qi_refined_v0_6",
+  "kind": "character",
+  "milestone": "artpack_v0_6_enemy_motion_refinement",
+  "source": {"type": "blender_python", "path": "source/characters/enemy_motion_v0_6.py"},
+  "runtime": {"path": "runtime/characters/chr_enemy_talisman_qi_refined_v0_6.glb"},
+  "preview": {"path": "reports/previews/chr_enemy_talisman_qi_refined_v0_6.png"},
+  "scale": {"unit": "meter", "expected_height_m": {"min": 1.65, "max": 2.15}},
+  "budget": {"triangles_lod0_max": 6000, "materials_max": 7, "bones_max": 20, "animations_max": 12, "textures_max_size": 2048},
+  "art": {"palette": "mortal_path_base_v1", "style": "grounded_xianxia_painterly_3d", "realm": "qi_refining"},
+  "animation_contract": {
+    "skeleton": "humanoid_v1",
+    "root_bone": "root",
+    "weapon_socket": "weapon_r",
+    "orbit_socket": "weapon_orbit",
+    "required_bones": ["root", "pelvis", "spine_01", "spine_02", "neck", "head", "upper_arm_l", "lower_arm_l", "hand_l", "upper_arm_r", "lower_arm_r", "hand_r", "thigh_l", "calf_l", "foot_l", "thigh_r", "calf_r", "foot_r", "weapon_r", "weapon_orbit"],
+    "required_clips": ["idle", "locomotion", "hit_light_front", "hit_light_back", "hit_light_left", "hit_light_right", "hit_heavy_front", "hit_heavy_back", "hit_heavy_left", "hit_heavy_right", "death", "cast_talisman"]
+  },
+  "material_contract": {
+    "version": "enemy_painterly_pbr_v0_6",
+    "materials": {
+      "mat_talisman_cloth_umber": {"roughness": {"min": 0.82, "max": 0.94}, "metallic": {"min": 0.0, "max": 0.05}},
+      "mat_talisman_paper": {"roughness": {"min": 0.88, "max": 0.98}, "metallic": {"min": 0.0, "max": 0.05}},
+      "mat_talisman_cinnabar": {"roughness": {"min": 0.46, "max": 0.58}, "metallic": {"min": 0.0, "max": 0.08}, "emissive_required": true}
+    }
+  },
+  "enemy_motion_contract": {
+    "version": "enemy_motion_refinement_v0_6",
+    "role": "talisman",
+    "event_source": "enemy_combat_signals",
+    "fps": 30,
+    "idle_clip": "idle",
+    "locomotion_clip": "locomotion",
+    "death_clip": "death",
+    "blend_seconds": 0.08,
+    "heavy_health_ratio": 0.18,
+    "presentation_nodes": ["presentation_talisman_left", "presentation_talisman_right"],
+    "actions": {
+      "ranged": {"clip": "cast_talisman", "end_frame": 30, "release_frame": 19}
+    },
+    "hit_reactions": {
+      "light": {"front": "hit_light_front", "back": "hit_light_back", "left": "hit_light_left", "right": "hit_light_right"},
+      "heavy": {"front": "hit_heavy_front", "back": "hit_heavy_back", "left": "hit_heavy_left", "right": "hit_heavy_right"}
+    }
+  },
+  "provenance": {"type": "original", "license": "project_owned"}
+}

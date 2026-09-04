@@ -37,6 +37,8 @@
 - 主角 v0.5 共享骨架、8 根衣物辅助骨骼、30 项动作、绘画化贴图和剑尖采样 Ribbon Trail；
 - 八方向屏幕移动、起步/停止/急转过渡、四方向轻重受击与死亡飞剑坠落；
 - 动作释放帧、战斗判定与飞剑轨迹同步契约。
+- 敌人与守关者 v0.6 共享骨架、角色化移动/攻法/受击/死亡动作及筑基护体姿态；
+- 敌方攻击释放帧与既有 AI 前摇同步，表现桥不接管战斗规则。
 
 当前画面已消费版本化 Runtime Art Pack，但仍属于程序化低模生产样本。它用于验证正交镜头轮廓、材质响应、动作时序、战斗可读性和跨仓发布流程，不等同于最终手工高模与正式动画质量。
 
@@ -79,7 +81,7 @@ bash scripts/godot.sh
 ## 验证
 
 ```bash
-# 完整工程、战斗、Art Pack、主角动作与输入回归
+# 完整工程、战斗、Art Pack、主角/敌人动作与输入回归
 bash scripts/validate-demo.sh
 
 # 境界、伤害、连击与灵力规则
@@ -93,6 +95,9 @@ bash scripts/godot.sh --headless --script res://tests/qinglan_art_pack_runner.gd
 
 # 主角骨架、八方向移动、受击、PBR 材质、释放帧与飞剑轨迹契约
 bash scripts/godot.sh --headless --script res://tests/player_motion_runner.gd
+
+# 敌人与守关者骨架、移动、攻法、受击、死亡及前摇同步契约
+bash scripts/godot.sh --headless --script res://tests/enemy_motion_runner.gd
 ```
 
 GitHub Actions 还会执行 Godot 工程导入、逐脚本解析、完整 Demo 回归、Linux Release 导出与图形化演示。
@@ -117,6 +122,9 @@ artpack-v0.2.0-qinglan-valley
 
 artpack-v0.5.0-player-motion-refinement
   → humanoid_v1_aux_v0_5 主角、30 项动作、绘画化贴图与飞剑轨迹契约
+
+artpack-v0.6.0-enemy-motion-refinement
+  → humanoid_v1 近战/符箓敌人及筑基守关者、角色化动作与释放帧契约
 ```
 
 仓库职责边界：

@@ -29,6 +29,7 @@ run_check rules --headless --path . --fixed-fps 60 --script res://tests/test_run
 run_check flow --headless --path . --fixed-fps 60 --script res://tests/demo_scene_runner.gd
 run_check artpack --headless --path . --fixed-fps 60 --script res://tests/qinglan_art_pack_runner.gd
 run_check player-motion --headless --path . --fixed-fps 60 --script res://tests/player_motion_runner.gd
+run_check enemy-motion --headless --path . --fixed-fps 60 --script res://tests/enemy_motion_runner.gd
 run_check feedback --headless --path . --fixed-fps 60 --script res://tests/combat_feedback_runner.gd
 run_check input --headless --path . --fixed-fps 60 --script res://tests/demo_input_runner.gd -- "--output=res://$evidence_dir"
 echo "Demo validation passed; evidence: $evidence_dir"
