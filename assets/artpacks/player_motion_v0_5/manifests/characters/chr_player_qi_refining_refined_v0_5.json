@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "id": "chr_player_qi_refining_refined_v0_5",
+  "kind": "character",
+  "milestone": "artpack_v0_5_player_motion_refinement",
+  "source": {
+    "type": "blender_python",
+    "path": "source/characters/player_qi_refining_motion_v0_5_compact.py"
+  },
+  "runtime": {
+    "path": "runtime/characters/chr_player_qi_refining_refined_v0_5.glb"
+  },
+  "preview": {
+    "path": "reports/previews/chr_player_qi_refining_refined_v0_5.png"
+  },
+  "scale": {
+    "unit": "meter",
+    "expected_height_m": {
+      "min": 1.72,
+      "max": 1.98
+    }
+  },
+  "budget": {
+    "triangles_lod0_max": 9000,
+    "materials_max": 7,
+    "bones_max": 28,
+    "animations_max": 30,
+    "textures_max_size": 2048
+  },
+  "art": {
+    "palette": "mortal_path_base_v1",
+    "style": "grounded_xianxia_painterly_3d",
+    "realm": "qi_refining"
+  },
+  "animation_contract": {
+    "skeleton": "humanoid_v1_aux_v0_5",
+    "root_bone": "root",
+    "weapon_socket": "weapon_r",
+    "orbit_socket": "weapon_orbit",
+    "required_bones": [
+      "root",
+      "pelvis",
+      "spine_01",
+      "spine_02",
+      "neck",
+      "head",
+      "upper_arm_l",
+      "lower_arm_l",
+      "hand_l",
+      "upper_arm_r",
+      "lower_arm_r",
+      "hand_r",
+      "thigh_l",
+      "calf_l",
+      "foot_l",
+      "thigh_r",
+      "calf_r",
+      "foot_r",
+      "weapon_r",
+      "weapon_orbit",
+      "robe_front_l",
+      "robe_front_r",
+      "robe_back_l",
+      "robe_back_r",
+      "sleeve_l",
+      "sleeve_r",
+      "hair_01",
+      "hair_02"
+    ],
+    "required_clips": [
+      "idle",
+      "locomotion_8_direction",
+      "locomotion_n",
+      "locomotion_ne",
+      "locomotion_e",
+      "locomotion_se",
+      "locomotion_s",
+      "locomotion_sw",
+      "locomotion_w",
+      "locomotion_nw",
+      "locomotion_start",
+      "locomotion_stop",
+      "turn_180",
+      "attack_light_1",
+      "attack_light_2",
+      "attack_light_3",
+      "dodge",
+      "cast_sword_art",
+      "cast_guard",
+      "hit_light",
+      "hit_heavy",
+      "hit_light_front",
+      "hit_light_back",
+      "hit_light_left",
+      "hit_light_right",
+      "hit_heavy_front",
+      "hit_heavy_back",
+      "hit_heavy_left",
+      "hit_heavy_right",
+      "death"
+    ]
+  },
+  "skinning_contract": {
+    "version": "normalized_blended_weights_v0_5",
+    "max_influences_per_vertex": 4,
+    "min_multi_influence_vertex_ratio": 0.22,
+    "max_normalization_error": 0.001,
+    "required_auxiliary_bones": [
+      "robe_front_l",
+      "robe_front_r",
+      "robe_back_l",
+      "robe_back_r",
+      "sleeve_l",
+      "sleeve_r",
+      "hair_01",
+      "hair_02"
+    ]
+  },
+  "material_contract": {
+    "version": "painterly_pbr_textured_v0_5",
+    "materials": {
+      "mat_player_cloth_moss": {
+        "roughness": {"min": 0.78, "max": 0.90},
+        "metallic": {"min": 0.0, "max": 0.05}
+      },
+      "mat_player_cloth_ink": {
+        "roughness": {"min": 0.84, "max": 0.96},
+        "metallic": {"min": 0.0, "max": 0.05}
+      },
+      "mat_player_leather_earth": {
+        "roughness": {"min": 0.58, "max": 0.76},
+        "metallic": {"min": 0.0, "max": 0.08}
+      },
+      "mat_player_iron_brushed": {
+        "roughness": {"min": 0.34, "max": 0.52},
+        "metallic": {"min": 0.62, "max": 0.82}
+      },
+      "mat_player_skin_warm": {
+        "roughness": {"min": 0.62, "max": 0.80},
+        "metallic": {"min": 0.0, "max": 0.02}
+      },
+      "mat_player_hair_ink": {
+        "roughness": {"min": 0.80, "max": 0.94},
+        "metallic": {"min": 0.0, "max": 0.02}
+      },
+      "mat_player_jade_muted": {
+        "roughness": {"min": 0.22, "max": 0.38},
+        "metallic": {"min": 0.02, "max": 0.14},
+        "emissive_required": true
+      }
+    }
+  },
+  "texture_contract": {
+    "version": "player_painterly_textures_v0_5",
+    "required_images": {
+      "tex_player_cloth_basecolor_2k": {
+        "width": 2048,
+        "height": 2048,
+        "role": "cloth_base_color"
+      },
+      "tex_player_ink_detail_1k": {
+        "width": 1024,
+        "height": 1024,
+        "role": "ink_cloth_detail"
+      }
+    },
+    "required_material_bindings": {
+      "mat_player_cloth_moss": "tex_player_cloth_basecolor_2k",
+      "mat_player_cloth_ink": "tex_player_ink_detail_1k"
+    }
+  },
+  "locomotion_contract": {
+    "version": "eight_direction_crossfade_v0_5",
+    "blend_seconds": 0.10,
+    "turn_threshold_dot": -0.45,
+    "idle_clip": "idle",
+    "legacy_clip": "locomotion_8_direction",
+    "start_clip": "locomotion_start",
+    "stop_clip": "locomotion_stop",
+    "turn_clip": "turn_180",
+    "directions": {
+      "n": {"clip": "locomotion_n", "blend_position": [0.0, -1.0]},
+      "ne": {"clip": "locomotion_ne", "blend_position": [0.70710678, -0.70710678]},
+      "e": {"clip": "locomotion_e", "blend_position": [1.0, 0.0]},
+      "se": {"clip": "locomotion_se", "blend_position": [0.70710678, 0.70710678]},
+      "s": {"clip": "locomotion_s", "blend_position": [0.0, 1.0]},
+      "sw": {"clip": "locomotion_sw", "blend_position": [-0.70710678, 0.70710678]},
+      "w": {"clip": "locomotion_w", "blend_position": [-1.0, 0.0]},
+      "nw": {"clip": "locomotion_nw", "blend_position": [-0.70710678, -0.70710678]}
+    }
+  },
+  "hit_reaction_contract": {
+    "version": "directional_hit_v0_5",
+    "heavy_health_ratio": 0.18,
+    "light": {
+      "front": "hit_light_front",
+      "back": "hit_light_back",
+      "left": "hit_light_left",
+      "right": "hit_light_right"
+    },
+    "heavy": {
+      "front": "hit_heavy_front",
+      "back": "hit_heavy_back",
+      "left": "hit_heavy_left",
+      "right": "hit_heavy_right"
+    }
+  },
+  "motion_contract": {
+    "version": "player_motion_refinement_v0_5",
+    "fps": 30,
+    "event_source": "player_action_signals",
+    "idle_clip": "idle",
+    "locomotion_clip": "locomotion_8_direction",
+    "sword_root_node": "presentation_flying_sword",
+    "sword_tip_node": "presentation_flying_sword_tip",
+    "weapon_orbit_node": "weapon_orbit",
+    "actions": {
+      "attack_light_1": {
+        "end_frame": 18,
+        "release_frame": 5,
+        "effective_frames": [5, 6, 7, 8, 9],
+        "trail_duration_seconds": 0.16,
+        "trail_width_m": 0.085,
+        "trail_opacity": 0.74,
+        "sample_spacing_m": 0.035,
+        "trajectory": "right_cut",
+        "orbit_samples": [
+          {"frame": 3, "location": [-0.38, 0.16, 0.18]},
+          {"frame": 5, "location": [0.62, -0.68, 0.12]},
+          {"frame": 6, "location": [0.56, -0.84, 0.10]},
+          {"frame": 7, "location": [0.42, -0.98, 0.09]},
+          {"frame": 8, "location": [0.28, -1.06, 0.08]},
+          {"frame": 9, "location": [0.18, -1.08, 0.08]},
+          {"frame": 12, "location": [0.38, -0.46, 0.16]}
+        ]
+      },
+      "attack_light_2": {
+        "end_frame": 18,
+        "release_frame": 5,
+        "effective_frames": [5, 6, 7, 8, 9],
+        "trail_duration_seconds": 0.17,
+        "trail_width_m": 0.09,
+        "trail_opacity": 0.76,
+        "sample_spacing_m": 0.035,
+        "trajectory": "left_cut",
+        "orbit_samples": [
+          {"frame": 3, "location": [0.46, 0.12, 0.30]},
+          {"frame": 5, "location": [-0.60, -0.68, 0.10]},
+          {"frame": 6, "location": [-0.56, -0.86, 0.09]},
+          {"frame": 7, "location": [-0.43, -1.00, 0.08]},
+          {"frame": 8, "location": [-0.29, -1.08, 0.07]},
+          {"frame": 9, "location": [-0.16, -1.10, 0.07]},
+          {"frame": 12, "location": [-0.34, -0.44, 0.17]}
+        ]
+      },
+      "attack_light_3": {
+        "end_frame": 22,
+        "release_frame": 6,
+        "effective_frames": [6, 7, 8, 9, 10, 11, 12],
+        "trail_duration_seconds": 0.23,
+        "trail_width_m": 0.13,
+        "trail_opacity": 0.82,
+        "sample_spacing_m": 0.04,
+        "trajectory": "wide_sweep",
+        "orbit_samples": [
+          {"frame": 4, "location": [-0.52, 0.22, 0.16]},
+          {"frame": 6, "location": [0.86, -0.55, 0.16]},
+          {"frame": 7, "location": [0.64, -0.78, 0.14]},
+          {"frame": 8, "location": [0.30, -0.96, 0.12]},
+          {"frame": 9, "location": [-0.10, -1.06, 0.11]},
+          {"frame": 10, "location": [-0.48, -1.04, 0.10]},
+          {"frame": 11, "location": [-0.72, -0.98, 0.10]},
+          {"frame": 12, "location": [-0.82, -0.92, 0.10]},
+          {"frame": 16, "location": [0.18, -0.38, 0.18]}
+        ]
+      },
+      "cast_sword_art": {
+        "end_frame": 28,
+        "release_frame": 6,
+        "effective_frames": [6, 7, 8, 9, 10, 11],
+        "trail_duration_seconds": 0.28,
+        "trail_width_m": 0.11,
+        "trail_opacity": 0.78,
+        "sample_spacing_m": 0.045,
+        "trajectory": "forward_thrust",
+        "orbit_samples": [
+          {"frame": 4, "location": [0.0, 0.16, 0.42]},
+          {"frame": 6, "location": [0.0, -2.35, 0.22]},
+          {"frame": 7, "location": [0.0, -2.68, 0.21]},
+          {"frame": 8, "location": [0.0, -2.96, 0.21]},
+          {"frame": 9, "location": [0.0, -3.20, 0.20]},
+          {"frame": 10, "location": [0.0, -3.40, 0.20]},
+          {"frame": 11, "location": [0.0, -3.55, 0.20]},
+          {"frame": 16, "location": [0.0, -1.24, 0.28]}
+        ]
+      }
+    }
+  },
+  "death_contract": {
+    "clip": "death",
+    "sword_drop_frame": 18,
+    "sword_settle_frame": 26,
+    "weapon_orbit_end_location": [0.96, 0.42, -0.93],
+    "runtime_sword_height_max_m": 0.25
+  },
+  "provenance": {
+    "type": "original",
+    "license": "project_owned"
+  }
+}
