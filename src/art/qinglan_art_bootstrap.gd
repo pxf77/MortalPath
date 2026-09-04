@@ -52,7 +52,7 @@ func _bind_demo(scene: MortalPathMain) -> void:
 
 	var player := scene.get_node_or_null("Player") as PlayerController
 	if player != null:
-		var player_visual := _attach_character(player, &"chr_player_qi_refining_polished_v0_4")
+		var player_visual := _attach_character(player, &"chr_player_qi_refining_refined_v0_5")
 		if player_visual != null:
 			_install_player_motion(player, player_visual)
 		_install_player_vfx(player)

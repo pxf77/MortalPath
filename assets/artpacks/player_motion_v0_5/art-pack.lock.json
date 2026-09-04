@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "version": "artpack-v0.5.0-player-motion-refinement",
+  "source_repository": "pxf77/MortalPath-Art",
+  "source_asset_commit": "4bae9b47e6b95b97406f676441dfffd8938a9cb7",
+  "release_target_commit": "cf54156051b1524863a8ad52514d8ebba3505f8a",
+  "release_id": 382458315,
+  "release_archive": {
+    "name": "mortalpath-artpack-snapshot-cf54156051b1.zip",
+    "sha256": "f9e10b08a81055ff3df86bab9da9baa0267a82f1f453348510a806c3add58d8d"
+  },
+  "runtime_assets": [
+    {
+      "asset_id": "chr_player_qi_refining_refined_v0_5",
+      "path": "runtime/characters/chr_player_qi_refining_refined_v0_5.glb",
+      "size_bytes": 901736,
+      "sha256": "e4e1f6e5f0ca9e52f77ad69278151a8548ffe13b4ab5f5fc01cf2cd3aecb9ce9"
+    }
+  ],
+  "manifest_assets": [
+    {
+      "asset_id": "chr_player_qi_refining_refined_v0_5",
+      "path": "manifests/characters/chr_player_qi_refining_refined_v0_5.json",
+      "size_bytes": 9444,
+      "sha256": "e0673c204bded54099d101a97e379dfe7281abb815499ce5ae357253bcefd5e6"
+    }
+  ]
+}

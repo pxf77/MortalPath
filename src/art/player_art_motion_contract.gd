@@ -1,7 +1,7 @@
 class_name PlayerArtMotionContract
 extends RefCounted
 
-const MANIFEST_PATH := "res://assets/artpacks/player_polish_v0_4/manifests/characters/chr_player_qi_refining_polished_v0_4.json"
+const MANIFEST_PATH := "res://assets/artpacks/player_motion_v0_5/manifests/characters/chr_player_qi_refining_refined_v0_5.json"
 
 static var _contract: Dictionary = {}
 static var _load_error := ""
@@ -14,11 +14,11 @@ static func load_contract(force_reload: bool = false) -> Dictionary:
 	_load_error = ""
 	var file := FileAccess.open(MANIFEST_PATH, FileAccess.READ)
 	if file == null:
-		_load_error = "cannot open player polish manifest: %s" % MANIFEST_PATH
+		_load_error = "cannot open player motion manifest: %s" % MANIFEST_PATH
 		return _contract
 	var parsed = JSON.parse_string(file.get_as_text())
 	if not parsed is Dictionary:
-		_load_error = "player polish manifest is not a JSON object"
+		_load_error = "player motion manifest is not a JSON object"
 		return _contract
 	_contract = parsed as Dictionary
 	return _contract
@@ -53,6 +53,47 @@ static func locomotion_clip() -> StringName:
 	return StringName(String(motion.get("locomotion_clip", "locomotion_8_direction")))
 
 
+static func locomotion_clip_for_screen_vector(direction: Vector2) -> StringName:
+	if direction.length_squared() <= 0.0001:
+		return idle_clip()
+	var normalized := direction.normalized()
+	var best_clip := locomotion_clip()
+	var best_dot := -INF
+	for value in _locomotion_directions().values():
+		if not value is Dictionary:
+			continue
+		var rule := value as Dictionary
+		var point = rule.get("blend_position", [])
+		if not point is Array or (point as Array).size() != 2:
+			continue
+		var candidate := Vector2(float(point[0]), float(point[1])).normalized()
+		var score := normalized.dot(candidate)
+		if score > best_dot:
+			best_dot = score
+			best_clip = StringName(String(rule.get("clip", best_clip)))
+	return best_clip
+
+
+static func locomotion_start_clip() -> StringName:
+	return StringName(String(_locomotion_contract().get("start_clip", "locomotion_start")))
+
+
+static func locomotion_stop_clip() -> StringName:
+	return StringName(String(_locomotion_contract().get("stop_clip", "locomotion_stop")))
+
+
+static func locomotion_turn_clip() -> StringName:
+	return StringName(String(_locomotion_contract().get("turn_clip", "turn_180")))
+
+
+static func locomotion_blend_seconds() -> float:
+	return maxf(0.0, float(_locomotion_contract().get("blend_seconds", 0.10)))
+
+
+static func locomotion_turn_threshold_dot() -> float:
+	return clampf(float(_locomotion_contract().get("turn_threshold_dot", -0.45)), -1.0, 1.0)
+
+
 static func sword_root_node() -> StringName:
 	var motion := _motion_contract()
 	return StringName(String(motion.get("sword_root_node", "presentation_flying_sword")))
@@ -61,6 +102,25 @@ static func sword_root_node() -> StringName:
 static func sword_tip_node() -> StringName:
 	var motion := _motion_contract()
 	return StringName(String(motion.get("sword_tip_node", "presentation_flying_sword_tip")))
+
+
+static func heavy_hit_ratio() -> float:
+	return clampf(float(_hit_reaction_contract().get("heavy_health_ratio", 0.18)), 0.0, 1.0)
+
+
+static func hit_clip(weight: StringName, direction: StringName) -> StringName:
+	var weight_rules = _hit_reaction_contract().get(String(weight), {})
+	if not weight_rules is Dictionary:
+		return StringName("hit_%s" % weight)
+	return StringName(String((weight_rules as Dictionary).get(String(direction), "hit_%s" % weight)))
+
+
+static func death_clip() -> StringName:
+	return StringName(String(_death_contract().get("clip", "death")))
+
+
+static func death_sword_height_max_m() -> float:
+	return float(_death_contract().get("runtime_sword_height_max_m", 0.25))
 
 
 static func clip_for_action(action: StringName, combo_step: int = 0) -> StringName:
@@ -124,6 +184,34 @@ static func required_clips() -> Array[StringName]:
 
 static func _motion_contract() -> Dictionary:
 	var value = load_contract().get("motion_contract", {})
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
+
+
+static func _locomotion_contract() -> Dictionary:
+	var value = load_contract().get("locomotion_contract", {})
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
+
+
+static func _locomotion_directions() -> Dictionary:
+	var value = _locomotion_contract().get("directions", {})
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
+
+
+static func _hit_reaction_contract() -> Dictionary:
+	var value = load_contract().get("hit_reaction_contract", {})
+	if value is Dictionary:
+		return value as Dictionary
+	return {}
+
+
+static func _death_contract() -> Dictionary:
+	var value = load_contract().get("death_contract", {})
 	if value is Dictionary:
 		return value as Dictionary
 	return {}

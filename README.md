@@ -34,7 +34,8 @@
 - 短前摇、输入缓冲、命中停顿、局部受击与破阵反馈、[CC0 初版采样音效](assets/audio/README.md)；
 - 默认 / 减弱动态 / 静音三轮正常输入回归与技能使用记录；
 - 青岚谷 v0.2 道路、岩体、竹蕨、敌人、阵眼、遁光阵与基础 VFX Runtime Art Pack；
-- 主角 v0.4 共享骨架、11 项动作、7 类 PBR 材质和剑尖采样 Ribbon Trail；
+- 主角 v0.5 共享骨架、8 根衣物辅助骨骼、30 项动作、绘画化贴图和剑尖采样 Ribbon Trail；
+- 八方向屏幕移动、起步/停止/急转过渡、四方向轻重受击与死亡飞剑坠落；
 - 动作释放帧、战斗判定与飞剑轨迹同步契约。
 
 当前画面已消费版本化 Runtime Art Pack，但仍属于程序化低模生产样本。它用于验证正交镜头轮廓、材质响应、动作时序、战斗可读性和跨仓发布流程，不等同于最终手工高模与正式动画质量。
@@ -90,8 +91,8 @@ bash scripts/godot.sh --headless --script res://tests/demo_scene_runner.gd
 # 青岚谷 Art Pack 资产与关卡挂载
 bash scripts/godot.sh --headless --script res://tests/qinglan_art_pack_runner.gd
 
-# 主角骨架、动作、PBR 材质、释放帧与飞剑轨迹契约
-bash scripts/godot.sh --headless --script res://tests/player_art_polish_runner.gd
+# 主角骨架、八方向移动、受击、PBR 材质、释放帧与飞剑轨迹契约
+bash scripts/godot.sh --headless --script res://tests/player_motion_runner.gd
 ```
 
 GitHub Actions 还会执行 Godot 工程导入、逐脚本解析、完整 Demo 回归、Linux Release 导出与图形化演示。
@@ -114,8 +115,8 @@ GitHub Actions 还会执行 Godot 工程导入、逐脚本解析、完整 Demo �
 artpack-v0.2.0-qinglan-valley
   → 青岚谷环境、敌人、阵器、飞剑与基础 VFX
 
-artpack-v0.4.0-player-polish
-  → humanoid_v1 主角、11 项动作、7 类 PBR 材质与飞剑轨迹契约
+artpack-v0.5.0-player-motion-refinement
+  → humanoid_v1_aux_v0_5 主角、30 项动作、绘画化贴图与飞剑轨迹契约
 ```
 
 仓库职责边界：
