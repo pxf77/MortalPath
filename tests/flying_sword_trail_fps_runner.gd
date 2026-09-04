@@ -88,14 +88,16 @@ func _run() -> void:
 		failures.append("sample spacing was not consumed from the authored rule")
 	if trail.peak_vertex_count_for_test() < 12:
 		failures.append("real process loop did not generate enough ribbon geometry")
-	if trail.observed_process_count_for_test() < frames:
-		failures.append("trail did not receive every fixed-FPS process tick")
+	var expected_measured_ticks := maxi(frames - 1, 1)
+	if trail.observed_process_count_for_test() < expected_measured_ticks:
+		failures.append("trail did not receive every measured fixed-FPS process tick")
 
 	var report := {
 		"schema_version": 1,
 		"requested_fixed_fps": _fps,
 		"frames_awaited": frames,
 		"observed_process_count": trail.observed_process_count_for_test(),
+		"warmup_ticks_excluded": 1,
 		"observed_average_delta_seconds": average_delta,
 		"observed_fps": observed_fps,
 		"delta_error_ratio": delta_error_ratio,

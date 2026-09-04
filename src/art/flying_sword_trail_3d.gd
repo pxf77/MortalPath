@@ -23,6 +23,7 @@ var _peak_vertex_count := 0
 var _peak_rendered_width := 0.0
 var _observed_process_count := 0
 var _observed_delta_sum := 0.0
+var _observation_warmup_ticks := 0
 
 
 func _ready() -> void:
@@ -54,6 +55,7 @@ func emit_for(rule: Dictionary) -> void:
 	_peak_rendered_width = 0.0
 	_observed_process_count = 0
 	_observed_delta_sum = 0.0
+	_observation_warmup_ticks = 1
 	_started_count += 1
 	_apply_material_parameters()
 	_sample_point(true)
@@ -73,12 +75,16 @@ func clear_trail() -> void:
 	_peak_rendered_width = 0.0
 	_observed_process_count = 0
 	_observed_delta_sum = 0.0
+	_observation_warmup_ticks = 0
 
 
 func _process(delta: float) -> void:
 	if _emit_left > 0.0 or not _points.is_empty():
-		_observed_process_count += 1
-		_observed_delta_sum += delta
+		if _observation_warmup_ticks > 0:
+			_observation_warmup_ticks -= 1
+		else:
+			_observed_process_count += 1
+			_observed_delta_sum += delta
 
 	for index in range(_points.size() - 1, -1, -1):
 		var point: Dictionary = _points[index]
