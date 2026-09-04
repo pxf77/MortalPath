@@ -78,12 +78,14 @@ func _install_dynamic_actor(node: Node) -> void:
 		return
 	if node is TrainingEnemy:
 		var enemy := node as TrainingEnemy
-		var asset_id := &"chr_enemy_melee_qi_a"
+		var asset_id := &"chr_enemy_melee_qi_refined_v0_6"
 		if enemy.combat_style == TrainingEnemy.CombatStyle.RANGED:
-			asset_id = &"chr_enemy_talisman_qi_a"
+			asset_id = &"chr_enemy_talisman_qi_refined_v0_6"
 		elif enemy.combat_style == TrainingEnemy.CombatStyle.GUARDIAN:
-			asset_id = &"chr_guardian_foundation_a"
-		_attach_character(enemy, asset_id)
+			asset_id = &"chr_guardian_foundation_refined_v0_6"
+		var enemy_visual := _attach_character(enemy, asset_id)
+		if enemy_visual != null:
+			_install_enemy_motion(enemy, enemy_visual, asset_id)
 		if enemy.combat_style == TrainingEnemy.CombatStyle.GUARDIAN:
 			_install_guard_vfx(enemy.get_node_or_null("GuardVisual") as MeshInstance3D)
 	elif node is FormationAnchor:
@@ -112,6 +114,19 @@ func _install_player_motion(player: PlayerController, visual: Node3D) -> void:
 	bridge.name = "PlayerArtMotionBridge"
 	player.add_child(bridge)
 	bridge.configure(player, visual)
+
+
+func _install_enemy_motion(
+	enemy: TrainingEnemy,
+	visual: Node3D,
+	asset_id: StringName
+) -> void:
+	if enemy.get_node_or_null("EnemyArtMotionBridge") != null:
+		return
+	var bridge := EnemyArtMotionBridge.new()
+	bridge.name = "EnemyArtMotionBridge"
+	enemy.add_child(bridge)
+	bridge.configure(enemy, visual, asset_id)
 
 
 func _install_player_vfx(player: PlayerController) -> void:

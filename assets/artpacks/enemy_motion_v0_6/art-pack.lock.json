@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "version": "artpack-v0.6.0-enemy-motion-refinement",
+  "source_repository": "pxf77/MortalPath-Art",
+  "source_asset_commit": "d3b06745ac4a0292bd5f8c1b30938fd1360bb5f8",
+  "release_target_commit": "1b68d0c68bf069c710265ce3ac1d8e21a27a4710",
+  "release_id": 382750410,
+  "release_archive": {
+    "name": "mortalpath-artpack-snapshot-1b68d0c68bf0.zip",
+    "sha256": "f347b307471c31dd8d4f972398bd881e55457b018184f015842dde915df6bbb0"
+  },
+  "runtime_assets": [
+    {
+      "asset_id": "chr_enemy_melee_qi_refined_v0_6",
+      "path": "runtime/characters/chr_enemy_melee_qi_refined_v0_6.glb",
+      "size_bytes": 167532,
+      "sha256": "68fe1ad24b66b32719da4224af435c85e8d1a78e282719d30a1620a71521f6cc"
+    },
+    {
+      "asset_id": "chr_enemy_talisman_qi_refined_v0_6",
+      "path": "runtime/characters/chr_enemy_talisman_qi_refined_v0_6.glb",
+      "size_bytes": 176328,
+      "sha256": "569bbd06bf15dbf67adfe8cd94eb8f0d21d3c1a9825b5a9b574236f2ab903778"
+    },
+    {
+      "asset_id": "chr_guardian_foundation_refined_v0_6",
+      "path": "runtime/characters/chr_guardian_foundation_refined_v0_6.glb",
+      "size_bytes": 195144,
+      "sha256": "b007535bcd0ba48224baf2becb1bfc4be5ccc071620d1599f4c54c08a76aed48"
+    }
+  ],
+  "manifest_assets": [
+    {
+      "asset_id": "chr_enemy_melee_qi_refined_v0_6",
+      "path": "manifests/characters/chr_enemy_melee_qi_refined_v0_6.json",
+      "size_bytes": 2608,
+      "sha256": "f842a2ca87b76c8e62b7dde57cdf8b761a3bbbb21b334b9fa74028f345b9ab10"
+    },
+    {
+      "asset_id": "chr_enemy_talisman_qi_refined_v0_6",
+      "path": "manifests/characters/chr_enemy_talisman_qi_refined_v0_6.json",
+      "size_bytes": 2663,
+      "sha256": "04b868114c6987fc125168e9b359f9718cc4e5068a156238a9c5bc25fa811390"
+    },
+    {
+      "asset_id": "chr_guardian_foundation_refined_v0_6",
+      "path": "manifests/characters/chr_guardian_foundation_refined_v0_6.json",
+      "size_bytes": 2834,
+      "sha256": "8565acad7d59ccc2d0229bc230b38c5be51da310f8be2ef8a16d9b0baff7e589"
+    }
+  ]
+}

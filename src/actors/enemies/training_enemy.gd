@@ -2,6 +2,8 @@ class_name TrainingEnemy
 extends CombatActor
 
 signal spell_released(cue: StringName)
+signal attack_started(kind: int, windup_seconds: float)
+signal attack_released(kind: int)
 
 enum CombatStyle {
 	MELEE,
@@ -182,12 +184,15 @@ func _begin_attack(kind: int) -> void:
 		_telegraph.scale = Vector3.ONE
 	else:
 		_telegraph.scale = Vector3(0.68, 1.0, 0.68)
+	attack_started.emit(kind, attack_windup)
 
 
 func _resolve_attack() -> void:
+	var resolved_kind := _attack_kind
 	_body_mesh.scale = Vector3.ONE
 	_telegraph.visible = false
 	_attack_cooldown_left = attack_cooldown
+	attack_released.emit(resolved_kind)
 
 	if _target == null or _target.is_dead:
 		_attack_kind = AttackKind.NONE
